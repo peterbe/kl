@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% load highlighter %}
 
 {% block extracss %}
@@ -6,10 +6,10 @@
 #allslots {
   padding:0; margin:0;
 }
-span.sugg {
+div.sugg {
   line-height:150%;
 }
-span.sugg span {
+div.sugg span {
   font-family:"courier new",courier;
   padding:0px 5px;
   font-size:18px;
@@ -18,6 +18,16 @@ span.sugg span {
 span.match {
   font-weight:bold;
 }
+div.error {
+  font-weight:bold;
+  color:red;
+}
+
+input#id_length, #allslots input {
+  font-size:130%;
+  font-weight:bold;
+}
+
 </style>
 {% endblock %}
 
@@ -28,9 +38,10 @@ span.match {
 {% block main %}
 
 <form action="./" id="solutions">
-  L&auml;ngd: <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"/><br/>
+  <label for="id_length">L&auml;ngd:</label>
+  <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"/><br/>
   
-  Rutor:
+  <label>Rutor:</label>
   <span id="allslots">
   {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1"/>{% endfor %}
   </span>
@@ -38,6 +49,14 @@ span.match {
   <input type="submit" value="S&ouml;k"/>
 </form>
 
+<div id="error__no_s" class="error" style="display:none">
+No letters all?
+</div>
+
+<div id="matches"></div>
+<div id="alternatives"></div>
+
+{% comment %}
 {% if alternatives %}
   <p>{{ alternatives_count }} matches:<br/>
     {% for alternative in alternatives %}
@@ -45,5 +64,6 @@ span.match {
     {% endfor %}
   </p>
 {% endif %}
+{% endcomment %}
 
 {% endblock %}

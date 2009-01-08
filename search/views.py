@@ -1,17 +1,32 @@
 import re
 from random import randint
+try:
+    import simplejson
+except ImportError:
+    from django.utils import simplejson
 
 # Create your views here.
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect,  Http404
+from django.template import RequestContext
+
 
 from models import Word
 from forms import DSSOUploadForm
 from utils import uniqify, any_true
 
+def _render_json(data):
+    return HttpResponse(simplejson.dumps(data),
+                        mimetype='application/javascript')
 
-def solve(request):
+def _render(template, data, request):
+    return render_to_response(template, data,
+                              context_instance=RequestContext(request))
+
+        
+
+def solve(request, json=False):
     if request.GET.get('l'):
         try:
             length = int(request.GET.get('l'))
@@ -29,10 +44,29 @@ def solve(request):
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]]);
         alternatives_count = len(alternatives)
         
-    else:
-        length = '' # default
+        if json:
+            data = dict(length=length,
+                        search=search,
+                        word_count=alternatives_count,
+                       )
+            words = [each.word for each in alternatives]
+            match_points = None
+            match_points = []
+            if words:
+                for i, letter in enumerate(words[0]):
+                    if letter.lower() == search[i]:
+                        match_points.append(1)
+                    else:
+                        match_points.append(0)
+                data['match_points'] = match_points
+            data['words'] = words
+                
+            return _render_json(data)
         
-    return render_to_response('solve.html', locals())
+    else:
+        length = '' # default        
+
+    return _render('solve.html', locals(), request)
 
 def _find_alternatives(slots):
     length = len(slots)
@@ -114,7 +148,7 @@ def upload_dsso(request):
         return HttpResponseRedirect('/upload-dsso/')
     
     form = DSSOUploadForm()
-    return render_to_response('upload_dsso.html', locals())
+    return _render('upload_dsso.html', locals(), request)
         
 def _add_word(word, part_of_speech):
     #pass

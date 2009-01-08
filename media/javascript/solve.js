@@ -82,6 +82,42 @@ function __goto_prev_slot(current) {
    });
 }
 
+function __before_ajaxSubmit(form_data, form_obj) {
+   console.log(form_data);
+   var any_s = false;
+   $('#allslots input').each(function() {
+      if ($(this).val())
+        any_s = true;
+   });
+   if (!any_s) {
+      $('#error__no_s').show();
+      setTimeout(function() {
+         $('#error__no_s').fadeOut(500);
+      }, 3*1000);
+      return false;
+   }
+   return true;
+}
+
+function __process_submission(res) {
+   $('#matches').text('');
+   $('#alternatives div.sugg').remove();
+   if (res.word_count) {
+      $.each(res.words, function(i,e) {
+         var all = $('<div class="sugg"></div>');
+         for (var i=0, len=e.length; i<len; i++) {
+            if (res.match_points[i])
+              all.append($('<span class="match letter"></span>').text(e[i]));
+            else
+              all.append($('<span class="letter"></span>').text(e[i]));
+         }
+         $('#alternatives').append(all);
+      });
+   } else {
+      $('#matches').text("None found :(");
+   }
+}
+
 $(function() {
    if ($('#id_length').val()) {
     if ($('#id_length').val().search(/[^\d]/) > -1)
@@ -92,4 +128,14 @@ $(function() {
    
    $('#id_length').bind('keyup', on_length_key);
    $('input', $('#allslots')).bind('keyup', on_slot_key);
+   
+   var submit_options = {
+      url: '/los/json/',
+        type: 'GET',
+        dataType: 'json',
+        beforeSubmit: __before_ajaxSubmit,
+        success: __process_submission
+   }
+   $('form#solutions').ajaxForm(submit_options);
+   
 });

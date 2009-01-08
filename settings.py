@@ -8,7 +8,7 @@ HOME = '/home/peterbe/dev/DJANGO/kl_env/kl'
 #TEST_RUNNER = 'kl.testrunner.run_tests'
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+     ('Peter', 'peter@fry-it.com'),
 )
 
 MANAGERS = ADMINS
@@ -61,11 +61,15 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
+
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'djangodblog.DBLogMiddleware',
+                      
 )
 
 ROOT_URLCONF = 'kl.urls'
@@ -85,7 +89,23 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
-    'search',    
+    'search',
+    'djangodblog',                  
 )
 
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'kl.search.context_processors.context',
+)
+
+
 TEMPLATE_STRING_IF_INVALID = ''
+
+try:
+    from settings_local import *
+except ImportError:
+    pass
