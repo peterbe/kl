@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load highlighter %}
+
+{% block extracss %}
+<style type="text/css">
+#allslots {
+  padding:0; margin:0;
+}
+span.sugg {
+  line-height:150%;
+}
+span.sugg span {
+  font-family:"courier new",courier;
+  padding:0px 5px;
+  font-size:18px;
+  border:1px solid #ccc;
+}
+span.match {
+  font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascript/solve.js"></script>
+{% endblock %}
+
+{% block main %}
+
+<form action="./" id="solutions">
+  L&auml;ngd: <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"/><br/>
+  
+  Rutor:
+  <span id="allslots">
+  {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1"/>{% endfor %}
+  </span>
+  <br/>
+  <input type="submit" value="S&ouml;k"/>
+</form>
+
+{% if alternatives %}
+  <p>{{ alternatives_count }} matches:<br/>
+    {% for alternative in alternatives %}
+      <span class="sugg">{{ alternative.word|highlight_suggestion:search|safe }}</span><br/>
+    {% endfor %}
+  </p>
+{% endif %}
+
+{% endblock %}

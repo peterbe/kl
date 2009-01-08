@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block main %}
+<form action="/accounts/login/" method="post">
+<table>
+{{ form }}
+<tr>
+  <td>&nbsp;</td>
+  <td><input type="submit" value="Login" /></td>
+</tr>
+</table>
+</form>
+{% endblock %}
+

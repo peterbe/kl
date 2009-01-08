@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<h2>Upload DSSO file</h2>
+<form action="./" method="post" enctype="multipart/form-data">
+<table>
+ {{ form.as_table }}
+<table>
+<input type="submit" value="Upload" onclick="this.value='Please wait...'"/>
+</form>
+{% endblock %}
