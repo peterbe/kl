@@ -28,6 +28,9 @@ class Word(models.Model):
     length = models.IntegerField()
     part_of_speech = models.CharField(max_length=20, null=True)
     
+    def __unicode__(self):
+        return self.word
+    
     def __init__(self, *args, **kwargs):
         if 'word' in kwargs:
             if 'length' in kwargs:

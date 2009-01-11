@@ -1,8 +1,10 @@
 {% extends base_template %}
 {% load highlighter %}
+{% load django_slimmer %}
 
 {% block extracss %}
 <style type="text/css">
+{% slimcontent %}
 #allslots {
   padding:0; margin:0;
 }
@@ -27,12 +29,12 @@ input#id_length, #allslots input {
   font-size:130%;
   font-weight:bold;
 }
-
+{% endslimcontent %}
 </style>
 {% endblock %}
 
 {% block extrajs %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascript/solve.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}{% slimfile "/javascript/solve.js" %}"></script>
 {% endblock %}
 
 {% block main %}
@@ -46,7 +48,8 @@ input#id_length, #allslots input {
   {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1"/>{% endfor %}
   </span>
   <br/>
-  <input type="submit" value="S&ouml;k"/>
+  <input type="submit" value="S&ouml;k"/> 
+  <img id="loading" style="display:none" src="{{ MEDIA_URL }}/images/loading-bar.gif" alt="Laddar" width="150" height="15"/>
 </form>
 
 <div id="error__no_s" class="error" style="display:none">

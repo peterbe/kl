@@ -6,7 +6,9 @@ function __prep_slots(n) {
       var left = n - already.size();
       for (var i=0, left=n - already.size(); i < left; i++) 
         $('#allslots').append(
-                              $('<input name="s" size="1" maxlength="1"/>').bind('keyup', on_slot_key));
+                              $('<input name="s" size="1" maxlength="1"/>')
+                              .bind('keyup', on_slot_key)
+                              .bind('change', on_slot_change));
    }
 }
 
@@ -14,8 +16,9 @@ function on_length_key(event) {
    var v = this.value;
    if (v.search(/[^\d]/)> -1) {
       this.value='';
-      __wrap__prep_slots(0);
-   } else if (event.which==39 || event.which==38) {
+      if($('#allslots input').size())
+	__wrap__prep_slots(0);
+   } else if (event.which==39 || event.which==38) {  // right & up
       if (this.value) {
          this.value = parseInt(this.value)+1;
          __wrap__prep_slots(parseInt(this.value));
@@ -23,7 +26,7 @@ function on_length_key(event) {
          this.value = '1';
          __wrap__prep_slots(1);
       }   
-   } else if (event.which==37 || event.which==40) {
+   } else if (event.which==37 || event.which==40) { // left & down
       if (this.value) {
          if ((parseInt(this.value)-1) < 1) 
            __wrap__prep_slots(1);
@@ -37,11 +40,10 @@ function on_length_key(event) {
       }  
    } else
      __wrap__prep_slots(parseInt(this.value));
-   console.log(event.which);
 }
 
 function __wrap__prep_slots(n) {
-   if (!n>=1)
+   if (n<1)
      alert("Must be bigger than zero");
    else if (n>40)
      alert("Too big");
@@ -53,13 +55,18 @@ function __wrap__prep_slots(n) {
 function on_slot_key(event) {
    if (event.which==39) // right arrow
      __goto_next_slot(this);
-   else if (event.which==37)
+   else if (event.which==37) // left arrow
      __goto_prev_slot(this);
+}
+
+function on_slot_change(event) {
+   if (!this.value) return;
+   if (this.value.match(/\d/)) this.value='';
 }
 
 function __goto_next_slot(current) {
    var is_next = false;
-   $('input', $('#allslots')).each(function() {
+   $('#allslots input').each(function() {
       if (is_next) {
          this.focus();
          this.select();
@@ -71,7 +78,6 @@ function __goto_next_slot(current) {
 
 function __goto_prev_slot(current) {
    var prev = null;
-   
    $('input', $('#allslots')).each(function() {
       if(this==current && prev) {
          prev.focus(); 
@@ -83,7 +89,17 @@ function __goto_prev_slot(current) {
 }
 
 function __before_ajaxSubmit(form_data, form_obj) {
-   console.log(form_data);
+   var length = parseInt($('#id_length').val());
+   if(isNaN(length)) {
+      if ($('#allslots input').size())
+	$('#id_length').val($('#allslots input').size());
+      else {
+	 $('#id_length').addClass('error').bind('focus', function() {
+	    $(this).removeClass('error');
+	 });
+      }
+      return false;
+   }
    var any_s = false;
    $('#allslots input').each(function() {
       if ($(this).val())
@@ -96,11 +112,17 @@ function __before_ajaxSubmit(form_data, form_obj) {
       }, 3*1000);
       return false;
    }
+   $('#loading:hidden').show();
+   
    return true;
 }
 
 function __process_submission(res) {
-   $('#matches').text('');
+   $('#loading:visible').hide();
+   if (res.word_count==1)
+     $('#matches').text(res.word_count + " hittad");
+   if (res.word_count>1)
+     $('#matches').text(res.word_count + " hittade");
    $('#alternatives div.sugg').remove();
    if (res.word_count) {
       $.each(res.words, function(i,e) {
@@ -127,7 +149,8 @@ $(function() {
    }
    
    $('#id_length').bind('keyup', on_length_key);
-   $('input', $('#allslots')).bind('keyup', on_slot_key);
+   if (!$('#id_length').val())
+     $('#id_length')[0].focus();
    
    var submit_options = {
       url: '/los/json/',

@@ -105,7 +105,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 TEMPLATE_STRING_IF_INVALID = ''
 
+DJANGO_SLIMMER = False
+
+# must be last
 try:
     from settings_local import *
 except ImportError:
     pass
+
