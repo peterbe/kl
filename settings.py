@@ -52,7 +52,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '4ae_t%30100%lbd#-!x0ajw@4u5xm0sq8o0(o)*^c84ga8i7=h'
+SECRET_KEY = open('.secret').read()
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -113,3 +113,4 @@ try:
 except ImportError:
     pass
 
+musts = HOME, SECRET_KEY

@@ -1,3 +1,8 @@
+// A variable that helps us tell us that a search has been done. This can be
+// used to understand that we should reset the form if someone changes the
+// length.
+var __done_search = null;
+
 function __prep_slots(n) {
    var already = $('input', $('#allslots'));
    if (already.size() > n) {
@@ -38,8 +43,21 @@ function on_length_key(event) {
          this.value = '1';
          __wrap__prep_slots(1);
       }  
-   } else
-     __wrap__prep_slots(parseInt(this.value));
+   } else {
+      if (__done_search) {
+	 __prep_slots(0);
+      }
+      __wrap__prep_slots(parseInt(this.value));
+      
+      __done_search = false;
+   }
+}
+
+function on_length_change(event) {
+   // check that the slots have been created
+   var v = this.value;
+   if (v && v.search(/[^\d]/) ==-1 && parseInt(v) != $('#allslots input').size())
+     __wrap__prep_slots(parseInt(v));
 }
 
 function __wrap__prep_slots(n) {
@@ -57,6 +75,8 @@ function on_slot_key(event) {
      __goto_next_slot(this);
    else if (event.which==37) // left arrow
      __goto_prev_slot(this);
+   else
+     this.value = this.value.toUpperCase();
 }
 
 function on_slot_change(event) {
@@ -117,8 +137,8 @@ function __before_ajaxSubmit(form_data, form_obj) {
    return true;
 }
 
+
 function __process_submission(res) {
-   $('#loading:visible').hide();
    if (res.word_count==1)
      $('#matches').text(res.word_count + " hittad");
    if (res.word_count>1)
@@ -138,6 +158,10 @@ function __process_submission(res) {
    } else {
       $('#matches').text("None found :(");
    }
+   $('#loading:visible').hide();
+   
+   __done_search = true;
+   
 }
 
 $(function() {
@@ -148,7 +172,7 @@ $(function() {
         __wrap__prep_slots(parseInt($('#id_length').val()));
    }
    
-   $('#id_length').bind('keyup', on_length_key);
+   $('#id_length').bind('keyup', on_length_key).bind('change', on_length_change);
    if (!$('#id_length').val())
      $('#id_length')[0].focus();
    

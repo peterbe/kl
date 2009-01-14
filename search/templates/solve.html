@@ -25,10 +25,6 @@ div.error {
   color:red;
 }
 
-input#id_length, #allslots input {
-  font-size:130%;
-  font-weight:bold;
-}
 {% endslimcontent %}
 </style>
 {% endblock %}
@@ -40,6 +36,7 @@ input#id_length, #allslots input {
 {% block main %}
 
 <form action="./" id="solutions">
+<p>
   <label for="id_length">L&auml;ngd:</label>
   <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"/><br/>
   
@@ -50,6 +47,7 @@ input#id_length, #allslots input {
   <br/>
   <input type="submit" value="S&ouml;k"/> 
   <img id="loading" style="display:none" src="{{ MEDIA_URL }}/images/loading-bar.gif" alt="Laddar" width="150" height="15"/>
+</p>
 </form>
 
 <div id="error__no_s" class="error" style="display:none">
