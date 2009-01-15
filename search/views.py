@@ -25,7 +25,6 @@ def _render(template, data, request):
                               context_instance=RequestContext(request))
 
         
-
 def solve(request, json=False):
     if request.GET.get('l'):
         try:
