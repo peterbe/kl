@@ -1,4 +1,5 @@
 import re
+from time import time
 from random import randint
 try:
     import simplejson
@@ -42,11 +43,16 @@ def solve(request, json=False):
         alternatives = _find_alternatives(slots[:length])
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]]);
         alternatives_count = len(alternatives)
+        alternatives_truncated = False
+        if alternatives_count > 100:
+            alternatives = alternatives[:100]
+            alternatives_truncated = True
         
         if json:
             data = dict(length=length,
                         search=search,
                         word_count=alternatives_count,
+                        alternatives_truncated=alternatives_truncated,
                        )
             words = [each.word for each in alternatives]
             match_points = None
@@ -63,9 +69,26 @@ def solve(request, json=False):
             return _render_json(data)
         
     else:
-        length = '' # default        
+        length = '' # default
+        
+    data = locals()
+    
+    data.update(_get_search_stats())
 
-    return _render('solve.html', locals(), request)
+    return _render('solve.html', data, request)
+
+def _get_search_stats():
+    
+    no_total_words = 70140
+    no_searches_today = 5
+    no_searches_yesterday = 4
+    
+    no_searches_this_week = 15
+    no_searches_this_month = 44
+    
+    no_searches_this_year = 109
+    
+    return locals()
 
 def _find_alternatives(slots):
     length = len(slots)
@@ -103,8 +126,21 @@ def _find_alternatives(slots):
                 # can't be match
                 return False
         return True
-        
-    return [x for x in Word.objects.filter(**filter_).order_by('word')
+    
+    limit = 10000
+    # if the filter is really vague and the length is high we're going to get 
+    # too many objects and we need to cut our losses.
+    if filter_['length'] > 5:
+        if filter_.get('word__istartswith') and filter_.get('word__iendswith'):
+            # It's long but has a startswith and an endswith, increase the limit
+            limit = 5000
+        elif filter_.get('word__istartswith') or filter_.get('word__iendswith'):
+            # we're going to get less than above but still many
+            limit = 2500
+        else:
+            limit = 1000
+    
+    return [x for x in Word.objects.filter(**filter_).order_by('word')[:limit]
             if filter_match(x)]
     
         

@@ -1,0 +1,60 @@
+/* HEADER */
+#header { top: 0; height: 60px; }
+#header .settings, .settings_content { display: none; }
+#header .search_form { float: right; }
+#header .search_form .select { background: none; border: none; }
+#header .search_form .select_text { display: none; }
+#header .search_form input { padding: 2px 10px 2px 5px; }
+#header .search_form .search_results { display: none; }
+
+/* BODY */
+#body { padding-top: 80px; zoom: 1; }
+
+/* READER CONTENT */
+.sidebar h2 { color: #fff; }
+
+/* FOOTER */
+#footer p.copyright a { color: #fff; }
+
+/* BOOK */
+.book_detail { zoom: 1; }
+.book_grid { zoom: 1; }
+.book_list .book { zoom: 1; }
+
+/* NOTE */
+.note { zoom: 1; }
+.note .body blockquote { background: #fff url(../images/quote.png) no-repeat; }
+
+/* CONTENT SIDEBAR */
+.content_sidebar ul li a em { display: none; }
+
+/* CONTEXTUAL SEARCH FORM */
+.contextual_search_form .select { background: none; border: none; }
+.contextual_search_form .select_text { display: none; }
+.contextual_search_form input { display: block; float: left; margin: 10px 0 0 0; padding: 2px 10px; width: 250px; -webkit-border-top-right-radius: 13px; -webkit-border-bottom-right-radius: 13px; }
+.contextual_search_form input.spyglass { overflow: hidden; text-indent: -1000px; color: #fff; }
+
+/* LISTS */
+.list .item .object { zoom: 1; }
+
+/* TABS */
+.tabs ul li { float: left; }
+
+/* VIEW TYPE */
+.view_type ul li { float: left; }
+
+/* BOOK STATUS */
+.book_status { zoom: 1; }
+
+/* FEEDBACK */
+.feedback_form { background: #fff; }
+.feedback_form h4 { color: #555; }
+.feedback_form textarea { border: 1px solid #ccc; }
+.feedback_form p.submit .button { border: 1px solid #ccc; outline: 0; }
+.feedback_form p.submit .alt_button { color: #999; }
+
+/* NOTE FORM */
+.note_form .note_area .meta .tags input { width: 300px; }
+
+/* BOOK */
+.list .item .object { padding-bottom: 10px; }

@@ -1,0 +1,433 @@
+
+/* BOOK (profiles)
+-------------------------------------------------------------- */
+body.book_profile .user_grid { height: 150px; overflow: hidden; }
+body.book_profile .user_grid .user { margin: 3px; float: left; }
+body.book_profile .user_grid .user .object .avatar { margin: 0; padding: 3px; }
+
+body.book_profile .book_specs { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #ddd; overflow: hidden; }
+body.book_profile .book_specs .column { float: left; padding-right: 20px; width: 250px; }
+body.book_profile .book_specs h4 { margin-bottom: 5px; font-size: 15px; line-height: 25px; color: #333; }
+body.book_profile .book_specs ul { list-style: none; margin: 0; padding: 0; font-size: 13px; line-height: 20px; color: #555; }
+
+body.book_profile div.book_readers,
+body.book_profile div.book_notes,
+body.book_profile div.book_tags,
+body.book_profile div.book_editions { margin-bottom: 50px; }
+
+body.books .content_title .amazon_link { position: absolute; top: 30px; right: 0; }
+
+
+/* READER BOOKS
+-------------------------------------------------------------- */
+body.user_book_detail .content .tags { position: relative; }
+body.user_book_detail .content .tags p.tag_list { margin: 0 0 20px 0; padding-right: 100px;  font-size: 13px; line-height: 18px; color: #777; }
+body.user_book_detail .content .tags p a.delete { color: #999; }
+body.user_book_detail .content .tags .add_tags { float: right; font-size: 12px; }
+body.user_book_detail .content .tags .add_tags a { display: block; width: 70px; font-size: 12px; }
+body.user_book_detail .content .tags .tag_form { display: none; margin: 0 0 20px 0; }
+body.user_book_detail .content .tags .tag_form form { margin-top: 10px; padding-left: 30px; }
+body.user_book_detail .content .tags .tag_form input { width: 235px; }
+body.user_book_detail .content .tags .tag_form .suggested_tags { margin: 10px 0 5px 0; color: #777; font-weight: normal; line-height: 18px; }
+
+body.user_book_detail .content .reader_session { position: relative; }
+body.user_book_detail .content .reader_session .progress { margin: 8px 0 20px 0; width: 450px; }
+body.user_book_detail .content .reader_session .update_progress { position: absolute; margin: 0; top: 30px; right: 0; }
+body.user_book_detail .content .reader_session .update_progress a { display: block; width: 70px; }
+body.user_book_detail .content .reader_session .progress_form { display: none; margin: 0; }
+body.user_book_detail .content .reader_session .progress_form form { margin: 10px 0 20px 0; padding-left: 120px; }
+body.user_book_detail .content .reader_session .progress_form input { width: 70px; }
+
+body.user_book_detail .content .reader_session_stats { position: relative; }
+body.user_book_detail .content .reader_session_stats p { margin: 0 0 20px 0; font-size: 13px; color: #777; }
+body.user_book_detail .content .reader_session_stats .start_session { position: absolute; top: 30px; right: 0; }
+body.user_book_detail .content .reader_session_stats .start_session a { display: block; width: 70px; }
+body.user_book_detail .content .reader_session_stats .reader_session_form { display: none; }
+body.user_book_detail .content .reader_session_stats .reader_session_form form { margin: 10px 0 20px 0; padding-left: 130px; }
+body.user_book_detail .content .reader_session_stats .reader_session_form #id_total_pages,
+body.user_book_detail .content .reader_session_stats .reader_session_form #id_current_page { width: 78px; }
+
+body.user_book_detail .content .notes { margin-bottom: 20px; }
+body.user_book_detail .content .notes .divider { border: none; }
+
+/* STATUS BUTTON */
+.book_status { position: relative; width: 110px; }
+.book_status:hover ul { display: block; }
+.book_status p { margin-bottom: 0 !important; font-size: 13px; line-height: 14px; font-weight: bold; text-align: center; }
+.book_status p a { display: block; padding: 4px 10px; background: #fff url(../images/button_bg.gif) left bottom repeat-x; border: 1px solid #ccc; color: #777; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+.book_status p a:hover { text-decoration: none; }
+.book_status ul { position: relative; display: none; width: 98px; list-style: none; margin: 3px 0 0 0; padding: 5px 5px; background: #444; border: 1px solid #555; border-top: none; font-size: 12px; line-height: 14px; font-weight: bold; text-align: center; z-index: 999; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+.book_status ul li { margin: 1px 0; }
+.book_status ul li a { display: block; padding: 4px 0; color: #fff; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+.book_status ul li a:hover { background: #2598db; color: #fff; text-decoration: none; }
+.book_status ul li.remove a { color: #999; }
+.book_status ul li.remove a:hover { background: #ff0000; color: #fff; }
+.book_status ul.status_1 li.status_1 a,
+.book_status ul.status_2 li.status_2 a,
+.book_status ul.status_3 li.status_3 a,
+.book_status ul.status_4 li.status_4 a,
+.book_status ul.status_5 li.status_5 a,
+.book_status ul.status_6 li.status_6 a { background: #222; }
+
+.add_book p a { background: #ffb900 url(../images/button_add_bg.gif) left bottom repeat-x; border-color: #ff9600; color: #fff; }
+
+.has_book .book_status p a { background: #fff; border-color: #ddd; color: #999; }
+
+.reader_override_form form table p { font-size: 13px; line-height: 20px; font-weight: bold; }
+.reader_override_form form table #id_pages { width: 80px; }
+.reader_override_form form table td.cover img { float: left; margin: 5px 10px 5px 0; }
+.reader_override_form form table td.cover input { margin: 5px 0 0 0; }
+
+
+/* LIST FORM
+-------------------------------------------------------------- */
+body.list_form ul.book_list { list-style: none; padding: 0; overflow: hidden; }
+body.list_form ul.book_list li { float: left; height: 110px; }
+body.list_form ul.book_list li a { float: left; margin: 0 6px 6px 0; padding: 4px; border: 1px solid #ddd; background: #fff; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+body.list_form ul.book_list li a img { display: block; }
+body.list_form ul.book_list li a.on { background-color: #2598db; border-color: #2598db; }
+
+
+/* NOTE
+-------------------------------------------------------------- */
+body.note_detail .content_title p { font-size: 13px; }
+
+body.note_detail .content .body { margin: 0 40px 0 0; }
+body.note_detail .content .body .highlight { color: #999 !important; }
+body.note_detail .content .body p { font-size: 15px; line-height: 23px; font-family: Palatino, Georgia, Times, serif; }
+body.note_detail .content .body blockquote { margin: 0; padding: 0 0 0 30px; background: url(../images/feedback_quote.gif) no-repeat; }
+
+body.note_detail .footer { padding-top: 10px; border-top: 1px solid #eee; overflow: hidden; }
+body.note_detail .footer .timestamp { float: left; width: 330px; margin-right: 10px; }
+body.note_detail .footer .tags { float: left; width: 260px; text-align: right; }
+body.note_detail .footer p { margin: 0; font-family: Palatino, Georgia, Times, serif; font-size: 13px; line-height: 18px; font-style: italic; color: #555; }
+
+body.note_detail #comments { margin-top: 40px; }
+body.note_detail #comments .item .cover { float: right; margin: 0 0 15px 15px; }
+body.note_detail #comments .item .rating,
+body.note_detail #comments .item .labels { display: none; }
+
+.labels span { display: inline-block; margin: 0 2px 0 0; padding: 2px 5px 3px 5px; font-family: 'Helvetica Neue', arial, sans-serif; font-size: 9px; line-height: 9px; text-transform: uppercase; font-style: normal; color: #fff; text-align: center; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.labels .quote { background: #2598db; }
+.labels .review { background: #db1b68; }
+.labels .comment { background: #f6cb00; }
+.labels .spoiler { background: #000; }
+
+.labels .wall_comment,
+.labels .list_comment,
+.labels .note_comment,
+.labels .reading_list { background: #eee; color: #999; }
+
+
+/* NOTE FORM
+-------------------------------------------------------------- */
+.note_form { margin-bottom: 20px; }
+.note_form h2 { margin: 0 0 10px 0; font-size: 16px; line-height: 20px; color: #333; }
+.note_form fieldset { margin: 0; padding: 0; border: none; }
+.note_form .note_area { position: relative; float: left; width: 100%; }
+.note_form .note_area > p { position: relative; margin-bottom: 0; padding: 5px 5px 30px 5px; border: 1px solid #ccc; background: #fff url(../images/field_bg.gif) repeat-x; }
+.note_form .note_area p .more_tab { position: absolute; display: block; bottom: -1px; left: 0; padding: 2px 5px; width: 50px; font-size: 13px; font-weight: bold; line-height: 18px; background: #eee; border: 1px solid #ccc; border-bottom: none; border-left: none; color: #777; text-align: center; -webkit-border-top-right-radius: 4px; -moz-border-radius-topright: 4px; }
+.note_form .note_area p .more_tab:hover { background: #bbb; border-color: #bbb; color: #fff; text-decoration: none; }
+.note_form .note_area textarea { display: block; margin: 0; padding: 0; width: 500px; max-width: 500px; height: 150px; background: none; border: none; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; color: #333; }
+.note_form .note_area .meta { display: none; margin-bottom: 0; padding: 10px;; background: #eee; border: 1px solid #ccc; border-top: none; overflow: hidden; }
+.note_form .note_area .meta p { margin: 0; font-size: 13px; color: #777; }
+.note_form .note_area .meta .page { float: left; margin-right: 20px; }
+.note_form .note_area .meta .page input { width: 30px; }
+.note_form .note_area .meta .tags { float: left; }
+.note_form .note_area .meta .tags input { width: 370px; }
+.note_form .note_area .meta .comments { display: none; }
+.note_form .note_labels { position: absolute; top: 1px; right: 1px; bottom: 1px; width: 90px; height: 165px; list-style: none; padding: 10px 0; background: #eee; }
+.note_form .note_labels li { font-size: 11px; font-weight: bold; line-height: 20px; color: #555; }
+.note_form .note_labels li.title { margin: 0; padding: 1px 10px; border-bottom: 1px solid #ddd; line-height: 20px; }
+.note_form .note_labels li a { display: block; padding: 1px 10px; border-bottom: 1px solid #ddd; color: #999; }
+.note_form .note_labels li a:hover { background: #999; color: #fff; text-decoration: none; }
+.note_form .note_labels li input { display: none; }
+.note_form .note_labels li.quote a.on { background: #2598db; color: #fff; }
+.note_form .note_labels li.comment a.on { background: #f6cb00; color: #fff; }
+.note_form .note_labels li.review a.on { background: #db1b68; color: #fff; }
+.note_form .note_labels li.spoiler a.on { background: #222; color: #fff; }
+.note_form .submit { margin: 0; padding: 10px 0 10px 0; clear: both; }
+.note_form .submit button { float: right; margin: 0; padding: 6px 20px; width: 92px; }
+.note_form .submit .alt_button { color: #aaa; }
+
+body.note_edit .note_form .note_area .meta { display: block; }
+body.note_edit .note_form .note_area p .more_tab { display: none; }
+body.note_edit .note_form .note_area textarea { height: 400px;}
+body.note_edit .note_form .note_labels { height: 415px; }
+
+
+/* USER LIST/GRID
+-------------------------------------------------------------- */
+.user_list .user { margin-bottom: 10px; }
+.user_list .user .object p.links { margin: 0; font-size: 13px; color: #999; }
+.user_list .user .object p.links .commonalities { color: #bbb; }
+
+.list .item .object .relationship { position: absolute; top: 0; right: 2px; }
+.list .item .object .relationship a.follow { display: block; width: 60px; }
+
+
+/* PROFILE
+-------------------------------------------------------------- */
+.profile_form .quiet,
+.profile_form ul.set { list-style: none; padding: 0; font-size: 13px; color: #555; overflow: hidden; }
+.profile_form ul.set li { float: left; padding-right: 20px; }
+
+.next_steps .item { margin-bottom: 1px; overflow: hidden; }
+.next_steps .item .thumbnail { float: left; margin-right: 10px; width: 80px; height: 80px;  background: #eee; }
+.next_steps .item h4 { margin: 20px 0 0 0; }
+.next_steps .item p { margin-bottom: 10px; font-size: 14px; line-height: 20px; color: #555; }
+
+.next_steps .finish_profile .thumbnail { -webkit-border-top-left-radius: 6px; -webkit-border-top-right-radius: 6px; -moz-border-radius-topleft: 6px; -moz-border-radius-topright: 6px; }
+.next_steps .find_people .thumbnail { -webkit-border-bottom-left-radius: 6px; -webkit-border-bottom-right-radius: 6px; -moz-border-radius-bottomleft: 6px; -moz-border-radius-bottomright: 6px; }
+
+.similarity_score { position: absolute; top: 0; right: 0; }
+.similarity_score h4 { float: left; margin: 2px 20px 0 0; font-size: 13px; color: #999; }
+.similarity_score .similarity { float: left; padding: 1px; width: 158px; height: 20px; border: 1px solid #ddd; -webkit-border-radius: 12px; -moz-border-radius: 12px; }
+.similarity_score .similarity a { display: block; padding: 0 7px 0 0; min-width: 20px; max-width: 151px; height: 20px; background: #e25b26; line-height: 20px; font-weight: bold; color: #fff; text-align: right; -webkit-border-radius: 10px; -moz-border-radius: 10px; }
+.similarity_score .similarity a:hover { background: #2598db; text-decoration: none; }
+
+.user_stats { list-style: none; margin: 0 0 10px 0; padding: 0; overflow: hidden; }
+.user_stats li { float: left; }
+.user_stats li a { float: left; margin-right: 5px; padding: 5px 5px; width: 85px; background: #999; font-size: 12px; line-height: 18px; font-weight: bold; color: #fff; text-align: center; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+.user_stats li a:hover { text-decoration: none; background: #2598db; color: #fff; }
+.user_stats li strong { display: block; font-size: 20px; line-height: 25px; }
+
+.last_login { margin: 0 0 10px 0; font-size: 12px; color: #999; }
+
+
+/* COMMENTS
+-------------------------------------------------------------- */
+#comments { clear: both; }
+
+.comment_form label { display: block; }
+.comment_form .avatar { float: left; display: block; margin: 0 10px 0 0; }
+.comment_form .avatar img { display: block; width: 50px; }
+.comment_form .comment_textarea { margin-bottom: 5px; }
+.comment_form .comment_textarea label { display: none; }
+.comment_form .comment_textarea textarea { width: 520px; height: 150px; }
+.comment_form .submit { margin-left: 65px; }
+
+.comment_login_form { padding: 10px 0 0 0; border-top: 1px solid #ddd; }
+
+
+/* TAGS
+-------------------------------------------------------------- */
+div.tag_cloud p { margin: 0; padding-bottom: 40px; font-size: .85em; line-height: 2em; -webkit-border-radius: 8px; -moz-border-radius: 8px; }
+
+.tag_columns { overflow: hidden; }
+.tag_column { float: left; list-style: none; padding: 0; width: 150px; font-size: 13px; }
+.tag_column a { display: block; padding: 0 10px; color: #333; }
+.tag_column a:hover { background: #2598db; color: #fff; text-decoration: none; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+
+
+/* AUTH
+-------------------------------------------------------------- */
+.login_form tr { border: none; }
+.login_form th { color: #777; }
+.login_form td { font-size: 12px; }
+.login_form td input { width: 300px; }
+.login_form td button { width: auto; }
+
+
+/* SEARCH
+-------------------------------------------------------------- */
+table.book_list { margin-bottom: 30px; }
+table.book_list td { padding: 0; }
+table.book_list td span.bar { margin-bottom: 0; display: block; height: 1px; background: #bbb; }
+table.book_list .title { padding-right: 20px; width: 600px; font-size: 14px; line-height: 25px; }
+table.book_list .title a { font-weight: bold; }
+table.book_list .count { font-size: 12px; color: #777; }
+
+
+/* BOOK CONTENTS
+-------------------------------------------------------------- */
+.book_contents_form { float: left; margin-right: 20px; }
+.book_contents_form p { margin-bottom: 10px; }
+.book_contents_form textarea { width: 400px; height: 350px; }
+
+.outline_help { float: left; margin-top: 25px; padding: 10px; width: 155px; background: #eee; }
+
+.content_layout h1 { font-size: 16px; line-height: 20px; }
+.content_layout ol { margin-left: 20px; font-size: 13px; }
+
+.chapter_progress { width: 100%; }
+.chapter_progress tr { border: none; }
+.chapter_progress td { padding: 0; margin: 0; }
+.chapter_progress td a { display: block; width: 100%; height: 20px; background: #ddd; border: 1px solid #fff; }
+
+
+/* BOOK LISTS
+-------------------------------------------------------------- */
+body.list_detail .content_title { padding-bottom: 0; }
+body.list_detail .description { margin-bottom: 30px; }
+body.list_detail .description p { font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+body.list_detail #comments { margin-top: 40px; }
+
+
+
+/* LIST ITEMS
+-------------------------------------------------------------- */
+
+/* NOTE */
+.list .note { overflow: hidden; }
+.list .note a.cover { position: relative; float: left; display: block; margin: 0 15px 10px 0; padding: 0; }
+.list .note a.cover img { display: block; }
+.list .note a.cover img.avatar { position: absolute; right: -3px; bottom: -3px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.list .note a.avatar { float: left; display: block; margin: 0 15px 10px 0; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.list .note .object { float: left; padding-bottom: 10px; width: 495px; }
+.list .note .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+.list .note .object p small { font-size: 13px; font-style: italic; color: #777; }
+.list .note .object p small a { color: #777; }
+.list .note .object p small a:hover { color: #2598db; text-decoration: underline; }
+.list .note .object p .more { display: inline-block; margin: 0 2px -4px 2px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
+.list .note .object p .more:hover { background-position: 0 -14px; }
+.list .note .object p.header { font-weight: bold; }
+.list .note .actions { list-style: none; padding: 0; margin-left: 20px; float: left; width: 15px; }
+.list .note .actions a { display: block; margin-bottom: 5px; width: 15px; height: 15px; overflow: hidden; text-indent: -1000px; }
+.list .note .actions .favorite a { background: url(../images/star.gif) 0 -15px no-repeat; }
+.list .note .actions .favorite a.favorited,
+.list .note .actions .favorite a:hover { background-position: 0 -30px; }
+.list .note .actions .comment a { background: url(../images/comment.gif) no-repeat; }
+.list .note .actions .comment a:hover { background-position: 0 -15px; }
+
+/* NOTE COMMENT */
+.list .note_comment { position: relative; overflow: hidden; }
+.list .note_comment .icon { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; width: 50px; height: 50px; background: url(../images/icons/notes.gif) no-repeat; }
+.list .note_comment .icon img.avatar { position: absolute; top: 28px; left: 28px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.list .note_comment .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #eee; }
+.list .note_comment .object { float: left; padding-bottom: 10px; width: 530px; }
+.list .note_comment .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+.list .note_comment .object p small { font-size: 13px; font-style: italic; color: #777; }
+.list .note_comment .object p small a { color: #777; }
+.list .note_comment .object p small a:hover { color: #2598db; text-decoration: underline; }
+.list .note_comment .object p small a.edit,
+.list .note_comment .object p small a.remove { margin-left: 5px; font-family: helvetica, arial, sans-serif; font-size: 12px; font-style: normal; color: #2598db; }
+.list .note_comment .object p .more { display: inline-block; margin: 0 5px -2px 5px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
+.list .note_comment .object p .more:hover { background-position: 0 -14px; }
+
+/* LIST COMMENT */
+.list .list_comment { position: relative; overflow: hidden; }
+.list .list_comment .icon { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; width: 50px; height: 50px; background: url(../images/icons/lists.gif) no-repeat; }
+.list .list_comment .icon img.avatar { position: absolute; top: 28px; left: 28px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.list .list_comment .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #eee; }
+.list .list_comment .object { float: left; padding-bottom: 10px; width: 530px; }
+.list .list_comment .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+.list .list_comment .object p small { font-size: 13px; font-style: italic; color: #777; }
+.list .list_comment .object p small a { color: #777; }
+.list .list_comment .object p small a:hover { color: #2598db; text-decoration: underline; }
+.list .list_comment .object p small a.edit,
+.list .list_comment .object p small a.remove { margin-left: 5px; font-family: helvetica, arial, sans-serif; font-size: 12px; font-style: normal; color: #2598db; }
+.list .list_comment .object p .more { display: inline-block; margin: 0 5px -2px 5px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
+.list .list_comment .object p .more:hover { background-position: 0 -14px; }
+
+/* WALL COMMENT */
+.list .wall_comment { position: relative; overflow: hidden; }
+.list .wall_comment .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #ddd; }
+.list .wall_comment .avatar2 { position: absolute; top: 28px; left: 28px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.list .wall_comment .avatar2 img { display: block; }
+.list .wall_comment .object { float: left; padding-bottom: 10px; width: 530px; }
+.list .wall_comment .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+.list .wall_comment .object p small { font-size: 13px; font-style: italic; color: #777; }
+.list .wall_comment .object p small a { color: #777; }
+.list .wall_comment .object p small a:hover { color: #2598db; text-decoration: underline; }
+.list .wall_comment .object p small a.reply,
+.list .wall_comment .object p small a.edit,
+.list .wall_comment .object p small a.remove { margin-left: 5px; font-family: helvetica, arial, sans-serif; font-size: 12px; font-style: normal; color: #2598db; }
+.list .wall_comment .object p .more { display: inline-block; margin: 0 5px -2px 5px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
+.list .wall_comment .object p .more:hover { background-position: 0 -14px; }
+
+/* PAGE */
+.list .page { overflow: hidden; }
+.list .page .cover { position: relative; float: left; display: block; margin: 0 15px 10px 0; padding: 0; }
+.list .page .cover img { display: block; }
+.list .page .cover img.avatar { position: absolute; right: -3px; bottom: -3px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.list .page .object { float: left; padding-bottom: 10px; width: 531px; }
+.list .page .object .progress { float: right; margin: 0 35px 0 0; width: 200px; height: 21px; border: 1px solid #ddd; font-size: 11px; line-height: 20px; -webkit-border-radius: 11px; -moz-border-radius: 11px; }
+.list .page .object .progress .current_page { min-width: 13%; max-width: 99%; height: 19px; background-color: #bbb; -webkit-border-radius: 9px; -moz-border-radius: 9px; }
+.list .page .object .description { float: left; margin: 0; width: 280px; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 20px; }
+.list .page .object .description small { white-space: nowrap; font-size: 13px; font-style: italic; color: #777; }
+.list .page .object .description small a { color: #777; }
+.list .page .object .description small a:hover { color: #2598db; text-decoration: underline; }
+.list .finished_book .object { background: url(../images/icons/finished.gif) 510px 0 no-repeat; }
+
+/* BOOK */
+.list .book .object .info { width: 400px; }
+.list .book .object .info h4,
+.list .book .object .info p.authors { font-family: Palatino, Georgia, Times, serif; font-size: 14px; line-height: 20px; }
+.list .book .object .info .progress { margin-top: 5px; width: 370px; height: 21px; line-height: 21px; -webkit-border-radius: 11px; -moz-border-radius: 11px; }
+.list .book .object .info .progress .current_page { min-width: 7%; height: 19px; line-height: 19px; -webkit-border-radius: 9px; -moz-border-radius: 9px; }
+.list .book .object .info .rating { margin-top: 5px; }
+.list .book .object .book_editions { margin-bottom: 10px; padding: 3px 10px; border: 1px solid #ddd; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+.list .book .object .book_editions h3 { margin-bottom: 2px; padding: 0; font-size: 13px; line-height: 15px; color: #777; }
+.list .book .object .book_editions h3:hover { cursor: pointer; }
+.list .book .object .book_editions .book_edition_list { margin-top: 10px; display: none; }
+.list .book .object .book_editions .book_edition_list .book_edition { position: relative; margin-bottom: 10px; border-bottom: 1px solid #eee; zoom: 1; }
+.list .book .object .book_editions .book_edition_list .book_edition:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.list .book .object .book_editions .book_edition_list .book_edition .cover { float: left; display: block; width: 50px; }
+.list .book .object .book_editions .book_edition_list .book_edition .info { float: left; width: 180px; }
+.list .book .object .book_editions .book_edition_list .book_edition_last { border: none; }
+
+/* BOOK ADD */
+.list .book_add { overflow: hidden; }
+.list .book_add a.cover { position: relative; float: left; display: block; margin: 0 15px 10px 0; padding: 0; }
+.list .book_add a.cover img { display: block; width: 48px; }
+.list .book_add a.cover img.avatar { position: absolute; right: -3px; bottom: -3px; display: block; padding: 3px; width: 25px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.list .book_add .object { float: left; padding-bottom: 10px; width: 531px; }
+.list .book_add .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+.list .book_add .object p small { font-size: 13px; font-style: italic; color: #777; }
+.list .book_add .object p small a { color: #777; }
+.list .book_add .object p small a:hover { color: #2598db; text-decoration: underline; }
+
+.book_add_grid:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.book_add_grid .book_add { position: relative; float: left; margin-right: 20px; width: 100px; height: 160px; }
+.book_add_grid .book_add a.cover { position: absolute; bottom: 0; }
+.book_add_grid .book_add a.cover img { width: auto; }
+.book_add_grid .book_add .object { display: none; }
+
+/* BOOK LIST */
+.list .book_list { overflow: hidden; }
+.list .book_list .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #eee; }
+.list .book_list .object { float: left; padding-bottom: 10px; width: 530px; }
+.list .book_list .object h4 { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; font-weight: bold; }
+.list .book_list .object h4 small { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; }
+.list .book_list .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+.list .book_list .object p small { font-size: 13px; font-style: italic; color: #777; }
+.list .book_list .object p small a { color: #777; }
+.list .book_list .object p small a:hover { color: #2598db; text-decoration: underline; }
+
+/* BOOK LIST BOOK */
+.list .book_list_book .object .info { padding-bottom: 10px; width: 400px; }
+.list .book_list_book .object .info p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
+
+
+/* BOOK LIST/GRID
+-------------------------------------------------------------- */
+.book_grid { overflow: hidden; }
+.book_grid .book { float: left; margin-right: 20px; }
+.book_grid .book .object { position: relative; padding: 0; width: 100px; height: 200px; border: none; -webkit-border-radius: 0; -moz-border-radius: 0; }
+.book_grid .book .object .cover { position: absolute; width: auto; bottom: 15px; left: 0; }
+.book_grid .book .object .cover img { width: auto; }
+.book_grid .book .object h3, .book_grid .item .object h4, .book_grid .item .object p.authors { display: none; }
+.book_grid .book .object .info { position: absolute; bottom: 0; left: 0; width: 100px; }
+.book_grid .book .object .info .progress { width: 98px; height: 12px; overflow: hidden; -webkit-border-radius: 7px; -moz-border-radius: 7px; }
+.book_grid .book .object .info .progress .current_page { min-width: 13%; height: 10px; text-indent: 1000px; -webkit-border-radius: 5px; -moz-border-radius: 5px; }
+.book_grid .book .object .info .rating { margin: -27px 0 0 8px; }
+.book_grid .book .object .book_status { display: none; }
+.book_grid .book .object p.buy { top: -25px; right: 0px; width: 100px;}
+
+
+/* SIGNUP 
+-------------------------------------------------------------- 
+body.signup #header { position: relative; top: 0; height: 200px; }
+
+body.signup #body { margin: 20px auto 0 auto; }
+
+body.signup .content_wrapper { margin-bottom: 20px; width: 980px; -webkit-border-radius: 10px; -moz-border-radius: 10px;  }
+body.signup .content_wrapper .join_us { float: left; padding: 20px; width: 370px; }
+body.signup .content_wrapper .join_us #signup_form { margin-bottom: 58px; }
+body.signup .content_wrapper .join_us table th { width: 110px; }
+body.signup .content_wrapper .join_us button { width: 80px; }
+
+body.signup .content_wrapper .activity { float: left; padding: 20px; width: 480px; }
+body.signup .content_wrapper .activity .note_list .note .object { width: 400px; }
+*/

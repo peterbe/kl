@@ -1,22 +1,109 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>{% block title %}Korsordsl&ouml;saren{% endblock %}</title>
-<link href="{{ MEDIA_URL }}/css/style.css" rel="stylesheet" type="text/css" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>{% block title %}Korsordsl&ouml;saren{% endblock %}</title>  
+  
+
+  <link rel="stylesheet" href="{{ MEDIA_URL }}/css/boilerplate.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="{{ MEDIA_URL }}/css/core.css" type="text/css" media="screen" charset="utf-8">
+  
+  <!--[if IE 7]><link rel="stylesheet" href="{{ MEDIA_URL }}/css/ie7.css" type="text/css" media="screen" charset="utf-8"><![endif]-->
+
 {% block extracss %}
 {% endblock %}
 </head>
-<body>
-<h2>Korsordsl&ouml;saren</h2>
-<div id="content">
+
+<body id="profile_5" class=" user_book_list">
+  <div id="page">
+  
+{% comment %}    
+    <div id="header">
+      <div class="wrapper">
+        <h1 class="brand"><a href="/">Korsordsl&ouml;saren</a></h1>
+      </div>
+    </div>
+{% endcomment %}    
+
+    <div id="body">
+      
+        
+          
+          <div class="sidebar reader_sidebar">
+            
+            <ul>
+	      <li class="on"><a href="/">Svenska</a></li>
+              <li class=""><a href="/in/english" onclick="alert('Sorry. Working on it');return false">English</a></li>
+            </ul>
+            
+          </div>
+        
+
+        <div class="content_wrapper">
+          <div class="content">
+            
+
+            
+            <div class="content_title">
+                <h2>Korsordsl&ouml;saren</h2>
+            </div>
+            
+
+            
 {% block main %}
 {% endblock %}
-</div>
+  
+  
+
+          </div>
+          <div class="content_sidebar">
+            
+  <h3>Statistik</h3>
+  <ul>
+    <!--<li class="on"><a href="/y/books/">All books <em>8</em></a></li>-->
+    <li><a>Antal ord totalt <em>{{ no_total_words }}</em></a></li>
+    <li><a>Sokningar idag <em>{{ no_searches_today }}</em></a></li>
+    <li><a>Sokningar igar <em>{{ no_searches_yesterday }}</em></a></li>
+    <li><a>Sokningar denna veckan <em>{{ no_searches_this_week }}</em></a></li>
+    <li><a>Sokningar denna manad <em>{{ no_searches_this_month }}</em></a></li>
+    <li><a>Sokningar i ar <em>{{ no_searches_this_year }}</em></a></li>
+  </ul>
+
+
+          </div>
+        </div>
+      
+    </div>
+
+    
+    <div id="footer">
+      <form action="/feedback/" method="post" class="feedback_form" id="feedback">
+        <p class="text"><textarea name="text" rows="8" cols="40" id="id_feedback">Skicka ett forslag...</textarea></p>
+        <p class="submit">
+          <input type="hidden" name="source" id="id_source" value="/y/books/">
+          <button type="submit" name="submit" value="Skicka feedback">Skicka feedback</button>
+          <a href="#" class="alt_button">Asch, annulera</a>
+        </p>
+      </form>
+
+      <p class="copyright">
+        <small>
+          <a href="/">Korsordsl&ouml;saren &copy; 2009</a>
+          <a href="http://www.peterbe.com">Peterbe.com</a>
+          <a href="http://www.fry-it.com">Fry-IT</a>
+          <a href="/om/korsordslosaren">Om Korsordsl&ouml;saren</a>
+          <a href="/om/dsso">Om DSSO</a>
+        </small>
+      </p>
+    </div>
+    
+  
+  </div>
 
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascript/jquery-1.2.6.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascript/jquery.form.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascript/jquery.site.js"></script>
 {% block extrajs %}{% endblock %}
 </body>
 </html>
+

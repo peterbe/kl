@@ -143,6 +143,10 @@ function __process_submission(res) {
      $('#matches').text(res.word_count + " hittad");
    if (res.word_count>1)
      $('#matches').text(res.word_count + " hittade");
+   
+   if (res.alternatives_truncated)
+     $('#matches').text($('#matches').text() + " (men begransar till 100)");
+   
    $('#alternatives div.sugg').remove();
    if (res.word_count) {
       $.each(res.words, function(i,e) {
