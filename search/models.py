@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 # Create your models here.
@@ -40,3 +42,20 @@ class Word(models.Model):
         super(Word, self).__init__(*args, **kwargs)
     
 
+class Search(models.Model):
+    """ A search is a record of someone doing a search. 
+    """
+    
+    class Meta:
+        db_table = u'searches'
+        
+    search_word = models.CharField(max_length=40)
+    add_date = models.DateTimeField('date added', default=datetime.datetime.now)
+    user_agent =  models.CharField(max_length=200, default=u'')
+    ip_address =  models.CharField(max_length=15, default=u'')
+    
+    found_word = models.ForeignKey(Word, null=True, blank=True)
+    
+    def __unicode__(self):
+        return self.search_word
+    

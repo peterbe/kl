@@ -74,7 +74,7 @@ def _slimfile(filename):
     t0=time()
     r = _slimfile_timed(filename)
     t1=time()
-    print (t1-t0), filename
+    #print (t1-t0), filename
     return r
         
         
@@ -88,10 +88,6 @@ def _slimfile_timed(filename):
     except ImportError:
         pass
     
-    
-    #pprint(_FILE_MAP)
-    if not _FILE_MAP:
-        print "\n\t_FILE_MAP empty!!\n"
     new_filename, m_time = _FILE_MAP.get(filename, (None, None))
     
     # we might already have done a conversion but the question is

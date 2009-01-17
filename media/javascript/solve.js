@@ -12,6 +12,7 @@ function __prep_slots(n) {
       for (var i=0, left=n - already.size(); i < left; i++) 
         $('#allslots').append(
                               $('<input name="s" size="1" maxlength="1"/>')
+                              .attr('autocomplete','off')
                               .bind('keyup', on_slot_key)
                               .bind('change', on_slot_change));
    }
@@ -164,6 +165,7 @@ function __process_submission(res) {
    }
    $('#loading:visible').hide();
    
+   $('#clear-search').show();
    __done_search = true;
    
 }

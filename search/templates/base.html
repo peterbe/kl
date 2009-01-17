@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
+{% load i18n %}
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>{% block title %}Korsordsl&ouml;saren{% endblock %}</title>  
+  <title>{% block title %}{% trans "Crossword solver" %}{% endblock %}</title>  
   
 
   <link rel="stylesheet" href="{{ MEDIA_URL }}/css/boilerplate.css" type="text/css" media="screen" charset="utf-8">
@@ -20,7 +21,7 @@
 {% comment %}    
     <div id="header">
       <div class="wrapper">
-        <h1 class="brand"><a href="/">Korsordsl&ouml;saren</a></h1>
+        <h1 class="brand"><a href="/">{% trans "Crossword solver" %}</a></h1>
       </div>
     </div>
 {% endcomment %}    
@@ -33,7 +34,7 @@
             
             <ul>
 	      <li class="on"><a href="/">Svenska</a></li>
-              <li class=""><a href="/in/english" onclick="alert('Sorry. Working on it');return false">English</a></li>
+              <li class=""><a href="/in/english" onclick="alert('Sorry. Not yet. Working on it');return false">English</a></li>
             </ul>
             
           </div>
@@ -45,7 +46,7 @@
 
             
             <div class="content_title">
-                <h2>Korsordsl&ouml;saren</h2>
+                <h2>{% trans "Crossword solver" %}</h2>
             </div>
             
 
@@ -58,15 +59,15 @@
           </div>
           <div class="content_sidebar">
             
-  <h3>Statistik</h3>
+  <h3>{% trans "Statistics" %}</h3>
   <ul>
     <!--<li class="on"><a href="/y/books/">All books <em>8</em></a></li>-->
-    <li><a>Antal ord totalt <em>{{ no_total_words }}</em></a></li>
-    <li><a>Sokningar idag <em>{{ no_searches_today }}</em></a></li>
-    <li><a>Sokningar igar <em>{{ no_searches_yesterday }}</em></a></li>
-    <li><a>Sokningar denna veckan <em>{{ no_searches_this_week }}</em></a></li>
-    <li><a>Sokningar denna manad <em>{{ no_searches_this_month }}</em></a></li>
-    <li><a>Sokningar i ar <em>{{ no_searches_this_year }}</em></a></li>
+    <li><a>{% trans "Searches today" %} <em>{{ no_searches_today }}</em></a></li>
+    <li><a>{% trans "Searches yesterday" %} <em>{{ no_searches_yesterday }}</em></a></li>
+    <li><a>{% trans "Searches this week" %} <em>{{ no_searches_this_week }}</em></a></li>
+    <li><a>{% trans "Searches this month" %} <em>{{ no_searches_this_month }}</em></a></li>
+    <li><a>{% trans "Searches this year" %} <em>{{ no_searches_this_year }}</em></a></li>
+    <li><a>{% trans "Total number of words" %} <em>{{ no_total_words }}</em></a></li>
   </ul>
 
 
@@ -78,11 +79,24 @@
     
     <div id="footer">
       <form action="/feedback/" method="post" class="feedback_form" id="feedback">
-        <p class="text"><textarea name="text" rows="8" cols="40" id="id_feedback">Skicka ett forslag...</textarea></p>
+        <p class="text"><textarea name="text" rows="8" cols="40" id="id_feedback">{% trans "Send suggestions, feedback or tips" %}</textarea></p>
+        <table style="display:none">
+          <tr>
+            <td><label>{% trans "Your name:" %}</label> <sup>({% trans "optional" %})</sup></td>
+            <td><input name="name" size="20" value="{{ cookie__name }}" /></td>
+          </tr>
+          <tr>
+            <td><label>{% trans "Your email:" %}</label> <sup>({% trans "optional" %})</sup></td>
+            <td><input name="email" size="20" value="{{ cookie__email }}" /></td>
+          </tr>
+          <tr class="h">
+            <td><label>Your URL: <sup>(leave empty)</sup></label></td>
+            <td><input name="url" size="30" value="" /></td>
+          </tr>          
+        </table>
         <p class="submit">
-          <input type="hidden" name="source" id="id_source" value="/y/books/">
-          <button type="submit" name="submit" value="Skicka feedback">Skicka feedback</button>
-          <a href="#" class="alt_button">Asch, annulera</a>
+          <button type="submit" name="submit" value="Skicka feedback">{% trans "Send feedback" %}</button>
+          <a href="#" class="alt_button">{% trans "Cancel" %}</a>
         </p>
       </form>
 
@@ -91,8 +105,12 @@
           <a href="/">Korsordsl&ouml;saren &copy; 2009</a>
           <a href="http://www.peterbe.com">Peterbe.com</a>
           <a href="http://www.fry-it.com">Fry-IT</a>
+          {% ifequal LANGUAGE_CODE "sv-SE" %}
           <a href="/om/korsordslosaren">Om Korsordsl&ouml;saren</a>
           <a href="/om/dsso">Om DSSO</a>
+          {% else %}
+          <a href="/about/crosswordsolver">About Crossword solver</a>
+          {% endifequal %}
         </small>
       </p>
     </div>

@@ -1,4 +1,5 @@
 {% extends base_template %}
+{% load i18n %}
 {% load highlighter %}
 {% load django_slimmer %}
 
@@ -24,7 +25,7 @@ div.error {
   font-weight:bold;
   color:red;
 }
-
+a.clear-search { font-size:80%;}
 {% endslimcontent %}
 </style>
 {% endblock %}
@@ -37,22 +38,24 @@ div.error {
 
 <form action="./" id="solutions">
 <p>
-  <label for="id_length">L&auml;ngd:</label>
+  <label for="id_length">{% trans "Length" %}:</label>
   <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"/><br/>
   
-  <label>Rutor:</label>
+  <label>{% trans "Slots" %}:</label>
   <span id="allslots">
   {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1"/>{% endfor %}
   </span>
   <br/>
   <input type="submit" value="S&ouml;k"/> 
   <img id="loading" style="display:none" src="{{ MEDIA_URL }}/images/loading-bar.gif" alt="Laddar" width="150" height="15"/>
+  <a href="./" id="clear-search" style="display:none">{% trans "clear search" %}</a>
 </p>
 </form>
 
 <div id="error__no_s" class="error" style="display:none">
-No letters all?
+{% trans "No letters all?" %}
 </div>
+
 
 <div id="matches"></div>
 <div id="alternatives"></div>
@@ -66,6 +69,5 @@ No letters all?
   </p>
 {% endif %}
 {% endcomment %}
-
 
 {% endblock %}

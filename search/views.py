@@ -1,3 +1,4 @@
+import datetime
 import re
 from time import time
 from random import randint
@@ -11,11 +12,15 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect,  Http404
 from django.template import RequestContext
+from django.core.cache import cache
+from django.utils.translation import ugettext as _
+from django.core.mail import send_mail
+from django.contrib.sites.models import Site
+from django.conf import settings
 
-
-from models import Word
-from forms import DSSOUploadForm
-from utils import uniqify, any_true
+from models import Word, Search
+from forms import DSSOUploadForm, FeedbackForm
+from utils import uniqify, any_true, ValidEmailAddress
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -24,6 +29,18 @@ def _render_json(data):
 def _render(template, data, request):
     return render_to_response(template, data,
                               context_instance=RequestContext(request))
+
+def set_cookie(response, key, value, expire=None):
+    # http://www.djangosnippets.org/snippets/40/
+    if expire is None:
+        max_age = 365*24*60*60  #one year
+    else:
+        max_age = expire
+    expires = datetime.datetime.strftime(datetime.datetime.utcnow() + \
+      datetime.timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
+    response.set_cookie(key, value, max_age=max_age, expires=expires,
+        domain=settings.SESSION_COOKIE_DOMAIN, secure=settings.SESSION_COOKIE_SECURE or None)
+
 
         
 def solve(request, json=False):
@@ -38,7 +55,7 @@ def solve(request, json=False):
         
         if not len(slots) >= length:
             return HttpResponseRedirect('/los/?error=slots&error=length')
-        
+
         # find some alternatives
         alternatives = _find_alternatives(slots[:length])
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]]);
@@ -47,48 +64,118 @@ def solve(request, json=False):
         if alternatives_count > 100:
             alternatives = alternatives[:100]
             alternatives_truncated = True
+
+        result = dict(length=length,
+                    search=search,
+                    word_count=alternatives_count,
+                    alternatives_truncated=alternatives_truncated,
+                    )
+        words = [each.word for each in alternatives]
+        match_points = None
+        match_points = []
+        if words:
+            for i, letter in enumerate(words[0]):
+                if letter.lower() == search[i]:
+                    match_points.append(1)
+                else:
+                    match_points.append(0)
+            result['match_points'] = match_points
+        result['words'] = words
         
+        found_word = None
+        if len(words) == 1:
+            found_word = Word.objects.get(word=words[0])
+        
+        _record_search(search,
+                       user_agent=request.META.get('HTTP_USER_AGENT',''),
+                       ip_address=request.META.get('REMOTE_ADDR',''),
+                       found_word=found_word)
+
         if json:
-            data = dict(length=length,
-                        search=search,
-                        word_count=alternatives_count,
-                        alternatives_truncated=alternatives_truncated,
-                       )
-            words = [each.word for each in alternatives]
-            match_points = None
-            match_points = []
-            if words:
-                for i, letter in enumerate(words[0]):
-                    if letter.lower() == search[i]:
-                        match_points.append(1)
-                    else:
-                        match_points.append(0)
-                data['match_points'] = match_points
-            data['words'] = words
-                
-            return _render_json(data)
+            return _render_json(result)
         
     else:
         length = '' # default
         
     data = locals()
     
-    data.update(_get_search_stats())
+    data.update(get_search_stats())
+    
+    data.update(get_saved_cookies(request))
 
     return _render('solve.html', data, request)
 
+def _record_search(search_word, user_agent=u'', ip_address=u'',
+                   found_word=None):
+    if len(user_agent) > 200:
+        user_agent = user_agent[:200]
+    if len(ip_address) > 15:
+        ip_address = u''
+    
+    Search.objects.create(search_word=search_word,
+                          user_agent=user_agent.strip(),
+                          ip_address=ip_address.strip(),
+                          found_word=found_word,
+                          )
+
+def get_search_stats(refresh_today_stats=True):
+    """ wrapper on _get_search_stats() that uses a cache instead """
+    cache_key = '_get_search_stats'
+    res = cache.get(cache_key)
+    today = datetime.datetime.today()
+    today_midnight = datetime.datetime(today.year, today.month,
+                                       today.day, 0, 0, 0)
+    if res is None:
+        #t0=time()
+        res = _get_search_stats()
+        #print time()-t0, "to generate stats"
+        seconds_since_midnight = (today - today_midnight).seconds
+        
+        cache.set(cache_key, res, seconds_since_midnight)
+        
+    if refresh_today_stats:
+        # exception
+        
+        res['no_searches_today'] = Search.objects.filter(
+                                           add_date__gte=today_midnight).count()
+    return res
+
 def _get_search_stats():
     
-    no_total_words = 70140
-    no_searches_today = 5
-    no_searches_yesterday = 4
+    no_total_words = Word.objects.all().count()
+    today = datetime.datetime.today()
     
-    no_searches_this_week = 15
-    no_searches_this_month = 44
+    today_midnight = datetime.datetime(today.year, today.month, 
+                                       today.day, 0, 0, 0)
+    no_searches_today = Search.objects.filter(
+                                            add_date__gte=today_midnight).count()
     
-    no_searches_this_year = 109
+    yesterday_midnight = today_midnight - datetime.timedelta(days=1)
+    no_searches_yesterday = Search.objects.filter(
+                    add_date__range=(yesterday_midnight, today_midnight)).count()
+    
+    # find the first monday
+    monday_midnight = today_midnight
+    while monday_midnight.strftime('%A') != 'Monday':
+        monday_midnight = monday_midnight - datetime.timedelta(days=1)
+        
+    no_searches_this_week = Search.objects.filter(
+                                            add_date__gt=monday_midnight).count()
+
+    first_day_month = datetime.datetime(today.year, today.month, 1, 0, 0, 0)
+    no_searches_this_month = Search.objects.filter(
+                                           add_date__gte=first_day_month).count()
+
+    first_day_year = datetime.datetime(today.year, 1, 1, 0, 0, 0)
+    no_searches_this_year = Search.objects.filter(
+                                           add_date__gte=first_day_year).count()
     
     return locals()
+
+def get_saved_cookies(request):
+    cookie__name = request.COOKIES.get('kl__name')
+    cookie__email = request.COOKIES.get('kl__email')
+    return dict([(k,v) for (k,v) in locals().items() if v is not None])
 
 def _find_alternatives(slots):
     length = len(slots)
@@ -194,3 +281,57 @@ def _add_word(word, part_of_speech):
     except Word.DoesNotExist:
         # add it
         Word.objects.create(word=word, length=length, part_of_speech=part_of_speech)
+        
+        
+def send_feedback(request):
+    
+    if not request.method == "POST":
+        return HttpResponseRedirect('/?error=feedback')
+    
+    form = FeedbackForm(data=request.POST)
+    if form.is_valid():
+        name = form.cleaned_data.get('name')
+        email = form.cleaned_data.get('email')
+        _send_feedback(form.cleaned_data.get('text'),
+                       name=name,
+                       email=email)
+        
+        response = _render('feedback_sent.html', locals(), request)
+        if name is not None:
+            if type(name) is unicode:
+                name = name.encode('utf8')
+            set_cookie(response, 'kl__name', name)
+        if email is not None:
+            if type(email) is unicode:
+                email = email.encode('utf8')
+            set_cookie(response, 'kl__email', email)
+        return response
+    
+    return _render('solve.html', locals(), request)
+        
+def _send_feedback(text, name=u'', email=u'', fail_silently=False):
+    
+    recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
+    
+    if email and ValidEmailAddress(email):
+        from_email = email
+    else:
+        try:
+            from_email = settings.DEFAULT_FROM_EMAIL
+        except:
+            from_email = 'feedbackform@' + Site.objects.get_current().domain
+            
+    message = "Feedback\n========\n" 
+    if name:
+        message += "From: %s\n" % name
+    if email:
+        message += "Email: %s\n" % email
+    message += "\n" + text
+    message += '\n\n\n--\nkl'
+    
+    send_mail(fail_silently=fail_silently, 
+              from_email=from_email,
+              recipient_list=recipient_list,
+              subject=_("Feedback on Crossword solver"),
+              message=message,
+             )

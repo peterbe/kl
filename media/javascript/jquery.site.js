@@ -12,7 +12,8 @@ function feedback_init() {
   var textarea = form.find('#id_feedback');
   var default_value = textarea.val();
   var submit = form.find('.submit');
-  
+  var table = form.find('table');
+
   textarea.height(20);
   submit.hide();
   
@@ -20,6 +21,7 @@ function feedback_init() {
     if (textarea.height() < 50) {
       textarea.height(100).val('');
       submit.show();
+      table.show();
     }
   });
   
@@ -27,17 +29,7 @@ function feedback_init() {
     e.preventDefault();
     textarea.height(20).val(default_value);
     submit.hide();
-  });
-
-  form.submit(function(e) {
-    e.preventDefault();
-    var data = {'text': textarea.val(), 'source': form.find('#id_source').val()}
-    $.post(form.attr('action'), data, function(response) {
-      if (response.success) {
-        textarea.height(20).val('Tack :)');
-        submit.hide();
-      }
-    }, 'json');
+    table.hide();
   });
 }
 

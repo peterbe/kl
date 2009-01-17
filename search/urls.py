@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'^los/$', solve),
     url(r'^/?$', solve),
     url(r'^los/json/$', solve, {'json':True}),
+    url(r'^feedback/$', send_feedback),
                        
 )

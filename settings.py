@@ -102,6 +102,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'kl.search.context_processors.context',
 )
 
+CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
+
 
 TEMPLATE_STRING_IF_INVALID = ''
 

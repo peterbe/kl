@@ -19,7 +19,10 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'search',
     'debug_toolbar',
+    'django_extensions',
 )
 
 
 DEBUG_TOOLBAR = False
+
+CACHE_BACKEND = "locmem:///?timeout=30"

@@ -34,7 +34,8 @@ form table th { color: #555; }
 form table td { padding: 5px 10px 5px 0; font-size: 12px; line-height: 16px;color: #777; }
 form table td input, form table td select, form table td textarea { margin-bottom: 5px; }
 form table td textarea { width: 100%; }
-form table td input { width: 70%; }
+form table td input { width: 55%; }
+form table tr.h { display:none; }
 form table td span { font-weight: bold; }
 form table tr.submit { border: none; }
 

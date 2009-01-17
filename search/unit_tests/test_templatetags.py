@@ -16,6 +16,7 @@ _original_DEBUG = settings.DEBUG
 class Test__django_slimmer(TestCase):
     
     def setUp(self):
+        settings.DJANGO_SLIMMER = True
         settings.MEDIA_ROOT = TEST_MEDIA_ROOT
         if not os.path.isdir(TEST_MEDIA_ROOT):
             os.mkdir(TEST_MEDIA_ROOT)
