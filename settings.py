@@ -69,6 +69,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'djangodblog.DBLogMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
                       
 )
 
@@ -80,7 +81,6 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     HOME + '/templates',
     HOME + '/kl/templates',
-    
 )
 
 INSTALLED_APPS = (
@@ -90,7 +90,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'search',
-    'djangodblog',                  
+    'djangodblog',
+    'django.contrib.flatpages',
 )
 
 
@@ -107,7 +108,7 @@ CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 TEMPLATE_STRING_IF_INVALID = ''
 
-DJANGO_SLIMMER = False
+DJANGO_SLIMMER = True
 
 # must be last
 try:
@@ -115,4 +116,5 @@ try:
 except ImportError:
     pass
 
-musts = HOME, SECRET_KEY
+# must exist
+HOME, SECRET_KEY
