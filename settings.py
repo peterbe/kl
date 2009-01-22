@@ -1,6 +1,6 @@
 # Django settings for kl project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 HOME = '/home/peterbe/dev/DJANGO/kl_env/kl'
