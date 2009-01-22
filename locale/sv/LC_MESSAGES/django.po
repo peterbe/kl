@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-17 17:34+0000\n"
-"PO-Revision-Date: 2009-01-17 17:59+0100\n"
+"PO-Revision-Date: 2009-01-22 13:06+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,13 +17,13 @@ msgstr ""
 
 #: search/views.py:335
 msgid "Feedback on Crossword solver"
-msgstr "Feedback på Korsordslösaren"
+msgstr "Feedback på Krysstips"
 
 #: search/templates/base.html:6
 #: search/templates/base.html.py:24
 #: search/templates/base.html:49
 msgid "Crossword solver"
-msgstr "Korsordslösaren"
+msgstr "Krysstips"
 
 #: search/templates/base.html:62
 msgid "Statistics"
@@ -88,7 +88,7 @@ msgstr "Feedback skickad. Tack så mycket!"
 
 #: search/templates/feedback_sent.html:12
 msgid "Go back to the Crossword solver"
-msgstr "Gå tillbaka till Korsordslösaren"
+msgstr "Gå tillbaka till Krysstips"
 
 #: search/templates/solve.html:41
 msgid "Length"
