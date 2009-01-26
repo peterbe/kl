@@ -64,7 +64,8 @@ class SlimFileNode(template.Node):
     def __init__(self, filename):
         self.filename = filename
     def render(self, context):
-        return _slimfile(self.filename)
+        r = _slimfile(self.filename)
+        return r
 
     
 _FILE_MAP = {}
@@ -86,8 +87,20 @@ def _slimfile_timed(filename):
         if not DJANGO_SLIMMER:
             return filename
     except ImportError:
-        pass
+        return filename
     
+    try:
+        from settings import DJANGO_SLIMMER_SAVE_PREFIX
+    except ImportError:
+        DJANGO_SLIMMER_SAVE_PREFIX = ''
+        
+    try:
+        from settings import DJANGO_SLIMMER_NAME_PREFIX
+    except ImportError:
+        DJANGO_SLIMMER_NAME_PREFIX = ''
+        
+    PREFIX = DJANGO_SLIMMER_SAVE_PREFIX and DJANGO_SLIMMER_SAVE_PREFIX or MEDIA_ROOT
+        
     new_filename, m_time = _FILE_MAP.get(filename, (None, None))
     
     # we might already have done a conversion but the question is
@@ -110,10 +123,9 @@ def _slimfile_timed(filename):
         old_new_filename = None
 
     if not new_filename:
-        
         filepath = _filename2filepath(filename, MEDIA_ROOT)
         if not os.path.isfile(filepath):
-            import warnings; warnings.warn("Can't file %s" % filepath)
+            import warnings; warnings.warn("Can't find file %s" % filepath)
             return filename
         
         new_m_time = os.stat(filepath)[stat.ST_MTIME]
@@ -133,20 +145,47 @@ def _slimfile_timed(filename):
                                 '.%s' % new_m_time,
                                 apart[1]])
             
-            _FILE_MAP[filename] = (new_filename, new_m_time)
+            #new_filename = DJANGO_SLIMMER_NAME_PREFIX + new_filename
+            
+            print "new_filename", repr(new_filename)
+            _FILE_MAP[filename] = (DJANGO_SLIMMER_NAME_PREFIX + new_filename, new_m_time)
             if old_new_filename:
-                os.remove(_filename2filepath(old_new_filename, MEDIA_ROOT))
+                print "old_new_filename", old_new_filename
+                os.remove(_filename2filepath(old_new_filename.replace(DJANGO_SLIMMER_NAME_PREFIX, ''),
+                                             PREFIX))
 
-    new_filepath = _filename2filepath(new_filename, MEDIA_ROOT)
+    new_filepath = _filename2filepath(new_filename, PREFIX)
         
+    content = open(filepath).read()
     if new_filename.endswith('.js'):
-        content = js_slimmer(open(filepath).read())
+        content = js_slimmer(content)
     elif new_filename.endswith('.css'):
-        content = css_slimmer(open(filepath).read())
+        content = css_slimmer(content)
+        
+    print "** STORING:", new_filepath
     open(new_filepath, 'w').write(content)
-                                    
-    return new_filename
+                            
+    return DJANGO_SLIMMER_NAME_PREFIX + new_filename
 
+
+def _mkdir(newdir):
+    """works the way a good mkdir should :)
+        - already exists, silently complete
+        - regular file in the way, raise an exception
+        - parent directory(ies) does not exist, make them as well
+    """
+    if os.path.isdir(newdir):
+        pass
+    elif os.path.isfile(newdir):
+        raise OSError("a file with the same name as the desired " \
+                      "dir, '%s', already exists." % newdir)
+    else:
+        head, tail = os.path.split(newdir)
+        if head and not os.path.isdir(head):
+            _mkdir(head)
+        if tail:
+            os.mkdir(newdir)
+            
 def _filename2filepath(filename, MEDIA_ROOT):
     # The reason we're doing this is because the templates will 
     # look something like this:
@@ -155,8 +194,13 @@ def _filename2filepath(filename, MEDIA_ROOT):
     # just be ''
     
     if filename.startswith('/'):
-        return os.path.join(MEDIA_ROOT, filename[1:])
+        path = os.path.join(MEDIA_ROOT, filename[1:])
     else:
-        return os.path.join(MEDIA_ROOT, filename)
+        path = os.path.join(MEDIA_ROOT, filename)
+        
+    if not os.path.isdir(os.path.dirname(path)):
+        _mkdir(os.path.dirname(path))
+        
+    return path
     
     
