@@ -103,8 +103,6 @@ class Test__django_slimmer(TestCase):
         """
         TEST_SAVE_PREFIX = '/tmp/infinity'
         TEST_NAME_PREFIX = '/cache-forever'
-        print "**"
-        print settings.MEDIA_URL
         
         settings.DJANGO_SLIMMER = True
         settings.DJANGO_SLIMMER_SAVE_PREFIX = TEST_SAVE_PREFIX
@@ -163,9 +161,12 @@ class Test__django_slimmer(TestCase):
         in DEBUG mode. Then slimit will not notice that the file changes
         because it's more optimized. 
         """
+        TEST_NAME_PREFIX = '/cache-forever'
+        TEST_SAVE_PREFIX = '/tmp/infinity'
+        
         settings.DJANGO_SLIMMER = True
-        settings.DJANGO_SLIMMER_SAVE_PREFIX = '/tmp/infinity'
-        settings.DJANGO_SLIMMER_NAME_PREFIX = '/cache-forever'
+        settings.DJANGO_SLIMMER_SAVE_PREFIX = TEST_SAVE_PREFIX
+        settings.DJANGO_SLIMMER_NAME_PREFIX = TEST_NAME_PREFIX
         settings.MEDIA_ROOT = TEST_MEDIA_ROOT
         settings.DEBUG = False
         
@@ -180,10 +181,14 @@ class Test__django_slimmer(TestCase):
         # if you remove that timestamp you should get the original 
         # file again
         assert TEST_CSS_FILENAME == \
-          result_filename.replace(str(timestamp)+'.', '')
+          result_filename.replace(str(timestamp)+'.', '')\
+                         .replace(TEST_NAME_PREFIX, '')
+        
         
         # and the content should be slimmed
-        content = open(TEST_MEDIA_ROOT + result_filename).read()
+        actual_saved_filepath = TEST_SAVE_PREFIX + \
+          result_filename.replace(TEST_NAME_PREFIX, '')
+        content = open(actual_saved_filepath).read()
         assert content == 'body{color:#CCC}', content
             
         time.sleep(1) # slow but necessary
@@ -192,7 +197,8 @@ class Test__django_slimmer(TestCase):
           .write('body { color:#FFFFFF}\n')
         
         result_filename = _slimfile(TEST_CSS_FILENAME)
-        new_content = open(TEST_MEDIA_ROOT + result_filename).read()
+        new_content = open(TEST_SAVE_PREFIX + \
+            result_filename.replace(TEST_NAME_PREFIX,'')).read()
         assert new_content == content, new_content
             
         
