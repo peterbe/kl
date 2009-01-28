@@ -1,8 +1,22 @@
 # python
 import os
+import sys
 import stat
 from slimmer import css_slimmer, guessSyntax, html_slimmer, js_slimmer
 from pprint import pprint
+
+if sys.platform == "win32":
+    _CAN_SYMLINK = False
+else:
+    _CAN_SYMLINK = True
+    import subprocess
+    
+def _symlink(from_, to):
+    cmd = 'ln -s "%s" "%s"' % (from_, to)
+    proc = subprocess.Popen(cmd, shell=True,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc.communicate()
+    
 
 # django 
 from django import template
@@ -58,28 +72,57 @@ def slimfile_node(parser, token):
     except IndexError:
         raise template.TemplateSyntaxError("Filename not specified")
     
-    return SlimFileNode(filename)
+    return StaticFileNode(filename, slimmer_if_possible=True)
 
-class SlimFileNode(template.Node):
-    def __init__(self, filename):
+@register.tag(name='staticfile')
+def staticfile_node(parser, token):
+    _split = token.split_contents()
+    tag_name = _split[0]
+    options = _split[1:]
+    try:
+        filename = options[0]
+        if not (filename[0] == filename[-1] and filename[0] in ('"', "'")):
+            raise template.TemplateSyntaxError, "%r tag's argument should be in quotes" % tag_name
+        filename = filename[1:-1]
+    except IndexError:
+        raise template.TemplateSyntaxError("Filename not specified")
+    
+    return StaticFileNode(filename, symlink_if_possible=_CAN_SYMLINK)
+
+class StaticFileNode(template.Node):
+    
+    def __init__(self, filename, slimmer_if_possible=False, 
+                 symlink_if_possible=False):
         self.filename = filename
+        self.slimmer_if_possible = slimmer_if_possible
+        self.symlink_if_possible = symlink_if_possible
+        
     def render(self, context):
-        r = _slimfile(self.filename)
-        return r
-
+        return _static_file(self.filename,
+                            slimmer_if_possible=self.slimmer_if_possible,
+                            symlink_if_possible=self.symlink_if_possible)
+    
     
 _FILE_MAP = {}
 
-def _slimfile(filename):
+def _static_file(filename, 
+                       slimmer_if_possible=False,
+                       symlink_if_possible=False):
+    print filename
+    print "symlink_if_possible", symlink_if_possible
+    print
     from time import time
     t0=time()
-    r = _slimfile_timed(filename)
+    r = _static_file_timed(filename, slimmer_if_possible=slimmer_if_possible,
+                          symlink_if_possible=symlink_if_possible)
     t1=time()
     #print (t1-t0), filename
     return r
         
         
-def _slimfile_timed(filename):
+def _static_file_timed(filename, 
+                       slimmer_if_possible=False, 
+                       symlink_if_possible=False):
     
     from settings import MEDIA_ROOT, DEBUG
     try:
@@ -100,7 +143,7 @@ def _slimfile_timed(filename):
         DJANGO_SLIMMER_NAME_PREFIX = ''
         
     PREFIX = DJANGO_SLIMMER_SAVE_PREFIX and DJANGO_SLIMMER_SAVE_PREFIX or MEDIA_ROOT
-        
+
     new_filename, m_time = _FILE_MAP.get(filename, (None, None))
     
     # we might already have done a conversion but the question is
@@ -147,21 +190,21 @@ def _slimfile_timed(filename):
             
             #new_filename = DJANGO_SLIMMER_NAME_PREFIX + new_filename
             
-            print "new_filename", repr(new_filename)
             _FILE_MAP[filename] = (DJANGO_SLIMMER_NAME_PREFIX + new_filename, new_m_time)
             if old_new_filename:
-                print "old_new_filename", old_new_filename
                 os.remove(_filename2filepath(old_new_filename.replace(DJANGO_SLIMMER_NAME_PREFIX, ''),
                                              PREFIX))
 
     new_filepath = _filename2filepath(new_filename, PREFIX)
         
     content = open(filepath).read()
-    if new_filename.endswith('.js'):
-        content = js_slimmer(content)
-    elif new_filename.endswith('.css'):
-        content = css_slimmer(content)
-        
+    if slimmer_if_possible:
+        if new_filename.endswith('.js'):
+            content = js_slimmer(content)
+        elif new_filename.endswith('.css'):
+            content = css_slimmer(content)
+    elif symlink_if_possible:
+        _symlink(filepath, new_filepath)
     print "** STORING:", new_filepath
     open(new_filepath, 'w').write(content)
                             
