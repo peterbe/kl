@@ -1,5 +1,6 @@
 # python
 import os
+import re
 import sys
 import stat
 from slimmer import css_slimmer, guessSyntax, html_slimmer, js_slimmer
@@ -72,7 +73,9 @@ def slimfile_node(parser, token):
     except IndexError:
         raise template.TemplateSyntaxError("Filename not specified")
     
-    return StaticFileNode(filename, slimmer_if_possible=True)
+    return StaticFileNode(filename,
+                          symlink_if_possible=_CAN_SYMLINK,
+                          slimmer_if_possible=True)
 
 @register.tag(name='staticfile')
 def staticfile_node(parser, token):
@@ -105,12 +108,11 @@ class StaticFileNode(template.Node):
     
 _FILE_MAP = {}
 
+referred_css_images_regex = re.compile('url\(([^\)]+)\)')
+
 def _static_file(filename, 
                        slimmer_if_possible=False,
                        symlink_if_possible=False):
-    print filename
-    print "symlink_if_possible", symlink_if_possible
-    print
     from time import time
     t0=time()
     r = _static_file_timed(filename, slimmer_if_possible=slimmer_if_possible,
@@ -196,17 +198,42 @@ def _static_file_timed(filename,
                                              PREFIX))
 
     new_filepath = _filename2filepath(new_filename, PREFIX)
-        
-    content = open(filepath).read()
+     
+    # Files are either slimmered or symlinked or just copied. Basically, only
+    # .css and .js can be slimmered but not all are. For example, an already
+    # minified say jquery.min.js doesn't need to be slimmered nor does it need
+    # to be copied. 
+    # If you're on windows, it will always have to do a copy. 
+    # When symlinking, what the achievement is is that it gives the file a 
+    # unique and different name than the original. 
+    #
+    # The caller of this method is responsible for dictacting if we're should
+    # slimmer and if we can symlink.
+    
     if slimmer_if_possible:
+        # Then we expect to be able to modify the content and we will 
+        # definitely need to write a new file. 
+        content = open(filepath).read()
         if new_filename.endswith('.js'):
             content = js_slimmer(content)
         elif new_filename.endswith('.css'):
             content = css_slimmer(content)
+            # and _static_file() all images refered in the CSS file itself
+            def replacer(match):
+                filename = match.groups()[0]
+                new_filename = _static_file(filename, symlink_if_possible=symlink_if_possible)
+                return match.group().replace(filename, new_filename)
+            content = referred_css_images_regex.sub(replacer, content)
+        else:
+            raise ValueError(
+              "Unable to slimmer file %s. Unrecognized extension" % new_filename)
+        print "** STORING:", new_filepath
+        open(new_filepath, 'w').write(content)
     elif symlink_if_possible:
         _symlink(filepath, new_filepath)
-    print "** STORING:", new_filepath
-    open(new_filepath, 'w').write(content)
+    else:
+        print "** STORING:", new_filepath
+        open(new_filepath, 'w').write(content)
                             
     return DJANGO_SLIMMER_NAME_PREFIX + new_filename
 
@@ -228,6 +255,7 @@ def _mkdir(newdir):
             _mkdir(head)
         if tail:
             os.mkdir(newdir)
+            
             
 def _filename2filepath(filename, MEDIA_ROOT):
     # The reason we're doing this is because the templates will 
