@@ -53,28 +53,28 @@ button.alt_button, input.alt_button { padding: 0; background: none; border: none
 button.alt_button:hover, input.alt_button:hover { color: #2598db; text-decoration: none; }
 
 /* PROFILE BACKGROUNDS */
-body#profile_1 { background: #f2f6a2 url(../images/backgrounds/green.gif) repeat-x; }
-body#profile_2 { background: #18a7c0 url(../images/backgrounds/blue.gif) repeat-x; }
-body#profile_3 { background: #ffb01d url(../images/backgrounds/orange.gif) repeat-x; }
-body#profile_4 { background: #fff9cf url(../images/backgrounds/yellow.gif) repeat-x; }
-body#profile_5 { background: #10c3de url(../images/backgrounds/purple.gif) repeat-x; }
+body#profile_1 { background: #f2f6a2 url(/images/backgrounds/green.gif) repeat-x; }
+body#profile_2 { background: #18a7c0 url(/images/backgrounds/blue.gif) repeat-x; }
+body#profile_3 { background: #ffb01d url(/images/backgrounds/orange.gif) repeat-x; }
+body#profile_4 { background: #fff9cf url(/images/backgrounds/yellow.gif) repeat-x; }
+body#profile_5 { background: #10c3de url(/images/backgrounds/purple.gif) repeat-x; }
 
 
 /* HEADER */
 #header { position: absolute; top: -301px; left: 0; padding: 0; width: 100%; height: 360px; background: #2c2c28; z-index: 999; }
 #header .wrapper { position: relative; width: 980px; margin: 0 auto; padding: 0; }
 #header .wrapper h1 { float: left; margin: 0; width: 180px; }
-#header .wrapper h1 a { display: block; height: 59px; background: url(../images/kl.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
+#header .wrapper h1 a { display: block; height: 59px; background: url(/images/kl.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
 #header .wrapper h1 a:hover { background-position: 0 -60px; }
 
 #header .settings { float: left; margin: 0 230px 0 255px; width: 35px; }
-#header .settings a { display: block; margin-top: 13px; width: 35px; height: 35px; background: url(../images/icons/toolbar_cog.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
+#header .settings a { display: block; margin-top: 13px; width: 35px; height: 35px; background: url(/images/icons/toolbar_cog.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
 #header .settings a:hover { background-position: 0 -35px; }
 
-#header .login_button a { background-image: url(../images/icons/toolbar_onoff.gif); }
+#header .login_button a { background-image: url(/images/icons/toolbar_onoff.gif); }
 
 #header .messages { position: relative; float: left; margin: 0 100px 0 0; width: 30px; }
-#header .messages a { display: block; margin-top: 16px; width: 30px; height: 30px; background: url(../images/icons/toolbar_messages.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
+#header .messages a { display: block; margin-top: 16px; width: 30px; height: 30px; background: url(/images/icons/toolbar_messages.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
 #header .messages a:hover { background-position: 0 -30px; }
 #header .messages small { position: absolute; bottom: 0; right: -7px; display: block; padding: 0px 4px; background: #ff0000; border: 1px solid #b80000; font-size: 12px; font-weight: bold; line-height: 15px; color: #fff; -webkit-border-radius: 8px; }
 
@@ -92,7 +92,7 @@ body#profile_5 { background: #10c3de url(../images/backgrounds/purple.gif) repea
 
 
 /* FEEDBACK FORM */
-.feedback_form { margin: 0 0 10px 0; padding: 15px 10px 5px 40px; background: #fff url(../images/feedback_quote.gif) 10px 15px no-repeat; border-top: 1px solid #ddd; -webkit-border-bottom-left-radius: 10px; -webkit-border-bottom-right-radius: 10px; -moz-border-radius-bottomleft: 10px; -moz-border-radius-bottomright: 10px; }
+.feedback_form { margin: 0 0 10px 0; padding: 15px 10px 5px 40px; background: #fff url(/images/feedback_quote.gif) 10px 15px no-repeat; border-top: 1px solid #ddd; -webkit-border-bottom-left-radius: 10px; -webkit-border-bottom-right-radius: 10px; -moz-border-radius-bottomleft: 10px; -moz-border-radius-bottomright: 10px; }
 .feedback_form p { margin-bottom: 5px; }
 .feedback_form textarea { width: 568px; height: 100px; color: #777; }
 .feedback_form textarea:focus { color: #333; }
@@ -113,7 +113,7 @@ body#profile_5 { background: #10c3de url(../images/backgrounds/purple.gif) repea
 .content_sidebar ul { list-style: none; margin: 0 0 20px 0; padding: 0; font-size: 12px; font-weight: bold; line-height: 25px; color: #fff; }
 .content_sidebar ul li a { display: block; padding: 0 15px; border-bottom: 1px solid #ddd; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .content_sidebar ul li a:hover { background-color: #ddd; text-decoration: none; color: #777; }
-.content_sidebar ul li a:active { background: #838383 url(../images/button_click_bg.gif) left bottom repeat-x; color: #fff; }
+.content_sidebar ul li a:active { background: #838383 url(/images/button_click_bg.gif) left bottom repeat-x; color: #fff; }
 .content_sidebar ul li a em { float: right; display: block; font-weight: normal; font-size: 11px; font-style: normal; }
 
 .content_sidebar .cover { display: block; margin: 0 0 20px 0; padding: 5px 0 0 15px; background: none; }
@@ -132,7 +132,7 @@ body#profile_5 { background: #10c3de url(../images/backgrounds/purple.gif) repea
 .content_sidebar .book_status ul li a { border-bottom: none; }
 
 .content_sidebar .rating ul { margin: 0 auto; }
-.content_sidebar .rating ul li a:active { background: url(../images/star.gif) 0 -30px no-repeat; }
+.content_sidebar .rating ul li a:active { background: url(/images/star.gif) 0 -30px no-repeat; }
 
 .content_sidebar .on a,
 body.user_book_detail .content_sidebar .reader_copy a,
@@ -178,26 +178,26 @@ body.find_friends .content_sidebar .find_friends a { background-color: #999; bor
 
 /* SIDEBAR */
 .sidebar { float: left; margin-right: 20px; width: 140px; }
-.sidebar .mugshot { display: block; margin-bottom: 10px; padding: 10px; width: 120px; height: 120px; background: url(../images/backgrounds/opaque_30.png); -webkit-border-radius: 10px; -moz-border-radius: 10px; }
+.sidebar .mugshot { display: block; margin-bottom: 10px; padding: 10px; width: 120px; height: 120px; background: url(/images/backgrounds/opaque_30.png); -webkit-border-radius: 10px; -moz-border-radius: 10px; }
 .sidebar .mugshot a { display: block; width: 120px; height: 120px; -webkit-border-radius: 6px; -moz-border-radius: 6px; }
-.sidebar .cover { display: block; margin-bottom: 10px; padding: 10px; width: 120px; background: url(../images/backgrounds/opaque_30.png); -webkit-border-radius: 6px; -moz-border-radius: 6px; }
+.sidebar .cover { display: block; margin-bottom: 10px; padding: 10px; width: 120px; background: url(/images/backgrounds/opaque_30.png); -webkit-border-radius: 6px; -moz-border-radius: 6px; }
 .sidebar .cover img { display: block; padding: 0; width: 120px; background-image: none; }
 .sidebar h2 { margin-bottom: 0; font-size: 15px; line-height: 20px; color: rgba(0, 0, 0, .4); text-align: center; }
 .sidebar ul { margin: 0 0 20px 0; padding: 0; list-style: none; font-size: 14px; font-weight: bold; line-height: 25px; text-align: center; }
 .sidebar ul li { margin: 1px 0; }
 .sidebar ul li a { display: block; color: #fff; }
-.sidebar ul li a:hover { background: url(../images/nav_bg.png) no-repeat; text-decoration: none; }
+.sidebar ul li a:hover { background: url(/images/nav_bg.png) no-repeat; text-decoration: none; }
 .sidebar ul li form p { margin: 0; }
 .sidebar ul li form input[type=hidden] { display: none; }
 
 .sidebar .back { margin-bottom: 10px; font-size: 14px; font-weight: bold; line-height: 15px; text-align: center; }
-.sidebar .back a { display: block; padding: 5px 10px; height: 15px; background: url(../images/back.png) no-repeat; color: #fff; }
+.sidebar .back a { display: block; padding: 5px 10px; height: 15px; background: url(/images/back.png) no-repeat; color: #fff; }
 .sidebar .back a:hover { background-position: 0 -25px; text-decoration: none; }
 
 .sidebar p.login { margin-bottom: 10px; font-size: 14px; font-weight: bold; line-height: 15px; text-align: center; }
-.sidebar p.login a { display: block; padding: 5px 10px; height: 15px; background: url(../images/nav_follow_bg.png) no-repeat; color: #fff; }
+.sidebar p.login a { display: block; padding: 5px 10px; height: 15px; background: url(/images/nav_follow_bg.png) no-repeat; color: #fff; }
 
-.sidebar ul li.on a { background: url(../images/nav_bg.png) no-repeat; }
+.sidebar ul li.on a { background: url(/images/nav_bg.png) no-repeat; }
 
 
 /* MESSAGE */
