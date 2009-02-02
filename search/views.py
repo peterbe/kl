@@ -55,9 +55,11 @@ def solve(request, json=False):
         
         if not len(slots) >= length:
             return HttpResponseRedirect('/los/?error=slots&error=length')
+        
+        language = request.GET.get('lang', 'sv')
 
         # find some alternatives
-        alternatives = _find_alternatives(slots[:length])
+        alternatives = _find_alternatives(slots[:length], language=language)
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]]);
         alternatives_count = len(alternatives)
         alternatives_truncated = False
@@ -177,13 +179,13 @@ def get_saved_cookies(request):
     cookie__email = request.COOKIES.get('kl__email')
     return dict([(k,v) for (k,v) in locals().items() if v is not None])
 
-def _find_alternatives(slots):
+def _find_alternatives(slots, language):
     length = len(slots)
     
     if length == 1:
-        return Word.objects.filter(length=1, word=slots[0])
+        return Word.objects.filter(length=1, word=slots[0], language=language)
     
-    filter_ = dict(length=length)
+    filter_ = dict(length=length, language=language)
     slots = [x and x.lower() or ' ' for x in slots]
     search = ''.join(slots)
     start = ''
@@ -259,7 +261,7 @@ def upload_dsso(request):
                 words = [x.split(',')[0].strip() for x in words.split(':')
                          if x.strip() and x.strip() not in list('!')]
                 for word in uniqify(words):
-                    _add_word(word, part)
+                    _add_word(word, part, 'sv')
             else:
                 print repr(line)
                     
@@ -272,15 +274,16 @@ def upload_dsso(request):
     form = DSSOUploadForm()
     return _render('upload_dsso.html', locals(), request)
         
-def _add_word(word, part_of_speech):
+def _add_word(word, part_of_speech, language):
     #pass
     print "\t", repr(part_of_speech), repr(word)
     length = len(word)
     try:
-        Word.objects.get(word=word, length=length)
+        Word.objects.get(word=word, length=length, language=language)
     except Word.DoesNotExist:
         # add it
-        Word.objects.create(word=word, length=length, part_of_speech=part_of_speech)
+        Word.objects.create(word=word, length=length, part_of_speech=part_of_speech,
+                            language=language)
         
         
 def send_feedback(request):

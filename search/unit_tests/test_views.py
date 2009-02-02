@@ -29,19 +29,20 @@ class ViewTestCase(TestCase):
         assert response.status_code == 302, response.status_code
         
         
-    def _add_word(self, word, part_of_speech=u''):
+    def _add_word(self, word, language, part_of_speech=u''):
         Word.objects.create(word=word, length=len(word),
-                            part_of_speech=part_of_speech)
+                            part_of_speech=part_of_speech,
+                            language=language)
         
     def test_solve_json(self):
         """ do an actual search """
         # add some that will help the search
-        self._add_word(u'abc')
-        self._add_word(u'abd')
-        self._add_word(u'acd')
+        self._add_word(u'abc', 'sv')
+        self._add_word(u'abd', 'sv')
+        self._add_word(u'acd', 'sv')
         
         client = Client()
-        response = client.get('/los/json/?l=3&s=a&s=b&s=')
+        response = client.get('/los/json/?l=3&s=a&s=b&s=&lang=sv')
         
         struct = simplejson.loads(response.content)
         assert not struct['alternatives_truncated']
@@ -79,9 +80,9 @@ class ViewTestCase(TestCase):
         assert res['no_searches_this_month'] == 0
         assert res['no_searches_this_year'] == 0
         
-        self._add_word(u'abc')
-        self._add_word(u'abd')
-        self._add_word(u'acd')
+        self._add_word(u'abc', 'sv')
+        self._add_word(u'abd', 'sv')
+        self._add_word(u'acd', 'sv')
         
         res = _get_search_stats()
         assert res['no_total_words'] == 3
@@ -93,7 +94,7 @@ class ViewTestCase(TestCase):
 
         # do a search "today"
         client = Client()
-        client.get('/los/json/?l=3&s=a&s=b&s=')
+        client.get('/los/json/?l=3&s=a&s=b&s=&lang=sv')
         
         res = _get_search_stats()
         assert res['no_total_words'] == 3

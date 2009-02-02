@@ -58,6 +58,7 @@ body#profile_2 { background: #18a7c0 url(/images/backgrounds/blue.gif) repeat-x;
 body#profile_3 { background: #ffb01d url(/images/backgrounds/orange.gif) repeat-x; }
 body#profile_4 { background: #fff9cf url(/images/backgrounds/yellow.gif) repeat-x; }
 body#profile_5 { background: #10c3de url(/images/backgrounds/purple.gif) repeat-x; }
+body#profile_6 { background: #EAEADD url(/images/backgrounds/body-bg.png) repeat-x; }
 
 
 /* HEADER */
@@ -80,7 +81,7 @@ body#profile_5 { background: #10c3de url(/images/backgrounds/purple.gif) repeat-
 
 
 /* BODY */
-#body { position: relative; margin: 80px auto 0 auto; width: 980px; }
+#body { position: relative; margin: 30px auto 0 auto; width: 980px; }
 #body:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 #body { zoom: 1; }
 

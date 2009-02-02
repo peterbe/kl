@@ -11,24 +11,21 @@ class Word(models.Model):
     has to be that of the word:
     
         >>> w = Word.objects.create(word=u'Peter',
-        ...                         part_of_speech=u'egenamn')
+        ...                         part_of_speech=u'egenamn',
+        ...                         language='sv')
         >>> w.length == len(u'Peter')
         True
-        
-    The field 'word' is supposed to be unique:
-    
-        >>> w = Word.objects.create(word=u'Peter')
-        Traceback (most recent call last):
-        ...
-        IntegrityError: duplicate key value violates unique constraint ...
         
     """
     class Meta:
         db_table = u'words'
     
-    word = models.CharField(max_length=40, unique=True)
+    word = models.CharField(max_length=40)
+    language = models.CharField(max_length=5)
     length = models.IntegerField()
     part_of_speech = models.CharField(max_length=20, null=True)
+    
+    unique_together = ('word', 'language')
     
     def __unicode__(self):
         return self.word
@@ -53,6 +50,7 @@ class Search(models.Model):
     add_date = models.DateTimeField('date added', default=datetime.datetime.now)
     user_agent =  models.CharField(max_length=200, default=u'')
     ip_address =  models.CharField(max_length=15, default=u'')
+    language = models.CharField(max_length=5, default=u'')
     
     found_word = models.ForeignKey(Word, null=True, blank=True)
     
