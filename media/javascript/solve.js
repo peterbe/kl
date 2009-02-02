@@ -140,6 +140,10 @@ function __before_ajaxSubmit(form_data, form_obj) {
 
 
 function __process_submission(res) {
+   // make sure any error messages are hidden
+   $('#error-wrapper:visible').hide();
+   
+   
    if (res.word_count==1)
      $('#matches').text(res.word_count + " hittad");
    if (res.word_count>1)
@@ -170,6 +174,11 @@ function __process_submission(res) {
    
 }
 
+function __error_ajaxSubmit(request, response_text) {
+   $('#error__ajax').show();
+   $('#error__ajax .response').text(response_text);
+}
+
 $(function() {
    if ($('#id_length').val()) {
     if ($('#id_length').val().search(/[^\d]/) > -1)
@@ -186,6 +195,7 @@ $(function() {
       url: '/los/json/',
         type: 'GET',
         dataType: 'json',
+        error: __error_ajaxSubmit,
         beforeSubmit: __before_ajaxSubmit,
         success: __process_submission
    }
