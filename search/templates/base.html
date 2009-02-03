@@ -4,7 +4,7 @@
 {% load django_slimmer %}
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>{% block title %}{% trans "Crossword solver" %}{% endblock %}</title>  
+  <title>{% block title %}{% trans "Crossword solver" %}{% endblock %}</title>
   
 
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
@@ -19,14 +19,6 @@
 <body id="profile_6" class=" user_book_list">
   <div id="page">
   
-{% comment %}    
-    <div id="header">
-      <div class="wrapper">
-        <h1 class="brand"><a href="/">{% trans "Crossword solver" %}</a></h1>
-      </div>
-    </div>
-{% endcomment %}    
-
     <div id="body">
       
         
@@ -47,7 +39,7 @@
 
             
             <div class="content_title">
-                <h2>{% trans "Crossword solver" %}</h2>
+                <h2>{% block pagetitle %}{% trans "Crossword solver" %}{% endblock %}</h2>
             </div>
             
 {% block main %}

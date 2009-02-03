@@ -2,6 +2,7 @@
 from kl import settings
 
 #from MobileUserAgent import parseUserAgent
+from views import get_search_stats, get_saved_cookies
 
 def context(request):
             
@@ -24,5 +25,9 @@ def context(request):
     #    data['mobile_user_agent'] = True
     #    data['base_template'] = "mobile_base.html"
     #    data['mobile_version'] = True
+
+    data.update(get_search_stats())
+    
+    data.update(get_saved_cookies(request))
 
     return data

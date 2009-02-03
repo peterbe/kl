@@ -19,13 +19,14 @@ class Word(models.Model):
     """
     class Meta:
         db_table = u'words'
+        unique_together = ('word', 'language')
     
     word = models.CharField(max_length=40)
     language = models.CharField(max_length=5)
     length = models.IntegerField()
     part_of_speech = models.CharField(max_length=20, null=True)
     
-    unique_together = ('word', 'language')
+    
     
     def __unicode__(self):
         return self.word
@@ -45,6 +46,7 @@ class Search(models.Model):
     
     class Meta:
         db_table = u'searches'
+        verbose_name_plural = u'Searches'
         
     search_word = models.CharField(max_length=40)
     add_date = models.DateTimeField('date added', default=datetime.datetime.now)
@@ -56,4 +58,5 @@ class Search(models.Model):
     
     def __unicode__(self):
         return self.search_word
+    
     

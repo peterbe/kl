@@ -3,9 +3,14 @@
 
 {% block title %}{{ flatpage.title }}{% endblock %}
 
+{% block pagetitle %}{{ flatpage.title }}{% endblock %}
+
 {% block main %}
-<h2>{{ flatpage.title }}</h2>
 
 {{ flatpage.content }}
+
+<p style="font-size:80%;padding-top:60px">
+<a href="/">&lt;&lt; {% trans "Go back to home page" %}</a>
+</p>
 
 {% endblock %}

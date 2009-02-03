@@ -101,9 +101,6 @@ def solve(request, json=False):
         
     data = locals()
     
-    data.update(get_search_stats())
-    
-    data.update(get_saved_cookies(request))
 
     return _render('solve.html', data, request)
 
