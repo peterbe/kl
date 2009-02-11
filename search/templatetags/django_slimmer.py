@@ -111,12 +111,14 @@ _FILE_MAP = {}
 referred_css_images_regex = re.compile('url\(([^\)]+)\)')
 
 def _static_file(filename, 
-                       slimmer_if_possible=False,
-                       symlink_if_possible=False):
+                 slimmer_if_possible=False,
+                 symlink_if_possible=False,
+                 warn_no_file=True):
     from time import time
     t0=time()
     r = _static_file_timed(filename, slimmer_if_possible=slimmer_if_possible,
-                          symlink_if_possible=symlink_if_possible)
+                           symlink_if_possible=symlink_if_possible,
+                           warn_no_file=warn_no_file)
     t1=time()
     #print (t1-t0), filename
     return r
@@ -124,7 +126,8 @@ def _static_file(filename,
         
 def _static_file_timed(filename, 
                        slimmer_if_possible=False, 
-                       symlink_if_possible=False):
+                       symlink_if_possible=False,
+                       warn_no_file=True):
     
     from settings import MEDIA_ROOT, DEBUG
     try:
@@ -170,7 +173,8 @@ def _static_file_timed(filename,
     if not new_filename:
         filepath = _filename2filepath(filename, MEDIA_ROOT)
         if not os.path.isfile(filepath):
-            import warnings; warnings.warn("Can't find file %s" % filepath)
+            if warn_no_file:
+                import warnings; warnings.warn("Can't find file %s" % filepath)
             return filename
         
         new_m_time = os.stat(filepath)[stat.ST_MTIME]
@@ -221,18 +225,23 @@ def _static_file_timed(filename,
             # and _static_file() all images refered in the CSS file itself
             def replacer(match):
                 filename = match.groups()[0]
-                new_filename = _static_file(filename, symlink_if_possible=symlink_if_possible)
+                # It's really quite common that the CSS file refers to the file 
+                # that doesn't exist because if you refer to an image in CSS for
+                # a selector you never use you simply don't suffer.
+                # That's why we say not to warn on nonexisting files
+                new_filename = _static_file(filename, symlink_if_possible=symlink_if_possible,
+                                            warn_no_file=False)
                 return match.group().replace(filename, new_filename)
             content = referred_css_images_regex.sub(replacer, content)
         else:
             raise ValueError(
               "Unable to slimmer file %s. Unrecognized extension" % new_filename)
-        print "** STORING:", new_filepath
+        #print "** STORING:", new_filepath
         open(new_filepath, 'w').write(content)
     elif symlink_if_possible:
         _symlink(filepath, new_filepath)
     else:
-        print "** STORING:", new_filepath
+        #print "** STORING:", new_filepath
         open(new_filepath, 'w').write(content)
                             
     return DJANGO_SLIMMER_NAME_PREFIX + new_filename
