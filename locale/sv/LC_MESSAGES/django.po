@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-17 17:34+0000\n"
+"POT-Creation-Date: 2009-02-11 10:17+0000\n"
 "PO-Revision-Date: 2009-02-10 23:56+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,62 +19,71 @@ msgstr ""
 msgid "Feedback on Crossword solver"
 msgstr "Feedback på Krysstips"
 
-#: search/templates/base.html:6
-#: search/templates/base.html.py:24
-#: search/templates/base.html:49
+#: search/templates/404.html:5
+msgid "Page not found :("
+msgstr ""
+
+#: search/templates/500.html:5
+msgid "Page trouble :("
+msgstr ""
+
+#: search/templates/500.html:7
+msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
+msgstr ""
+
+#: search/templates/base.html:7 search/templates/base.html.py:42
 msgid "Crossword solver"
 msgstr "Krysstips"
 
-#: search/templates/base.html:62
+#: search/templates/base.html:51
 msgid "Statistics"
 msgstr "Statistik"
 
-#: search/templates/base.html:65
+#: search/templates/base.html:54
 msgid "Searches today"
 msgstr "Sökningar idag"
 
-#: search/templates/base.html:66
+#: search/templates/base.html:55
 msgid "Searches yesterday"
 msgstr "Sökningar igår"
 
-#: search/templates/base.html:67
+#: search/templates/base.html:56
 msgid "Searches this week"
 msgstr "Sökningar denna vecka"
 
-#: search/templates/base.html:68
+#: search/templates/base.html:57
 msgid "Searches this month"
 msgstr "Sökningar denna månad"
 
-#: search/templates/base.html:69
+#: search/templates/base.html:58
 msgid "Searches this year"
 msgstr "Sökningar detta året"
 
-#: search/templates/base.html:70
+#: search/templates/base.html:59
 msgid "Total number of words"
 msgstr "Totalt antal ord"
 
-#: search/templates/base.html:82
+#: search/templates/base.html:71
 msgid "Send suggestions, feedback or tips"
 msgstr "Skicka förslag, feedback eller tips"
 
-#: search/templates/base.html:85
+#: search/templates/base.html:74
 msgid "Your name:"
 msgstr "Ditt namn:"
 
-#: search/templates/base.html:85
-#: search/templates/base.html.py:89
+#: search/templates/base.html:74 search/templates/base.html.py:78
 msgid "optional"
 msgstr "valfritt"
 
-#: search/templates/base.html:89
+#: search/templates/base.html:78
 msgid "Your email:"
 msgstr "Din E-mail:"
 
-#: search/templates/base.html:98
+#: search/templates/base.html:87
 msgid "Send feedback"
 msgstr "Skicka feedback"
 
-#: search/templates/base.html:99
+#: search/templates/base.html:88
 msgid "Cancel"
 msgstr "Äsch, annulera"
 
@@ -106,3 +115,10 @@ msgstr "ta bort sökningen"
 msgid "No letters all?"
 msgstr "Inga bokstäver alls?"
 
+#: search/templates/solve.html:59
+msgid "Sorry. Unable to do a search right now. Please try again a bit later."
+msgstr ""
+
+#: search/templates/flatpages/default.html:13
+msgid "Go back to home page"
+msgstr ""
