@@ -3,7 +3,7 @@ I18N
 
 Make messages:
 
- django-admin.py makemessages -l sv-SE
+ django-admin.py makemessages -l sv
  
 Compile messages:
 
