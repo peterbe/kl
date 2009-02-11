@@ -109,6 +109,8 @@ def _record_search(search_word, user_agent=u'', ip_address=u'',
     if len(user_agent) > 200:
         user_agent = user_agent[:200]
     if len(ip_address) > 15:
+        import warnings
+        warnings.warn("ip_address too long (%r)" % ip_address)
         ip_address = u''
     
     Search.objects.create(search_word=search_word,
