@@ -403,6 +403,9 @@ def get_language_options(request):
     http_lang = request.META.get('LANG')
     if http_lang:
         logging.info("LANG=%r" % http_lang)
+    else:
+        print [k for k in request.META.keys() if k.count('LANG')]
+        print request.META.get('HTTP_ACCEPT_LANGUAGE')
     print "LANG=%r" % http_lang
         
     language_domans = settings.LANGUAGE_DOMAINS
