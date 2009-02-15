@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-15 22:41+0000\n"
-"PO-Revision-Date: 2009-02-10 23:56+0100\n"
+"PO-Revision-Date: 2009-02-15 22:44+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: settings.py:113
 msgid "Swedish"
-msgstr ""
+msgstr "Svenska"
 
 #: settings.py:114
 msgid "British English"
@@ -34,20 +34,21 @@ msgstr "Feedback på Krysstips"
 
 #: search/templates/404.html:5
 msgid "Page not found :("
-msgstr ""
+msgstr "Sidan kan inte hittas :("
 
 #: search/templates/500.html:5
 msgid "Page trouble :("
-msgstr ""
+msgstr "Sidoproblem :)"
 
 #: search/templates/500.html:7
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
-msgstr ""
+msgstr "Tyvärr gick nånting åt skogen. Förhoppningsvis fixas det snart."
 
-#: search/templates/base.html:7 search/templates/base.html.py:52
+#: search/templates/base.html:7
+#: search/templates/base.html.py:52
 #: search/templates/base.html:110
 msgid "Crosstips"
-msgstr ""
+msgstr "Krysstips"
 
 #: search/templates/base.html:63
 msgid "Statistics"
@@ -85,7 +86,8 @@ msgstr "Skicka förslag, feedback eller tips"
 msgid "Your name:"
 msgstr "Ditt namn:"
 
-#: search/templates/base.html:89 search/templates/base.html.py:93
+#: search/templates/base.html:89
+#: search/templates/base.html.py:93
 msgid "optional"
 msgstr "valfritt"
 
@@ -103,7 +105,7 @@ msgstr "Äsch, annulera"
 
 #: search/templates/change_language.html:5
 msgid "Change language"
-msgstr ""
+msgstr "Ändra språk"
 
 #: search/templates/feedback_sent.html:5
 msgid "Thank you!"
@@ -136,11 +138,12 @@ msgstr "Inga bokstäver alls?"
 
 #: search/templates/solve.html:59
 msgid "Sorry. Unable to do a search right now. Please try again a bit later."
-msgstr ""
+msgstr "Tyvärr funkar inte sökningen just nu. Försök lite senare."
 
 #: search/templates/flatpages/default.html:13
 msgid "Go back to home page"
-msgstr ""
+msgstr "Gå tillbaka till hemsidan"
 
 #~ msgid "Crossword solver"
 #~ msgstr "Krysstips"
+
