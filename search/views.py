@@ -414,8 +414,8 @@ def get_language_options(request):
             option['on'] = False
             
         # we must create a key called 'href'
-        if option['code'] in language_domans:
-            option['href'] = 'http://%s' % language_domans[option['code']]
+        if option['code'].lower() in language_domans:
+            option['href'] = 'http://%s' % language_domans[option['code'].lower()]
         else:
             option['href'] = '/change-language/to/%s/' % option['code']
             
