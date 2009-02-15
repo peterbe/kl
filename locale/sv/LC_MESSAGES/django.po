@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-15 19:36+0000\n"
+"POT-Creation-Date: 2009-02-15 22:41+0000\n"
 "PO-Revision-Date: 2009-02-10 23:56+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,8 @@ msgid "American English"
 msgstr ""
 
 #: search/views.py:386
-msgid "Feedback on Crossword solver"
+#, fuzzy
+msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
 
 #: search/templates/404.html:5
@@ -43,13 +44,10 @@ msgstr ""
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
 msgstr ""
 
-#: search/templates/base.html:7
+#: search/templates/base.html:7 search/templates/base.html.py:52
+#: search/templates/base.html:110
 msgid "Crosstips"
 msgstr ""
-
-#: search/templates/base.html:52
-msgid "Crossword solver"
-msgstr "Krysstips"
 
 #: search/templates/base.html:63
 msgid "Statistics"
@@ -116,7 +114,8 @@ msgid "Feedback sent. Thank you very much!"
 msgstr "Feedback skickad. Tack så mycket!"
 
 #: search/templates/feedback_sent.html:12
-msgid "Go back to the Crossword solver"
+#, fuzzy
+msgid "Go back to the Crosstips"
 msgstr "Gå tillbaka till Krysstips"
 
 #: search/templates/solve.html:41
@@ -142,3 +141,6 @@ msgstr ""
 #: search/templates/flatpages/default.html:13
 msgid "Go back to home page"
 msgstr ""
+
+#~ msgid "Crossword solver"
+#~ msgstr "Krysstips"
