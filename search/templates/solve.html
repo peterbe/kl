@@ -46,8 +46,8 @@ a.clear-search { font-size:80%;}
   {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1"/>{% endfor %}
   </span>
   <br/>
-  <input type="submit" value="S&ouml;k"/> 
-  <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="Laddar" width="150" height="15"/>
+  <input type="submit" value="{% trans "Search" %}"/>
+  <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15"/>
   <a href="./" id="clear-search" style="display:none">{% trans "clear search" %}</a>
 </p>
 </form>

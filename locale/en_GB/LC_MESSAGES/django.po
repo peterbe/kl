@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-15 22:41+0000\n"
+"POT-Creation-Date: 2009-02-15 23:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,6 +123,14 @@ msgstr ""
 
 #: search/templates/solve.html:44
 msgid "Slots"
+msgstr ""
+
+#: search/templates/solve.html:49
+msgid "Search"
+msgstr ""
+
+#: search/templates/solve.html:50
+msgid "Loading"
 msgstr ""
 
 #: search/templates/solve.html:51
