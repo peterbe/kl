@@ -1,0 +1,29 @@
+{% extends base_template %}
+{% load i18n %}
+
+{% block main %}
+<h3 align="center">{% trans "Change language" %}</h3>
+
+<form action="/i18n/setlang/" method="post" id="setlang">
+<input type="hidden" name="next" value="{{ next }}" />
+<select name="language">
+ {% for lang in LANGUAGES %}
+   <option value="{{ lang.0 }}"
+     {% ifequal lang.0 language %}selected="selected"{% endifequal %}
+     >{{ lang.1 }}</option>
+ {% endfor %}
+</select>
+<input type="submit" value="Go"/>
+</form>
+
+{% endblock %}
+
+{% block extrajs %}
+{% if autosubmit %}
+<script type="text/javascript">
+$(function() {
+  $('#setlang')[0].submit();
+});
+</script>
+{% endif %}
+{% endblock %}

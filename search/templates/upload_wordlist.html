@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content_sidebar_outer %}{% endblock %}
+{% block main %}
+<h2>Upload Wordlist file</h2>
+<form action="./" method="post" enctype="multipart/form-data">
+<table>
+ {{ form.as_table }}
+<table>
+<input type="submit" value="Upload" onclick="this.value='Please wait...'"/>
+</form>
+{% endblock %}
+
+{% block feedback_form %}
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+{% endblock %}

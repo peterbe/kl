@@ -64,14 +64,5 @@ a.clear-search { font-size:80%;}
 <div id="matches"></div>
 <div id="alternatives"></div>
 
-{% comment %}
-{% if alternatives %}
-  <p>{{ alternatives_count }} matches:<br/>
-    {% for alternative in alternatives %}
-      <span class="sugg">{{ alternative.word|highlight_suggestion:search|safe }}</span><br/>
-    {% endfor %}
-  </p>
-{% endif %}
-{% endcomment %}
 
 {% endblock %}

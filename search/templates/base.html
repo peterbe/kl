@@ -4,7 +4,7 @@
 {% load django_slimmer %}
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>{% block title %}{% trans "Crossword solver" %}{% endblock %}</title>
+  <title>{% block title %}{% trans "Crosstips" %}{% endblock %}</title>
   
 
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
@@ -24,12 +24,22 @@
         
           
           <div class="sidebar reader_sidebar">
-            
+          <form action="/i18n/setlang/" method="post">
+
             <ul>
-	      <li class="on"><a href="/">Svenska</a></li>
-              <li class=""><a href="/in/english" onclick="alert('Sorry. Not yet. Working on it');return false">English</a></li>
+              {% for language_option in language_options %}
+                <li {% if language_option.on %}class="on"{% endif %}><a
+                {% if language_option.title %}title="{{ language_option.title }}"{% endif %}
+                href="{{ language_option.href }}">{{ language_option.label }}</a></li>
+              {% endfor %}
+              {% comment %}
+	      <li {% ifequal request.LANGUAGE_CODE "sv" %}class="on"{% endifequal %}><a href="{{ "sv"|language_switch_href }}">Svenska</a></li>
+              <li {% ifequal request.LANGUAGE_CODE "en-US" %}class="on"{% endifequal %}><a href="{{ "en-US"|language_switch_href }}">English (US)</a></li>
+              <li {% ifequal request.LANGUAGE_CODE "en-GB" %}class="on"{% endifequal %}><a href="{{ "en-GB"|language_switch_href }}">English (GB)</a></li>
+              {% endcomment %}
             </ul>
             
+          </form>
           </div>
         
 
@@ -46,8 +56,10 @@
 {% endblock %}
 
           </div>
+  {% block content_sidebar_outer %}
           <div class="content_sidebar">
             
+  {% block content_sidebar %}
   <h3>{% trans "Statistics" %}</h3>
   <ul>
     <!--<li class="on"><a href="/y/books/">All books <em>8</em></a></li>-->
@@ -58,15 +70,18 @@
     <li><a>{% trans "Searches this year" %} <em>{{ no_searches_this_year }}</em></a></li>
     <li><a>{% trans "Total number of words" %} <em>{{ no_total_words }}</em></a></li>
   </ul>
+  {% endblock %}
 
 
           </div>
+  {% endblock %}
         </div>
       
     </div>
 
     
     <div id="footer">
+      {% block feedback_form %}
       <form action="/feedback/" method="post" class="feedback_form" id="feedback">
         <p class="text"><textarea name="text" rows="8" cols="40" id="id_feedback">{% trans "Send suggestions, feedback or tips" %}</textarea></p>
         <table style="display:none">
@@ -88,6 +103,7 @@
           <a href="#" class="alt_button">{% trans "Cancel" %}</a>
         </p>
       </form>
+      {% endblock %}
 
       <p class="copyright">
         <small>

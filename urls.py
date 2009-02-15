@@ -10,6 +10,7 @@ from settings import MEDIA_ROOT
 urlpatterns = patterns('',
     # Example:
     (r'', include('kl.search.urls')),
+    (r'^i18n/', include('django.conf.urls.i18n')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

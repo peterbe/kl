@@ -1,5 +1,7 @@
 import datetime
 import re
+from pprint import pprint
+import logging
 from time import time
 from random import randint
 try:
@@ -19,7 +21,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 
 from models import Word, Search
-from forms import DSSOUploadForm, FeedbackForm
+from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm
 from utils import uniqify, any_true, ValidEmailAddress
 
 def _render_json(data):
@@ -56,7 +58,7 @@ def solve(request, json=False):
         if not len(slots) >= length:
             return HttpResponseRedirect('/los/?error=slots&error=length')
         
-        language = request.GET.get('lang', 'sv')
+        language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
 
         # find some alternatives
         alternatives = _find_alternatives(slots[:length], language=language)
@@ -86,7 +88,7 @@ def solve(request, json=False):
         
         found_word = None
         if len(words) == 1:
-            found_word = Word.objects.get(word=words[0])
+            found_word = Word.objects.get(word=words[0], language=language)
         
         _record_search(search,
                        user_agent=request.META.get('HTTP_USER_AGENT',''),
@@ -119,16 +121,16 @@ def _record_search(search_word, user_agent=u'', ip_address=u'',
                           found_word=found_word,
                           )
 
-def get_search_stats(refresh_today_stats=True):
+def get_search_stats(language, refresh_today_stats=True):
     """ wrapper on _get_search_stats() that uses a cache instead """
-    cache_key = '_get_search_stats'
+    cache_key = '_get_search_stats' + language
     res = cache.get(cache_key)
     today = datetime.datetime.today()
     today_midnight = datetime.datetime(today.year, today.month,
                                        today.day, 0, 0, 0)
     if res is None:
         #t0=time()
-        res = _get_search_stats()
+        res = _get_search_stats(language)
         #print time()-t0, "to generate stats"
         seconds_since_midnight = (today - today_midnight).seconds
         
@@ -141,18 +143,20 @@ def get_search_stats(refresh_today_stats=True):
                                            add_date__gte=today_midnight).count()
     return res
 
-def _get_search_stats():
+def _get_search_stats(language):
     
-    no_total_words = Word.objects.all().count()
+    no_total_words = Word.objects.filter(language=language).count()
+        
     today = datetime.datetime.today()
     
     today_midnight = datetime.datetime(today.year, today.month, 
                                        today.day, 0, 0, 0)
-    no_searches_today = Search.objects.filter(
-                                            add_date__gte=today_midnight).count()
+    no_searches_today = Search.objects.filter(language=language,
+                                              add_date__gte=today_midnight).count()
     
     yesterday_midnight = today_midnight - datetime.timedelta(days=1)
     no_searches_yesterday = Search.objects.filter(
+                    language=language,
                     add_date__range=(yesterday_midnight, today_midnight)).count()
     
     # find the first monday
@@ -161,14 +165,15 @@ def _get_search_stats():
         monday_midnight = monday_midnight - datetime.timedelta(days=1)
         
     no_searches_this_week = Search.objects.filter(
+                                            language=language,
                                             add_date__gt=monday_midnight).count()
 
     first_day_month = datetime.datetime(today.year, today.month, 1, 0, 0, 0)
-    no_searches_this_month = Search.objects.filter(
+    no_searches_this_month = Search.objects.filter(language=language,
                                            add_date__gte=first_day_month).count()
 
     first_day_year = datetime.datetime(today.year, 1, 1, 0, 0, 0)
-    no_searches_this_year = Search.objects.filter(
+    no_searches_this_year = Search.objects.filter(language=language,
                                            add_date__gte=first_day_year).count()
     
     return locals()
@@ -183,6 +188,8 @@ def _find_alternatives(slots, language):
     
     if length == 1:
         return Word.objects.filter(length=1, word=slots[0], language=language)
+    
+    print language, repr(''.join([x==u'' and u'_' or x for x in slots]))
     
     filter_ = dict(length=length, language=language)
     slots = [x and x.lower() or ' ' for x in slots]
@@ -231,7 +238,48 @@ def _find_alternatives(slots, language):
     return [x for x in Word.objects.filter(**filter_).order_by('word')[:limit]
             if filter_match(x)]
     
-        
+
+@login_required
+def upload_wordlist(request):
+    if request.method == "POST":
+        file_ = request.FILES['file']
+        skip_ownership_s = bool(request.POST.get('skip_ownership_s'))
+        titled_is_name = bool(request.POST.get('titled_is_name'))
+        language = request.POST.get('language')
+        assert language, "no language :("
+        count = 0
+        for line in file_.xreadlines():
+            if line.startswith('#') or not line.strip():
+                continue
+            if skip_ownership_s and line.strip().endswith("'s"):
+                continue
+            
+            
+            line = unicode(line, 'iso-8859-1').strip()
+            
+            if len(line) == 1:
+                continue
+            
+            name = False
+            if titled_is_name:
+                if line[0].isupper():
+                    name = True
+                    
+            part_of_speech = ''
+            
+            count += 1
+            if count > 10000000:
+                break
+            
+            # let's add it!
+            _add_word(line, part_of_speech, language, name)
+            
+        return HttpResponseRedirect('/upload-wordlist/')
+    
+    form = WordlistUploadForm()
+    return _render('upload_wordlist.html', locals(), request)
+
+
 @login_required
 def upload_dsso(request):
     if request.method == "POST":
@@ -260,7 +308,7 @@ def upload_dsso(request):
                 words = [x.split(',')[0].strip() for x in words.split(':')
                          if x.strip() and x.strip() not in list('!')]
                 for word in uniqify(words):
-                    _add_word(word, part, 'sv')
+                    _add_word(word, part, 'sv', part=='egennamn')
             else:
                 print repr(line)
                     
@@ -273,16 +321,17 @@ def upload_dsso(request):
     form = DSSOUploadForm()
     return _render('upload_dsso.html', locals(), request)
         
-def _add_word(word, part_of_speech, language):
+def _add_word(word, part_of_speech, language, name):
     #pass
-    print "\t", repr(part_of_speech), repr(word)
+    print "\t", repr(word), language
     length = len(word)
     try:
         Word.objects.get(word=word, length=length, language=language)
     except Word.DoesNotExist:
         # add it
         Word.objects.create(word=word, length=length, part_of_speech=part_of_speech,
-                            language=language)
+                            language=language,
+                            name=name)
         
         
 def send_feedback(request):
@@ -337,3 +386,47 @@ def _send_feedback(text, name=u'', email=u'', fail_silently=False):
               subject=_("Feedback on Crossword solver"),
               message=message,
              )
+
+def get_language_options(request):
+    current_language = request.LANGUAGE_CODE
+    all_options = (
+        {'code':'sv', 'label':'Svenska', 'domain':'krysstips.se'},
+        {'code':'en-US', 'label':'English (US)', 'domain':'en-us.crosstips.org',
+         'title':"American English"},
+        {'code':'en-GB', 'label':'English (GB)', 'domain':'en-us.crosstips.org',
+         'title':"BritishEnglish"},
+    )
+    
+    # if your browser says 'en-GB' then hide the US option and relabel
+    # 'English (GB)' as just 'English' so that british and US users don't
+    # have to worry about the difference
+    http_lang = request.META.get('LANG')
+    if http_lang:
+        logging.info("LANG=%r" % http_lang)
+        
+    language_domans = settings.LANGUAGE_DOMAINS
+    
+    options = []
+    for option in all_options:
+        if option['code'].lower() == current_language.lower():
+            option['on'] = True
+        else:
+            option['on'] = False
+            
+        # we must create a key called 'href'
+        if option['code'] in language_domans:
+            option['href'] = 'http://%s' % language_domans[option['code']]
+        else:
+            option['href'] = '/change-language/to/%s/' % option['code']
+            
+        options.append(option)
+        
+    return options
+    
+def change_language(request, language):
+    if language:
+        autosubmit = True
+    else:
+        autosubmit = False
+    next = '/'
+    return _render('change_language.html', locals(), request)

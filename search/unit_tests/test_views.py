@@ -29,10 +29,11 @@ class ViewTestCase(TestCase):
         assert response.status_code == 302, response.status_code
         
         
-    def _add_word(self, word, language, part_of_speech=u''):
+    def _add_word(self, word, language, part_of_speech=u'', name=False):
         Word.objects.create(word=word, length=len(word),
                             part_of_speech=part_of_speech,
-                            language=language)
+                            language=language,
+                            name=name)
         
     def test_solve_json(self):
         """ do an actual search """

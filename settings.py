@@ -70,6 +70,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.doc.XViewMiddleware',
     'djangodblog.DBLogMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    #'django.middleware.locale.LocaleMiddleware',
+    'middleware.locale.LocaleMiddleware',
                       
 )
 
@@ -105,6 +107,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
+ugettext = lambda s: s
+
+LANGUAGES = (
+  ('sv', ugettext("Swedish")),
+  ('en-GB', ugettext("British English")),
+  ('en-US', ugettext("American English")),
+
+)             
 
 TEMPLATE_STRING_IF_INVALID = ''
 
@@ -117,4 +127,4 @@ except ImportError:
     pass
 
 # must exist
-HOME, SECRET_KEY
+HOME, SECRET_KEY, LANGUAGE_DOMAINS

@@ -2,7 +2,7 @@
 from kl import settings
 
 #from MobileUserAgent import parseUserAgent
-from views import get_search_stats, get_saved_cookies
+from views import get_search_stats, get_saved_cookies, get_language_options
 
 def context(request):
             
@@ -26,8 +26,11 @@ def context(request):
     #    data['base_template'] = "mobile_base.html"
     #    data['mobile_version'] = True
 
-    data.update(get_search_stats())
+    language = request.LANGUAGE_CODE
+    data.update(get_search_stats(language))
     
     data.update(get_saved_cookies(request))
+    
+    data.update(dict(language_options=get_language_options(request)))
 
     return data
