@@ -383,7 +383,7 @@ def _send_feedback(text, name=u'', email=u'', fail_silently=False):
     send_mail(fail_silently=fail_silently, 
               from_email=from_email,
               recipient_list=recipient_list,
-              subject=_("Feedback on Crossword solver"),
+              subject=_("Feedback on Crosstips"),
               message=message,
              )
 

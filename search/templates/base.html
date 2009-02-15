@@ -49,7 +49,7 @@
 
             
             <div class="content_title">
-                <h2>{% block pagetitle %}{% trans "Crossword solver" %}{% endblock %}</h2>
+                <h2>{% block pagetitle %}{% trans "Crosstips" %}{% endblock %}</h2>
             </div>
             
 {% block main %}
@@ -107,14 +107,14 @@
 
       <p class="copyright">
         <small>
-          <a href="/">Korsordsl&ouml;saren &copy; 2009</a>
-          <a href="http://www.peterbe.com">Peterbe.com</a>
-          <a href="http://www.fry-it.com">Fry-IT</a>
+          <a href="/">{% trans "Crosstips" %} &copy; 2009</a>
+          <a href="http://www.peterbe.com/">Peterbe.com</a>
+          <a href="http://www.fry-it.com/">Fry-IT</a>
           {% ifequal LANGUAGE_CODE "sv" %}
-          <a href="/om/krysstips">Om Krysstips</a>
-          <a href="/om/dsso">Om DSSO</a>
+          <a href="/om/krysstips/">Om Krysstips</a>
+          <a href="/om/dsso/">Om DSSO</a>
           {% else %}
-          <a href="/about/crosswordsolver">About Crossword solver</a>
+          <a href="/about/crosstips/">About Crosstips</a>
           {% endifequal %}
         </small>
       </p>
