@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-15 23:22+0000\n"
-"PO-Revision-Date: 2009-02-15 22:44+0100\n"
+"PO-Revision-Date: 2009-02-15 23:24+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +44,8 @@ msgstr "Sidoproblem :)"
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
 msgstr "Tyvärr gick nånting åt skogen. Förhoppningsvis fixas det snart."
 
-#: search/templates/base.html:7 search/templates/base.html.py:52
+#: search/templates/base.html:7
+#: search/templates/base.html.py:52
 #: search/templates/base.html:110
 msgid "Crosstips"
 msgstr "Krysstips"
@@ -85,7 +86,8 @@ msgstr "Skicka förslag, feedback eller tips"
 msgid "Your name:"
 msgstr "Ditt namn:"
 
-#: search/templates/base.html:89 search/templates/base.html.py:93
+#: search/templates/base.html:89
+#: search/templates/base.html.py:93
 msgid "optional"
 msgstr "valfritt"
 
@@ -127,13 +129,12 @@ msgid "Slots"
 msgstr "Rutor"
 
 #: search/templates/solve.html:49
-#, fuzzy
 msgid "Search"
-msgstr "Sökningar idag"
+msgstr "Sök"
 
 #: search/templates/solve.html:50
 msgid "Loading"
-msgstr ""
+msgstr "Laddar"
 
 #: search/templates/solve.html:51
 msgid "clear search"
@@ -153,3 +154,4 @@ msgstr "Gå tillbaka till hemsidan"
 
 #~ msgid "Crossword solver"
 #~ msgstr "Krysstips"
+
