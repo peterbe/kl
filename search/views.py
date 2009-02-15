@@ -189,7 +189,7 @@ def _find_alternatives(slots, language):
     if length == 1:
         return Word.objects.filter(length=1, word=slots[0], language=language)
     
-    print language, repr(''.join([x==u'' and u'_' or x for x in slots]))
+    #print language, repr(''.join([x==u'' and u'_' or x for x in slots]))
     
     filter_ = dict(length=length, language=language)
     slots = [x and x.lower() or ' ' for x in slots]
@@ -403,6 +403,7 @@ def get_language_options(request):
     http_lang = request.META.get('LANG')
     if http_lang:
         logging.info("LANG=%r" % http_lang)
+    print "LANG=%r" % http_lang
         
     language_domans = settings.LANGUAGE_DOMAINS
     
