@@ -143,14 +143,13 @@ function __process_submission(res) {
    // make sure any error messages are hidden
    $('#error-wrapper:visible').hide();
    
-   
    if (res.word_count==1)
-     $('#matches').text(res.word_count + " hittad");
+     $('#matches').text(res.match_text);
    if (res.word_count>1)
-     $('#matches').text(res.word_count + " hittade");
+     $('#matches').text(res.match_text);
    
-   if (res.alternatives_truncated)
-     $('#matches').text($('#matches').text() + " (men begransar till 100)");
+   //if (res.alternatives_truncated)
+   //  $('#matches').text($('#matches').text() + " (men begransar till 100)");
    
    $('#alternatives div.sugg').remove();
    if (res.word_count) {
@@ -165,7 +164,7 @@ function __process_submission(res) {
          $('#alternatives').append(all);
       });
    } else {
-      $('#matches').text("None found :(");
+      $('#matches').text(res.match_text);
    }
    $('#loading:visible').hide();
    

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-15 23:22+0000\n"
+"POT-Creation-Date: 2009-02-16 11:25+0000\n"
 "PO-Revision-Date: 2009-02-15 23:24+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,25 @@ msgstr ""
 msgid "American English"
 msgstr ""
 
-#: search/views.py:386
+#: search/views.py:90
+msgid "1 found"
+msgstr ""
+
+#: search/views.py:93
+#, python-format
+msgid "%(count)s found but only showing first 100"
+msgstr ""
+
+#: search/views.py:96
+#, python-format
+msgid "%(count)s found"
+msgstr ""
+
+#: search/views.py:99
+msgid "None found unfortunately :("
+msgstr ""
+
+#: search/views.py:398
 #, fuzzy
 msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
@@ -44,8 +62,7 @@ msgstr "Sidoproblem :)"
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
 msgstr "Tyvärr gick nånting åt skogen. Förhoppningsvis fixas det snart."
 
-#: search/templates/base.html:7
-#: search/templates/base.html.py:52
+#: search/templates/base.html:7 search/templates/base.html.py:52
 #: search/templates/base.html:110
 msgid "Crosstips"
 msgstr "Krysstips"
@@ -86,8 +103,7 @@ msgstr "Skicka förslag, feedback eller tips"
 msgid "Your name:"
 msgstr "Ditt namn:"
 
-#: search/templates/base.html:89
-#: search/templates/base.html.py:93
+#: search/templates/base.html:89 search/templates/base.html.py:93
 msgid "optional"
 msgstr "valfritt"
 
@@ -154,4 +170,3 @@ msgstr "Gå tillbaka till hemsidan"
 
 #~ msgid "Crossword solver"
 #~ msgstr "Krysstips"
-

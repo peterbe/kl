@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-15 23:22+0000\n"
+"POT-Creation-Date: 2009-02-16 11:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,25 @@ msgstr ""
 msgid "American English"
 msgstr ""
 
-#: search/views.py:386
+#: search/views.py:90
+msgid "1 found"
+msgstr ""
+
+#: search/views.py:93
+#, python-format
+msgid "%(count)s found but only showing first 100"
+msgstr ""
+
+#: search/views.py:96
+#, python-format
+msgid "%(count)s found"
+msgstr ""
+
+#: search/views.py:99
+msgid "None found unfortunately :("
+msgstr ""
+
+#: search/views.py:398
 msgid "Feedback on Crosstips"
 msgstr ""
 

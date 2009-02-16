@@ -86,6 +86,18 @@ def solve(request, json=False):
             result['match_points'] = match_points
         result['words'] = words
         
+        if alternatives_count == 1:
+            result['match_text'] = _("1 found")
+        elif alternatives_count:
+            if alternatives_truncated:
+                result['match_text'] = _("%(count)s found but only showing first 100")\
+                  % dict(count=alternatives_count)
+            else:
+                result['match_text'] = _("%(count)s found") % \
+                  dict(count=alternatives_count)
+        else:
+            result['match_text'] = _("None found unfortunately :(")
+        
         found_word = None
         if len(words) == 1:
             found_word = Word.objects.get(word=words[0], language=language)
