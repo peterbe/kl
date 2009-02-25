@@ -412,13 +412,15 @@ def get_language_options(request):
     # if your browser says 'en-GB' then hide the US option and relabel
     # 'English (GB)' as just 'English' so that british and US users don't
     # have to worry about the difference
-    http_lang = request.META.get('LANG')
-    if http_lang:
-        logging.info("LANG=%r" % http_lang)
-    else:
-        print [k for k in request.META.keys() if k.count('LANG')]
-        print request.META.get('HTTP_ACCEPT_LANGUAGE')
-    print "LANG=%r" % http_lang
+    print "GEO", repr(request.META.get('GEO'))
+    #http_lang = request.META.get('LANG')
+    #if http_lang:
+    #    logging.info("LANG=%r" % http_lang)
+    #else:
+    #    print [k for k in request.META.keys() if k.count('LANG')]
+    #    print request.META.get('HTTP_ACCEPT_LANGUAGE')
+    #print "LANG=%r" % http_lang
+    
         
     language_domans = settings.LANGUAGE_DOMAINS
     

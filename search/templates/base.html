@@ -33,11 +33,6 @@
                 {% if language_option.title %}title="{{ language_option.title }}"{% endif %}
                 href="{{ language_option.href }}">{{ language_option.label }}</a></li>
               {% endfor %}
-              {% comment %}
-	      <li {% ifequal request.LANGUAGE_CODE "sv" %}class="on"{% endifequal %}><a href="{{ "sv"|language_switch_href }}">Svenska</a></li>
-              <li {% ifequal request.LANGUAGE_CODE "en-US" %}class="on"{% endifequal %}><a href="{{ "en-US"|language_switch_href }}">English (US)</a></li>
-              <li {% ifequal request.LANGUAGE_CODE "en-GB" %}class="on"{% endifequal %}><a href="{{ "en-GB"|language_switch_href }}">English (GB)</a></li>
-              {% endcomment %}
             </ul>
             
           </form>
