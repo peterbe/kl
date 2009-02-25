@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-16 11:25+0000\n"
+"POT-Creation-Date: 2009-02-25 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,60 +62,60 @@ msgstr ""
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
 msgstr ""
 
-#: search/templates/base.html:7 search/templates/base.html.py:52
-#: search/templates/base.html:110
+#: search/templates/base.html:8 search/templates/base.html.py:53
+#: search/templates/base.html:111
 msgid "Crosstips"
 msgstr ""
 
-#: search/templates/base.html:63
+#: search/templates/base.html:64
 msgid "Statistics"
 msgstr ""
 
-#: search/templates/base.html:66
+#: search/templates/base.html:67
 msgid "Searches today"
 msgstr ""
 
-#: search/templates/base.html:67
+#: search/templates/base.html:68
 msgid "Searches yesterday"
 msgstr ""
 
-#: search/templates/base.html:68
+#: search/templates/base.html:69
 msgid "Searches this week"
 msgstr ""
 
-#: search/templates/base.html:69
+#: search/templates/base.html:70
 msgid "Searches this month"
 msgstr ""
 
-#: search/templates/base.html:70
+#: search/templates/base.html:71
 msgid "Searches this year"
 msgstr ""
 
-#: search/templates/base.html:71
+#: search/templates/base.html:72
 msgid "Total number of words"
 msgstr ""
 
-#: search/templates/base.html:86
+#: search/templates/base.html:87
 msgid "Send suggestions, feedback or tips"
 msgstr ""
 
-#: search/templates/base.html:89
+#: search/templates/base.html:90
 msgid "Your name:"
 msgstr ""
 
-#: search/templates/base.html:89 search/templates/base.html.py:93
+#: search/templates/base.html:90 search/templates/base.html.py:94
 msgid "optional"
 msgstr ""
 
-#: search/templates/base.html:93
+#: search/templates/base.html:94
 msgid "Your email:"
 msgstr ""
 
-#: search/templates/base.html:102
+#: search/templates/base.html:103
 msgid "Send feedback"
 msgstr ""
 
-#: search/templates/base.html:103
+#: search/templates/base.html:104
 msgid "Cancel"
 msgstr ""
 
