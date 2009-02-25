@@ -412,7 +412,7 @@ def get_language_options(request):
     # if your browser says 'en-GB' then hide the US option and relabel
     # 'English (GB)' as just 'English' so that british and US users don't
     # have to worry about the difference
-    print "GEO", repr(request.META.get('GEO'))
+    #print "GEO", repr(request.META.get('GEO'))
     #http_lang = request.META.get('LANG')
     #if http_lang:
     #    logging.info("LANG=%r" % http_lang)
@@ -436,7 +436,15 @@ def get_language_options(request):
             option['href'] = 'http://%s' % language_domans[option['code'].lower()]
         else:
             option['href'] = '/change-language/to/%s/' % option['code']
-            
+        
+        if request.META.get('GEO') == 'GB':
+            # ditch the en-US option and change the label 
+            # from "English (GB)" to "English"
+            if option['code'] == 'en-US':
+                continue
+            elif option['label'] == 'English (GB)':
+                option['label'] = 'English'
+                
         options.append(option)
         
     return options
