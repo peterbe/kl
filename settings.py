@@ -120,6 +120,8 @@ TEMPLATE_STRING_IF_INVALID = ''
 
 DJANGO_SLIMMER = True
 
+SESSION_ENGINE="django.contrib.sessions.backends.cache"
+
 # must be last
 try:
     from settings_local import *

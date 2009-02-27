@@ -106,12 +106,16 @@ def solve(request, json=False):
                        user_agent=request.META.get('HTTP_USER_AGENT',''),
                        ip_address=request.META.get('REMOTE_ADDR',''),
                        found_word=found_word)
+        
+        request.session['has_searched'] = True
 
         if json:
             return _render_json(result)
         
     else:
         length = '' # default
+        
+    show_example_search = not bool(request.session.get('has_searched'))
         
     data = locals()
     
@@ -449,7 +453,7 @@ def get_language_options(request):
         
     return options
     
-def change_language(request, language):
+def change_language(request, language=None):
     if language:
         autosubmit = True
     else:

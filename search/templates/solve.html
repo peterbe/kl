@@ -64,5 +64,15 @@ a.clear-search { font-size:80%;}
 <div id="matches"></div>
 <div id="alternatives"></div>
 
+{% if show_example_search %}
+<div id="for-example">
+{% ifequal request.LANGUAGE_CODE "sv" %}
+<p>Till exempel, <a href="/" onclick="run_example(7, ['K','O','','','O','','D']);return false">vilket ord b&ouml;rjar p&auml; KO, femte bokstaven O och slutar p&auml; bokstaven D?</a>
+{% else %}
+<p>For example, <a href="/" onclick="run_example(9, ['C','','O','','','','','R','D']);return false">what's
+a 9 letter word that starts with C, third letter O and ends with RD?</a>
+{% endifequal %}
+</div>
+{% endif %}
 
 {% endblock %}

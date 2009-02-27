@@ -178,6 +178,29 @@ function __error_ajaxSubmit(request, response_text) {
    $('#error__ajax .response').text(response_text);
 }
 
+function run_example(l, w) {
+   $('#id_length').val(l);
+   __prep_slots(l);
+   $.each(w, function(i, e) {
+      //console.log($('input', '#allslots')[1]);
+      $('input', '#allslots')[i].value = e;
+   });
+   $('#for-example').hide(500);
+   setTimeout(function() {
+      $('form#solutions').ajaxSubmit(submit_options);
+   }, 500);
+   
+}
+
+var submit_options = {
+   url: '/los/json/',
+     type: 'GET',
+     dataType: 'json',
+     error: __error_ajaxSubmit,
+     beforeSubmit: __before_ajaxSubmit,
+     success: __process_submission
+};
+
 $(function() {
    if ($('#id_length').val()) {
     if ($('#id_length').val().search(/[^\d]/) > -1)
@@ -190,14 +213,6 @@ $(function() {
    if (!$('#id_length').val())
      $('#id_length')[0].focus();
    
-   var submit_options = {
-      url: '/los/json/',
-        type: 'GET',
-        dataType: 'json',
-        error: __error_ajaxSubmit,
-        beforeSubmit: __before_ajaxSubmit,
-        success: __process_submission
-   }
    $('form#solutions').ajaxForm(submit_options);
    
 });
