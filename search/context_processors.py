@@ -8,6 +8,7 @@ def context(request):
             
     data = {'TEMPLATE_DEBUG': settings.TEMPLATE_DEBUG,
             'DEBUG': settings.DEBUG,
+            'HOME': settings.HOME,
             #'OFFLINE': settings.OFFLINE,
             'base_template': "base.html",
             'mobile_version': False,

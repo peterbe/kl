@@ -3,11 +3,10 @@
 {% load i18n %}
 {% load django_slimmer %}
 <head>
+  <!-- HOME: {{ HOME }} -->
   <meta http-equiv="Content-Language" content="{{ request.LANGUAGE_CODE }}"/>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>{% block title %}{% trans "Crosstips" %}{% endblock %}</title>
-  
-
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/core.css" %}" type="text/css" media="screen" charset="utf-8">
   
@@ -106,10 +105,12 @@
           <a href="/">{% trans "Crosstips" %} &copy; 2009</a>
           <a href="http://www.peterbe.com/">Peterbe.com</a>
           <a href="http://www.fry-it.com/">Fry-IT</a>
-          {% ifequal LANGUAGE_CODE "sv" %}
+	  <!-- {{ request.LANGUAGE_CODE }} -->
+          {% ifequal request.LANGUAGE_CODE "sv" %}
           <a href="/om/krysstips/">Om Krysstips</a>
           <a href="/om/dsso/">Om DSSO</a>
           {% else %}
+	  
           <a href="/about/crosstips/">About Crosstips</a>
           {% endifequal %}
         </small>
