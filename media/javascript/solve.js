@@ -133,13 +133,19 @@ function __before_ajaxSubmit(form_data, form_obj) {
       }, 3*1000);
       return false;
    }
+   // make sure the for-example is hidden
+   $('#for-example:visible').hide();
+   
    $('#loading:hidden').show();
+   
+   
    
    return true;
 }
 
 
 function __process_submission(res) {
+    
    // make sure any error messages are hidden
    $('#error-wrapper:visible').hide();
    
