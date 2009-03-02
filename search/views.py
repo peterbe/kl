@@ -44,6 +44,8 @@ def set_cookie(response, key, value, expire=None):
         domain=settings.SESSION_COOKIE_DOMAIN, secure=settings.SESSION_COOKIE_SECURE or None)
 
 
+ONE_DAY = 60 * 60 * 24 # one day in seconds
+
         
 def solve(request, json=False):
     if request.GET.get('l'):
@@ -61,7 +63,12 @@ def solve(request, json=False):
         language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
 
         # find some alternatives
-        alternatives = _find_alternatives(slots[:length], language=language)
+        cache_key = '_find_alternatives_%s_%s' % (''.join(slots[:length]), language)
+        alternatives = cache.get(cache_key)
+        if alternatives is None:
+            alternatives = _find_alternatives(slots[:length], language=language)
+            cache.set(cache_key, alternatives, ONE_DAY)
+            
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]]);
         alternatives_count = len(alternatives)
         alternatives_truncated = False
@@ -70,10 +77,10 @@ def solve(request, json=False):
             alternatives_truncated = True
 
         result = dict(length=length,
-                    search=search,
-                    word_count=alternatives_count,
-                    alternatives_truncated=alternatives_truncated,
-                    )
+                      search=search,
+                      word_count=alternatives_count,
+                      alternatives_truncated=alternatives_truncated,
+                     )
         words = [each.word for each in alternatives]
         match_points = None
         match_points = []
