@@ -26,6 +26,7 @@ div.error {
   color:red;
 }
 a.clear-search { font-size:80%;}
+input#id_length, #allslots input { font-weight:bold; font-size:120% }
 {% endslimcontent %}
 </style>
 {% endblock %}
@@ -38,7 +39,7 @@ a.clear-search { font-size:80%;}
 
 <form action="./" id="solutions">
 <p>
-  <label for="id_length">{% trans "Length" %}:</label>
+  <label for="id_length">{% trans "Number of letters" %}:</label>
   <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"/><br/>
   
   <label>{% trans "Slots" %}:</label>
@@ -66,6 +67,11 @@ a.clear-search { font-size:80%;}
 
 {% if show_example_search %}
 <div id="for-example">
+<p>{% blocktrans %}
+Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. 
+Enter the length of the word and fill in the known letters.
+{% endblocktrans %}</p>
+
 {% ifequal request.LANGUAGE_CODE "sv" %}
 <p>Till exempel, <a href="/" onclick="run_example(7, ['K','O','','','O','','D']);return false">vilket ord b&ouml;rjar p&auml; KO, femte bokstaven O och slutar p&auml; bokstaven D?</a>
 {% else %}

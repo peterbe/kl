@@ -5,7 +5,9 @@
 <head>
   <meta http-equiv="Content-Language" content="{{ request.LANGUAGE_CODE }}"/>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>{% block title %}{% trans "Crosstips" %}{% endblock %}</title>
+  <meta name="description" content="{% trans "helps you solve your crossword puzzles" %}">
+  <meta name="keywords" content="{% trans "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles" %}">
+  <title>{% block title %}{% trans "Crosstips" %} - {% trans "helps you solve your crossword puzzles" %}{% endblock %}</title>
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/core.css" %}" type="text/css" media="screen" charset="utf-8">
   
@@ -43,6 +45,7 @@
 
             
             <div class="content_title">
+	        <h3 style="float:right">{% trans "helps you solve your crossword puzzles" %}</h3>
                 <h2>{% block pagetitle %}{% trans "Crosstips" %}{% endblock %}</h2>
             </div>
             
