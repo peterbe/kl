@@ -63,13 +63,14 @@ def solve(request, json=False):
         language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
 
         # find some alternatives
-        cache_key = '_find_alternatives_%s_%s' % (''.join(slots[:length]), language)
+        search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
+        cache_key = '_find_alternatives_%s_%s' % (search, language)
+        cache_key = cache_key.replace(' ','_')
         alternatives = cache.get(cache_key)
         if alternatives is None:
             alternatives = _find_alternatives(slots[:length], language=language)
             cache.set(cache_key, alternatives, ONE_DAY)
             
-        search = ''.join([x and x.lower() or ' ' for x in slots[:length]]);
         alternatives_count = len(alternatives)
         alternatives_truncated = False
         if alternatives_count > 100:
