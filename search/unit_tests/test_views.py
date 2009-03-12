@@ -10,7 +10,7 @@ from django.test.client import Client
 from django.test import TestCase
 
 # project
-from search.views import _get_search_stats
+from search.views import get_search_stats, _get_variations
 from search.models import Word, Search
 
 class ViewTestCase(TestCase):
@@ -49,7 +49,9 @@ class ViewTestCase(TestCase):
         assert not struct['alternatives_truncated']
         assert struct['word_count'] == 2
         assert struct['match_points'] == [1,1,0]
-        assert struct['words'] == ['abc','abd']
+        
+        self.assertEquals(struct['words'],
+                          [{'word':'abc'}, {'word':'abd'}])
         assert struct['search'] == 'ab '
         
         recorded_search = Search.objects.get(search_word='ab ')
@@ -57,13 +59,13 @@ class ViewTestCase(TestCase):
         assert recorded_search.found_word is None
         
         # do another search were we find exactly one result
-        response = client.get('/los/json/?l=3&s=&s=c&s=d')
-        
+        response = client.get('/los/json/?l=3&s=&s=c&s=d&lang=sv')
         struct = simplejson.loads(response.content)
-        assert struct['word_count'] == 1
-        assert struct['match_points'] == [0,1,1]
-        assert struct['words'] == ['acd']
-        assert struct['search'] == ' cd'
+        self.assertEquals(struct['word_count'], 1)
+        self.assertEquals(struct['match_points'], [0,1,1])
+        self.assertEquals(struct['words'], 
+                          [{'word':'acd'}])
+        self.assertEquals(struct['search'], ' cd')
         
         recorded_search = Search.objects.get(search_word=' cd')
         word_instance = recorded_search.found_word
@@ -71,9 +73,11 @@ class ViewTestCase(TestCase):
         assert word_instance.word == u'acd'
         
         
-    def test__get_search_stats(self):
-        """ test the private method _get_search_stats() """
-        res = _get_search_stats()
+    def test_get_search_stats(self):
+        """ test the get_search_stats() """
+        func = lambda l: get_search_stats(l, use_cache=False)
+        
+        res = func('sv')
         assert res['no_total_words'] == 0
         assert res['no_searches_today'] == 0
         assert res['no_searches_yesterday'] == 0
@@ -85,8 +89,8 @@ class ViewTestCase(TestCase):
         self._add_word(u'abd', 'sv')
         self._add_word(u'acd', 'sv')
         
-        res = _get_search_stats()
-        assert res['no_total_words'] == 3
+        res = func('sv')
+        self.assertEquals(res['no_total_words'], 3)
         assert res['no_searches_today'] == 0
         assert res['no_searches_yesterday'] == 0
         assert res['no_searches_this_week'] == 0
@@ -95,19 +99,47 @@ class ViewTestCase(TestCase):
 
         # do a search "today"
         client = Client()
-        client.get('/los/json/?l=3&s=a&s=b&s=&lang=sv')
+        response = client.get('/los/json/?l=3&s=a&s=b&s=&lang=sv')
         
-        res = _get_search_stats()
+        res = func('sv')
         assert res['no_total_words'] == 3
-        assert res['no_searches_today'] == 1
+        self.assertEquals(res['no_searches_today'], 1)
 
         # do another search and then manually nudge it's add_date
-        client.get('/los/json/?l=3&s=x&s=x&s=x')
+        client.get('/los/json/?l=3&s=x&s=x&s=x&lang=sv')
         s = Search.objects.get(search_word=u'xxx')
+        self.assertEquals(s.language, u'sv')
         s.add_date = datetime.datetime.today() - datetime.timedelta(days=1)
         s.save()
         
-        res = _get_search_stats()
-        assert res['no_total_words'] == 3
-        assert res['no_searches_yesterday'] == 1
+        res = func('sv')
+        self.assertEquals(res['no_total_words'], 3)
+        self.assertEquals(res['no_searches_yesterday'], 1)
+        
+        
+    def test_search_with_clue(self):
+        """test if wordnet is installed """
+        from search.views import wordnet
+        if wordnet is None:
+            return
+
+        client = Client()
+        # surface, 7 letters
+        from urllib import urlencode
+        qs = urlencode(dict(l=7, s=list('surfac_'), lang='en-gb', clues='floor'), 
+                       doseq=True)
+        response = client.get('/los/json/?' + qs.replace('_',''))
+        print response.content
+        
+    def test__get_variations(self):
+        """ test the private method _get_variations() """
+        from search.views import wordnet
+        if wordnet is None:
+            return
+        
+        print _get_variations(u'partying')
+        
+        
+        
+
         

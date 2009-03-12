@@ -23,6 +23,7 @@ from django.conf import settings
 from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm
 from utils import uniqify, any_true, ValidEmailAddress
+from morph_en import variations as morph_variations
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -46,6 +47,12 @@ def set_cookie(response, key, value, expire=None):
 
 ONE_DAY = 60 * 60 * 24 # one day in seconds
 
+class SearchResult(object):
+    def __init__(self, word, definition=u'', by_clue=None):
+        self.word = word
+        self.definition = definition
+        self.by_clue = by_clue
+        
         
 def solve(request, json=False):
     if request.GET.get('l'):
@@ -60,7 +67,16 @@ def solve(request, json=False):
         if not len(slots) >= length:
             return HttpResponseRedirect('/los/?error=slots&error=length')
         
+        clues = request.GET.get('clues', u'')
+        clues = [x.strip() for x in clues.split(',') if x.strip()]
+        
         language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
+        
+        search_results = [] # the final simple list that is sent back
+        
+        for clue in clues:
+            alternatives = _find_alternative_synonyms(clue, slots[:length], language)
+            search_results.extend([SearchResult(x, by_clue=clue) for x in alternatives])
 
         # find some alternatives
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
@@ -68,7 +84,7 @@ def solve(request, json=False):
         cache_key = cache_key.replace(' ','_')
         alternatives = cache.get(cache_key)
         if alternatives is None:
-            alternatives = _find_alternatives(slots[:length], language=language)
+            alternatives = _find_alternatives(slots[:length], language)
             cache.set(cache_key, alternatives, ONE_DAY)
             
         alternatives_count = len(alternatives)
@@ -76,23 +92,37 @@ def solve(request, json=False):
         if alternatives_count > 100:
             alternatives = alternatives[:100]
             alternatives_truncated = True
-
+            
         result = dict(length=length,
                       search=search,
                       word_count=alternatives_count,
                       alternatives_truncated=alternatives_truncated,
                      )
-        words = [each.word for each in alternatives]
+        already_found = [x.word for x in search_results]
+        search_results.extend([SearchResult(each.word,
+                                            definition=each.definition)
+                               for each in alternatives
+                               if each.word not in already_found])
         match_points = None
         match_points = []
-        if words:
-            for i, letter in enumerate(words[0]):
+        if search_results:
+            first_word = search_results[0].word
+            for i, letter in enumerate(first_word):
                 if letter.lower() == search[i]:
                     match_points.append(1)
                 else:
                     match_points.append(0)
             result['match_points'] = match_points
-        result['words'] = words
+            
+        result['words'] = []
+        for search_result in search_results:
+            v = dict(word=search_result.word)
+            if search_result.definition:
+                v['definition'] = search_result.definition
+            if search_result.by_clue:
+                v['by_clue'] = search_result.by_clue
+            result['words'].append(v)
+                
         
         if alternatives_count == 1:
             result['match_text'] = _("1 found")
@@ -105,15 +135,22 @@ def solve(request, json=False):
                   dict(count=alternatives_count)
         else:
             result['match_text'] = _("None found unfortunately :(")
-        
+            
         found_word = None
-        if len(words) == 1:
-            found_word = Word.objects.get(word=words[0], language=language)
+        if len(search_results) == 1:
+            try:
+                found_word = Word.objects.get(word=search_results[0].word, 
+                                              language=language)
+            except Word.DoesNotExist:
+                # this it was probably not from the database but
+                # from the wordnet stuff
+                found_word = None
         
         _record_search(search,
                        user_agent=request.META.get('HTTP_USER_AGENT',''),
                        ip_address=request.META.get('REMOTE_ADDR',''),
-                       found_word=found_word)
+                       found_word=found_word,
+                       language=language)
         
         request.session['has_searched'] = True
 
@@ -124,14 +161,18 @@ def solve(request, json=False):
         length = '' # default
         
     show_example_search = not bool(request.session.get('has_searched'))
-        
-    data = locals()
     
+    accept_clues = wordnet is not None and \
+      request.LANGUAGE_CODE.lower() in ('en', 'en-gb', 'en-us')
+    accept_clues=False# disabled for the time being
+
+    data = locals()
 
     return _render('solve.html', data, request)
 
 def _record_search(search_word, user_agent=u'', ip_address=u'',
-                   found_word=None):
+                   found_word=None,
+                   language=None):
     if len(user_agent) > 200:
         user_agent = user_agent[:200]
     if len(ip_address) > 15:
@@ -143,28 +184,35 @@ def _record_search(search_word, user_agent=u'', ip_address=u'',
                           user_agent=user_agent.strip(),
                           ip_address=ip_address.strip(),
                           found_word=found_word,
+                          language=language
                           )
 
-def get_search_stats(language, refresh_today_stats=True):
+def get_search_stats(language, refresh_today_stats=True, use_cache=True):
     """ wrapper on _get_search_stats() that uses a cache instead """
-    cache_key = '_get_search_stats' + language
-    res = cache.get(cache_key)
+    
     today = datetime.datetime.today()
     today_midnight = datetime.datetime(today.year, today.month,
                                        today.day, 0, 0, 0)
+    
+    if use_cache:
+        cache_key = '_get_search_stats' + language
+        res = cache.get(cache_key)
+    else:
+        res = None
+
     if res is None:
         #t0=time()
         res = _get_search_stats(language)
         #print time()-t0, "to generate stats"
-        seconds_since_midnight = (today - today_midnight).seconds
-        
-        cache.set(cache_key, res, seconds_since_midnight)
+        if use_cache:
+            seconds_since_midnight = (today - today_midnight).seconds
+            cache.set(cache_key, res, seconds_since_midnight)
         
     if refresh_today_stats:
         # exception
-        
-        res['no_searches_today'] = Search.objects.filter(
-                                           add_date__gte=today_midnight).count()
+        res['no_searches_today'] = Search.objects.filter(add_date__gte=today_midnight,
+                                                        # language=language
+                                                        ).count()
     return res
 
 def _get_search_stats(language):
@@ -206,6 +254,184 @@ def get_saved_cookies(request):
     cookie__name = request.COOKIES.get('kl__name')
     cookie__email = request.COOKIES.get('kl__email')
     return dict([(k,v) for (k,v) in locals().items() if v is not None])
+
+try:
+    from nltk.corpus import wordnet
+except ImportError:
+    wordnet = None
+
+    
+def _find_alternative_synonyms(word, slots, language):
+    if wordnet is None:
+        return []
+    
+    length = len(slots)
+    
+    slots = [x and x.lower() or ' ' for x in slots]
+    search = ''.join(slots)
+    start = ''
+    end = ''
+    try:
+        start = re.findall('^\w+', search)[0]
+    except IndexError:
+        pass
+    
+    try:
+        end = re.findall('\w+$', search)[0]
+    except IndexError:
+        pass
+    
+    
+    def filter_match(word):
+        
+        if end and not word.endswith(end):
+            # Don't even bother
+            return False
+        elif start and not word.startswith(start):
+            # Don't even bother
+            return False
+
+        if end:
+            matchable_string = search[len(start):-len(end)]
+            found_string = word[len(start):-len(end)]
+        else:
+            matchable_string = search[len(start):]
+            found_string = word[len(start):]
+        assert len(matchable_string) == len(found_string)
+        for i, each in enumerate(matchable_string):
+            if each != u' ' and each != found_string[i]:
+                # can't be match
+                return False
+        return True
+    
+    
+    
+    def test(word, pos, pluralize=True):
+        if len(word) == length:
+            return filter_match(word)
+        elif pluralize and pos == wordnet.NOUN:
+            # still here,
+            # getting desperate!
+            as_plural = plural(word)
+            if as_plural != word:
+                return test(as_plural, pos, pluralize=False)
+                
+        
+    def plural(word):
+        if word.endswith('y'):
+            return word[:-1] + 'ies'
+        elif word[-1] in 'sx' or word[-2:] in ['sh', 'ch']:
+            return word + 'es'
+        elif word.endswith('an'):
+            return word[:-2] + 'en'
+        return word + 's'
+        
+                
+    tested_words = []
+    
+    matched_words = []
+    for synset in wordnet.synsets(word):
+        s_word = synset.name.split('.')[0]
+        if synset.definition:
+            try:
+                _add_word_definition(s_word, synset.definition, language=language)
+            except Word.DoesNotExist:
+                pass
+        print "s", repr(s_word)
+        if s_word not in tested_words and not s_word.count('_'):
+            tested_words.append(s_word)
+            if test(s_word, synset.pos):
+                matched_words.append(s_word)
+                
+            for variation in morph_variations(s_word):
+                if len(variation) == length and variation not in tested_words:
+                    tested_words.append(variation)
+                    test(variation, None)
+        
+        for sub_synset in wordnet.synset(synset.name).hypernyms():
+            print "\ts", repr(s_word)
+            s_word = sub_synset.name.split('.')[0]
+            if sub_synset.definition:
+                try:
+                    _add_word_definition(s_word, sub_synset.definition, language=language)
+                except Word.DoesNotExist:
+                    pass
+            if s_word not in tested_words and not s_word.count('_'):
+                tested_words.append(s_word)
+                if test(s_word, sub_synset.pos):
+                    matched_words.append(s_word)
+
+                for variation in morph_variations(s_word):
+                    if len(variation) == length and variation not in tested_words:
+                        tested_words.append(variation)
+                        test(variation, None)
+    
+    tested_words.sort()
+    print tested_words
+        
+    del tested_words
+        
+    return matched_words
+
+def _get_variations(word, greedy=False,
+                    store_definitions=True):
+    """return a list of words if possible.
+    If greedy, return a
+    """
+    all = []
+    
+    def plural(word):
+        if word.endswith('y'):
+            return word[:-1] + 'ies'
+        elif word[-1] in 'sx' or word[-2:] in ['sh', 'ch']:
+            return word + 'es'
+        elif word.endswith('an'):
+            return word[:-2] + 'en'
+        return word + 's'
+    
+
+    def ok_word(w):
+        return not w.count('_')
+    
+    for each in morph_variations(word):
+        if each in all:
+            # a crap variation
+            continue
+        
+        # check that each variation is a word
+        if not wordnet.morphy(each):
+            # then it's probably not a word
+            continue
+            # then it's a word
+        if not ok_word(each):
+            # e.g. 'horizontal_surface'
+            continue
+        
+        print plural(each)
+        
+        all.append(each)
+        for synset in wordnet.synsets(each):
+            for synonym_synset in synset.hypernyms():
+                #print synonym_synset
+                synonym = synonym_synset.name.split('.')[0]
+                if not ok_word(synonym):
+                    continue
+                
+                for synonym_variation in morph_variations(synonym):
+                    if not wordnet.morphy(synonym_variation):
+                        # then it's not a word
+                        continue
+                    
+                    if synonym_variation in all:
+                        # already seen this variation
+                        continue
+                    
+                    all.append(synonym_variation)
+                    
+                    print plural(synonym_variation)
+    
+    return all
+    
 
 def _find_alternatives(slots, language):
     length = len(slots)
@@ -258,10 +484,21 @@ def _find_alternatives(slots, language):
             limit = 2500
         else:
             limit = 1000
-    
-    return [x for x in Word.objects.filter(**filter_).order_by('word')[:limit]
-            if filter_match(x)]
-    
+
+    all_matches = [x for x in Word.objects.filter(**filter_).order_by('word')[:limit]
+                   if filter_match(x)]
+    return uniqify(all_matches,
+                   lambda x: x.word.lower())
+
+
+def _add_word_definition(word, definition, language=None):
+    filter_ = dict(word=word)
+    if language:
+        filter_ = dict(filter_, language=language)
+        
+    w = Word.objects.get(**filter_)
+    w.definition = definition.strip()
+    w.save()
 
 @login_required
 def upload_wordlist(request):

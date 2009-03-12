@@ -147,7 +147,7 @@ function __before_ajaxSubmit(form_data, form_obj) {
 function __process_submission(res) {
     
    // make sure any error messages are hidden
-   $('#error-wrapper:visible').hide();
+   $('div.error:visible').hide();
    
    if (res.word_count==1)
      $('#matches').text(res.match_text);
@@ -158,15 +158,21 @@ function __process_submission(res) {
    //  $('#matches').text($('#matches').text() + " (men begransar till 100)");
    
    $('#alternatives div.sugg').remove();
+   var all, w;
    if (res.word_count) {
-      $.each(res.words, function(i,e) {
-         var all = $('<div class="sugg"></div>');
+      $.each(res.words, function(i,r) {
+         all = $('<div class="sugg"></div>');
+         e = r.word;
          for (var i=0, len=e.length; i<len; i++) {
             if (res.match_points[i])
               all.append($('<span class="match letter"></span>').text(e[i]));
             else
               all.append($('<span class="letter"></span>').text(e[i]));
          }
+         if (r.by_clue)
+           all.append($('<span class="by_clue"></span>').text('~ ' + r.by_clue));
+         if (r.definition)
+           all.append($('<abbr>definition</abbr>').attr('title', r.definition));
          $('#alternatives').append(all);
       });
    } else {

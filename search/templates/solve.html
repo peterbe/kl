@@ -18,6 +18,11 @@ div.sugg span {
   font-size:18px;
   border:1px solid #ccc;
 }
+div.sugg abbr {
+  padding-left:10px; 
+  font-size:80%;
+}
+
 span.match {
   font-weight:bold;
 }
@@ -47,6 +52,11 @@ input#id_length, #allslots input { font-weight:bold; font-size:120% }
   {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1"/>{% endfor %}
   </span>
   <br/>
+  {% if accept_clues %}
+    <label>{% trans "Clue(s):" %}</label>
+    <input name="clues" value="" size="12" />
+    <br/><br/>
+  {% endif %}
   <input type="submit" value="{% trans "Search" %}"/>
   <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15"/>
   <a href="./" id="clear-search" style="display:none">{% trans "clear search" %}</a>

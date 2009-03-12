@@ -25,6 +25,7 @@ class Word(models.Model):
     language = models.CharField(max_length=5)
     length = models.IntegerField()
     part_of_speech = models.CharField(max_length=20, null=True)
+    definition = models.CharField(max_length=250)
     name = models.BooleanField()
     
     def __unicode__(self):
