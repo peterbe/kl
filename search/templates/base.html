@@ -80,8 +80,16 @@
     <div id="footer">
       {% block feedback_form %}
       <form action="/feedback/" method="post" class="feedback_form" id="feedback">
+        {% if form.errors %}
+         <p style="color:red">Error! Please try to fill in the form again.</p>
+        {% endif %}
+        <input type="hidden" name="render_form_ts" value="{{ render_form_ts }}"/>
         <p class="text"><textarea name="text" rows="8" cols="40" id="id_feedback">{% trans "Send suggestions, feedback or tips" %}</textarea></p>
         <table style="display:none">
+          <tr id="your-website-inp">
+            <td><label>Your website:</label> (leave blank please)</td>
+            <td><input name="your_website_url" size="20" value=""/></td>
+          </tr>        
           <tr>
             <td><label>{% trans "Your name:" %}</label> <sup>({% trans "optional" %})</sup></td>
             <td><input name="name" size="20" value="{{ cookie__name }}" /></td>
@@ -129,7 +137,6 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery.form.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}{% slimfile "/javascript/jquery.site.js" %}"></script>
 {% block extrajs %}{% endblock %}
-
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

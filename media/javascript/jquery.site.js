@@ -8,7 +8,7 @@ function settings_init() {
 /* FEEDBACK
 ---------------------------------------------------------------------- */
 function feedback_init() {
-  var form = $('.feedback_form');
+  var form = $('#feedback');
   var textarea = form.find('#id_feedback');
   var default_value = textarea.val();
   var submit = form.find('.submit');
@@ -31,13 +31,19 @@ function feedback_init() {
     submit.hide();
     table.hide();
   });
+   
+   // HP
+   form.bind('mouseover', function() {
+      $('#your-website-inp').hide();
+      form.unbind('mouseover');
+   });
 }
+
 
 
 /* INIT
 ---------------------------------------------------------------------- */
 $(function() {
   feedback_init();
-  
   
 });

@@ -604,9 +604,12 @@ def send_feedback(request):
     if form.is_valid():
         name = form.cleaned_data.get('name')
         email = form.cleaned_data.get('email')
+        geo = request.META.get('GEO')
+
         _send_feedback(form.cleaned_data.get('text'),
                        name=name,
-                       email=email)
+                       email=email,
+                       geo=geo)
         
         response = _render('feedback_sent.html', locals(), request)
         if name is not None:
@@ -621,7 +624,8 @@ def send_feedback(request):
     
     return _render('solve.html', locals(), request)
         
-def _send_feedback(text, name=u'', email=u'', fail_silently=False):
+def _send_feedback(text, name=u'', email=u'', fail_silently=False,
+                   geo=None):
     
     recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
     
@@ -638,6 +642,8 @@ def _send_feedback(text, name=u'', email=u'', fail_silently=False):
         message += "From: %s\n" % name
     if email:
         message += "Email: %s\n" % email
+    if geo:
+        message += "GEO: %s\n" % geo
     message += "\n" + text
     message += '\n\n\n--\nkl'
     

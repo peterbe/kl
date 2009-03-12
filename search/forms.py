@@ -1,3 +1,4 @@
+import time
 from django import forms
 
 
@@ -19,6 +20,8 @@ class FeedbackForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     email = forms.CharField(max_length=100, required=False)
     url = forms.CharField(max_length=1, required=False)
+    your_website_url = forms.CharField(max_length=1, required=False)
+    render_form_ts = forms.CharField(max_length=20, required=True)
     
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -26,6 +29,25 @@ class FeedbackForm(forms.Form):
             raise forms.ValidationError("Not empty :(")
         return cleaned_data
     
+    def clean_render_form_ts(self):
+        v = self.cleaned_data['render_form_ts']
+        # the timestamp can't been too old or too recent because then we suspect it's a 
+        # bot.
+        diff = int(time.time()) - int(v)
+        if diff == 0:
+            raise forms.ValidationError("Timestamp too short")
+        # diff = 60 is 1 minute
+        # diff * 60 = 60 is 1 hour
+        if diff >  (3600 * 24):
+            # form generated too long ago
+            raise forms.ValidationError("Timestamp too long")
+        return v
+    
+    def clean_your_website_url(self):
+        # this is a honeypot and must be blank 
+        if self.cleaned_data['your_website_url']:
+            raise forms.ValidationError(u"Please leave this one blank")
+        return self.cleaned_data['your_website_url']
     
     def clean_body(self):
         if 'text' in self.cleaned_data and getattr(settings, 'AKISMET_API_KEY', ''):
