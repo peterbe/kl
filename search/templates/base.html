@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/core.css" %}" type="text/css" media="screen" charset="utf-8">
   
-  <!--[if IE 7]><link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/ie7.css" %}" type="text/css" media="screen" charset="utf-8"><![endif]-->
+  {% comment %}<!--[if IE 7]><link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/ie7.css" %}" type="text/css" media="screen" charset="utf-8"><![endif]-->{% endcomment %}
 
 {% block extracss %}
 {% endblock %}

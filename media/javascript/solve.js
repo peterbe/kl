@@ -165,9 +165,9 @@ function __process_submission(res) {
          e = r.word;
          for (var i=0, len=e.length; i<len; i++) {
             if (res.match_points[i])
-              all.append($('<span class="match letter"></span>').text(e[i]));
+              all.append($('<span class="match letter"></span>').text(e.charAt(i)));
             else
-              all.append($('<span class="letter"></span>').text(e[i]));
+              all.append($('<span class="letter"></span>').text(e.charAt(i)));
          }
          if (r.by_clue)
            all.append($('<span class="by_clue"></span>').text('~ ' + r.by_clue));
