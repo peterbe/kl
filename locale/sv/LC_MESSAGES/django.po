@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 11:31+0000\n"
+"POT-Creation-Date: 2009-03-12 00:20+0000\n"
 "PO-Revision-Date: 2009-02-19 18:48+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,25 +27,25 @@ msgstr ""
 msgid "American English"
 msgstr ""
 
-#: search/views.py:90
+#: search/views.py:98
 msgid "1 found"
 msgstr "1 hittad"
 
-#: search/views.py:93
+#: search/views.py:101
 #, python-format
 msgid "%(count)s found but only showing first 100"
 msgstr "%(count)s hiddade men visar bara 100 första"
 
-#: search/views.py:96
+#: search/views.py:104
 #, python-format
 msgid "%(count)s found"
 msgstr "%(count)s hiddade"
 
-#: search/views.py:99
+#: search/views.py:107
 msgid "None found unfortunately :("
 msgstr "Inga hittade tyvärr :("
 
-#: search/views.py:402
+#: search/views.py:410
 #, fuzzy
 msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
