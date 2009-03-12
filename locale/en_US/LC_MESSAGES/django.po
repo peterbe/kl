@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-12 00:20+0000\n"
+"POT-Creation-Date: 2009-03-12 10:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,25 +28,25 @@ msgstr ""
 msgid "American English"
 msgstr ""
 
-#: search/views.py:98
+#: search/views.py:128
 msgid "1 found"
 msgstr ""
 
-#: search/views.py:101
+#: search/views.py:131
 #, python-format
 msgid "%(count)s found but only showing first 100"
 msgstr ""
 
-#: search/views.py:104
+#: search/views.py:134
 #, python-format
 msgid "%(count)s found"
 msgstr ""
 
-#: search/views.py:107
+#: search/views.py:137
 msgid "None found unfortunately :("
 msgstr ""
 
-#: search/views.py:410
+#: search/views.py:647
 msgid "Feedback on Crosstips"
 msgstr ""
 
@@ -144,35 +144,39 @@ msgstr ""
 msgid "Go back to the Crosstips"
 msgstr ""
 
-#: search/templates/solve.html:42
+#: search/templates/solve.html:47
 msgid "Number of letters"
 msgstr ""
 
-#: search/templates/solve.html:45
+#: search/templates/solve.html:50
 msgid "Slots"
 msgstr ""
 
-#: search/templates/solve.html:50
-msgid "Search"
-msgstr ""
-
-#: search/templates/solve.html:51
-msgid "Loading"
-msgstr ""
-
-#: search/templates/solve.html:52
-msgid "clear search"
-msgstr ""
-
-#: search/templates/solve.html:57
-msgid "No letters all?"
+#: search/templates/solve.html:56
+msgid "Clue(s):"
 msgstr ""
 
 #: search/templates/solve.html:60
-msgid "Sorry. Unable to do a search right now. Please try again a bit later."
+msgid "Search"
+msgstr ""
+
+#: search/templates/solve.html:61
+msgid "Loading"
+msgstr ""
+
+#: search/templates/solve.html:62
+msgid "clear search"
+msgstr ""
+
+#: search/templates/solve.html:67
+msgid "No letters all?"
 msgstr ""
 
 #: search/templates/solve.html:70
+msgid "Sorry. Unable to do a search right now. Please try again a bit later."
+msgstr ""
+
+#: search/templates/solve.html:80
 msgid ""
 "\n"
 "Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your "

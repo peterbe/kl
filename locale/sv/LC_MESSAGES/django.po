@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 11:31+0000\n"
+"POT-Creation-Date: 2009-03-12 10:21+0000\n"
 "PO-Revision-Date: 2009-02-19 18:48+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,25 +27,25 @@ msgstr ""
 msgid "American English"
 msgstr ""
 
-#: search/views.py:90
+#: search/views.py:128
 msgid "1 found"
 msgstr "1 hittad"
 
-#: search/views.py:93
+#: search/views.py:131
 #, python-format
 msgid "%(count)s found but only showing first 100"
 msgstr "%(count)s hiddade men visar bara 100 första"
 
-#: search/views.py:96
+#: search/views.py:134
 #, python-format
 msgid "%(count)s found"
 msgstr "%(count)s hiddade"
 
-#: search/views.py:99
+#: search/views.py:137
 msgid "None found unfortunately :("
 msgstr "Inga hittade tyvärr :("
 
-#: search/views.py:402
+#: search/views.py:647
 #, fuzzy
 msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
@@ -145,36 +145,40 @@ msgstr "Feedback skickad. Tack så mycket!"
 msgid "Go back to the Crosstips"
 msgstr "Gå tillbaka till Krysstips"
 
-#: search/templates/solve.html:42
+#: search/templates/solve.html:47
 #, fuzzy
 msgid "Number of letters"
 msgstr "Inga bokstäver alls?"
 
-#: search/templates/solve.html:45
+#: search/templates/solve.html:50
 msgid "Slots"
 msgstr "Rutor"
 
-#: search/templates/solve.html:50
+#: search/templates/solve.html:56
+msgid "Clue(s):"
+msgstr ""
+
+#: search/templates/solve.html:60
 msgid "Search"
 msgstr "Sök"
 
-#: search/templates/solve.html:51
+#: search/templates/solve.html:61
 msgid "Loading"
 msgstr "Laddar"
 
-#: search/templates/solve.html:52
+#: search/templates/solve.html:62
 msgid "clear search"
 msgstr "ta bort sökningen"
 
-#: search/templates/solve.html:57
+#: search/templates/solve.html:67
 msgid "No letters all?"
 msgstr "Inga bokstäver alls?"
 
-#: search/templates/solve.html:60
+#: search/templates/solve.html:70
 msgid "Sorry. Unable to do a search right now. Please try again a bit later."
 msgstr "Tyvärr funkar inte sökningen just nu. Försök lite senare."
 
-#: search/templates/solve.html:70
+#: search/templates/solve.html:80
 msgid ""
 "\n"
 "Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your "
