@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-12 10:21+0000\n"
-"PO-Revision-Date: 2009-03-13 10:25+0100\n"
+"POT-Creation-Date: 2009-03-13 10:48+0000\n"
+"PO-Revision-Date: 2009-03-13 10:50+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,11 +21,11 @@ msgstr "Svenska"
 
 #: settings.py:114
 msgid "British English"
-msgstr ""
+msgstr "Brittisk engelska"
 
 #: settings.py:115
 msgid "American English"
-msgstr ""
+msgstr "Amerikansk engelska"
 
 #: search/views.py:128
 msgid "1 found"
@@ -45,7 +45,7 @@ msgstr "%(count)s hiddade"
 msgid "None found unfortunately :("
 msgstr "Inga hittade tyvärr :("
 
-#: search/views.py:647
+#: search/views.py:653
 #, fuzzy
 msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
@@ -74,7 +74,7 @@ msgstr "krysstips, kryss, korsord, puzzel, kryss puzzel, korsordspuzzel"
 
 #: search/templates/base.html:10
 #: search/templates/base.html.py:49
-#: search/templates/base.html:107
+#: search/templates/base.html:115
 msgid "Crosstips"
 msgstr "Krysstips"
 
@@ -106,28 +106,28 @@ msgstr "Sökningar detta året"
 msgid "Total number of words"
 msgstr "Totalt antal ord"
 
-#: search/templates/base.html:83
+#: search/templates/base.html:87
 msgid "Send suggestions, feedback or tips"
 msgstr "Skicka förslag, feedback eller tips"
 
-#: search/templates/base.html:86
+#: search/templates/base.html:94
 msgid "Your name:"
 msgstr "Ditt namn:"
 
-#: search/templates/base.html:86
-#: search/templates/base.html.py:90
+#: search/templates/base.html:94
+#: search/templates/base.html.py:98
 msgid "optional"
 msgstr "valfritt"
 
-#: search/templates/base.html:90
+#: search/templates/base.html:98
 msgid "Your email:"
 msgstr "Din E-mail:"
 
-#: search/templates/base.html:99
+#: search/templates/base.html:107
 msgid "Send feedback"
 msgstr "Skicka feedback"
 
-#: search/templates/base.html:100
+#: search/templates/base.html:108
 msgid "Cancel"
 msgstr "Äsch, annulera"
 
@@ -144,7 +144,6 @@ msgid "Feedback sent. Thank you very much!"
 msgstr "Feedback skickad. Tack så mycket!"
 
 #: search/templates/feedback_sent.html:12
-#, fuzzy
 msgid "Go back to the Crosstips"
 msgstr "Gå tillbaka till Krysstips"
 
@@ -185,7 +184,9 @@ msgid ""
 "\n"
 "Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. \n"
 "Enter the length of the word and fill in the known letters.\n"
-msgstr "Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara in antal bokstäver och de bokstäver du vet redan."
+msgstr ""
+"\n"
+"Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara in antal bokstäver och de bokstäver du vet redan.\n"
 
 #: search/templates/flatpages/default.html:13
 msgid "Go back to home page"

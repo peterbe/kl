@@ -211,7 +211,7 @@ def get_search_stats(language, refresh_today_stats=True, use_cache=True):
     if refresh_today_stats:
         # exception
         res['no_searches_today'] = Search.objects.filter(add_date__gte=today_midnight,
-                                                        # language=language
+                                                         language=language
                                                         ).count()
     return res
 

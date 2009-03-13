@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-12 10:21+0000\n"
+"POT-Creation-Date: 2009-03-13 10:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "None found unfortunately :("
 msgstr ""
 
-#: search/views.py:647
+#: search/views.py:653
 msgid "Feedback on Crosstips"
 msgstr ""
 
@@ -72,7 +72,7 @@ msgid "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles"
 msgstr ""
 
 #: search/templates/base.html:10 search/templates/base.html.py:49
-#: search/templates/base.html:107
+#: search/templates/base.html:115
 msgid "Crosstips"
 msgstr ""
 
@@ -104,27 +104,27 @@ msgstr ""
 msgid "Total number of words"
 msgstr ""
 
-#: search/templates/base.html:83
+#: search/templates/base.html:87
 msgid "Send suggestions, feedback or tips"
 msgstr ""
 
-#: search/templates/base.html:86
+#: search/templates/base.html:94
 msgid "Your name:"
 msgstr ""
 
-#: search/templates/base.html:86 search/templates/base.html.py:90
+#: search/templates/base.html:94 search/templates/base.html.py:98
 msgid "optional"
 msgstr ""
 
-#: search/templates/base.html:90
+#: search/templates/base.html:98
 msgid "Your email:"
 msgstr ""
 
-#: search/templates/base.html:99
+#: search/templates/base.html:107
 msgid "Send feedback"
 msgstr ""
 
-#: search/templates/base.html:100
+#: search/templates/base.html:108
 msgid "Cancel"
 msgstr ""
 
