@@ -711,3 +711,63 @@ def change_language(request, language=None):
         autosubmit = False
     next = '/'
     return _render('change_language.html', locals(), request)
+
+
+from calendar import HTMLCalendar
+from itertools import groupby
+
+# copied from http://journal.redflavor.com/creating-a-flexible-monthly-calendar-in-django
+class StatsCalendar(HTMLCalendar):
+ 
+    def __init__(self, stats):
+        super(StatsCalendar, self).__init__()
+        self.stats = self.group_by_day(stats)
+ 
+    def formatday(self, day, weekday):
+        if day != 0:
+            cssclass = self.cssclasses[weekday]
+            if datetime.date.today() == datetime.date(self.year, self.month, day):
+                cssclass += ' today'
+                
+            if day in self.stats:
+                cssclass += ' filled'
+                body = self.stats[day]
+                return self.day_cell(cssclass, '%d <p class="count">%s</p>' % (day, body))
+            return self.day_cell(cssclass, day)
+        return self.day_cell('noday', '&nbsp;')
+ 
+    def formatmonth(self, year, month):
+        self.year, self.month = year, month
+        return super(StatsCalendar, self).formatmonth(year, month)
+ 
+    def group_by_day(self, stats):
+        field = lambda search: search.add_date.day
+        return dict(
+            [(day, len(list(items))) for day, items in groupby(stats, field)]
+        )
+ 
+    def day_cell(self, cssclass, body):
+        return '<td class="%s">%s</td>' % (cssclass, body)
+
+def statistics_calendar(request):
+    
+    month = request.GET.get('month')
+    if month:
+        month = int(month)
+        if month < 1 or month > 12:
+            raise ValueError("Invalid month")
+    else:
+        month = datetime.date.today().month
+    
+    year = request.GET.get('year')
+    if year:
+        year = int(year)
+        if year < 2008 or year > 2020:
+            raise ValueError("Year out of range month")
+    else:
+        year = datetime.date.today().year
+    
+    stats = Search.objects.filter(add_date__year=year, add_date__month=month)
+    calendar = StatsCalendar(stats)
+    html_calendar = calendar.formatmonth(year, month)
+    return _render('statistics_calendar.html', locals(), request)

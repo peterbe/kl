@@ -1,0 +1,33 @@
+{% extends base_template %}
+{% load i18n %}
+
+{% block extracss %}
+<style type="text/css">
+table.month tr th.month { font-size:120%; text-align:center; }
+table.month tr td.today { background-color:#efefef; }
+table.month tr td { color:#999; font-size:80%; height:70px;}
+table.month tr td p.count { color:black; font-size:180%; font-weight:bolder; text-align:center; }
+</style>
+{% endblock %}
+
+{% block main %}
+<h3>{% trans "Statistics Calendar" %}</h3>
+
+
+{{ html_calendar|safe }}
+
+
+
+<p align="center">
+<a id="go-back" href="/">{% trans "Go back to the Crosstips" %}</a>
+</p>
+
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+$(function() {
+  //
+});
+</script>
+{% endblock %}
