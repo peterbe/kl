@@ -14,12 +14,23 @@ table.month tr td p.count { color:black; font-size:180%; font-weight:bolder; tex
 <h3>{% trans "Statistics Calendar" %}</h3>
 
 
+<form action=".">
 {{ html_calendar|safe }}
+<input type="hidden" name="month" value="{{ month }}"/>
+<input type="hidden" name="year" value="{{ year }}"/>
+<label>{% trans "Language(s):" %}</label>
+{% for option in language_options %}
+<input type="checkbox" name="languages" value="{{ option.code }}" onchange="this.form.submit()"
+       {% if option.checked %}checked="checked"{% endif %}/>
+{{ option.label }}
+&nbsp;
+{% endfor %}
+</form>
 
+<br/><br/>
 
-
-<p align="center">
-<a id="go-back" href="/">{% trans "Go back to the Crosstips" %}</a>
+<p style="font-size:80%;padding-top:60px">
+<a href="/">&lt;&lt; {% trans "Go back to home page" %}</a>
 </p>
 
 {% endblock %}

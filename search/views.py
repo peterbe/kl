@@ -662,7 +662,7 @@ def _send_feedback(text, name=u'', email=u'', fail_silently=False,
               message=message,
              )
 
-def get_language_options(request):
+def get_language_options(request, be_clever=True):
     current_language = request.LANGUAGE_CODE
     all_options = (
         {'code':'sv', 'label':'Svenska', 'domain':'krysstips.se'},
@@ -700,7 +700,7 @@ def get_language_options(request):
         else:
             option['href'] = '/change-language/to/%s/' % option['code']
         
-        if request.META.get('GEO') == 'GB':
+        if be_clever and request.META.get('GEO') == 'GB':
             # ditch the en-US option and change the label 
             # from "English (GB)" to "English"
             if option['code'] == 'en-US':
@@ -722,14 +722,14 @@ def change_language(request, language=None):
 
 
 from calendar import HTMLCalendar
-from itertools import groupby
+from collections import defaultdict
 
 # copied from http://journal.redflavor.com/creating-a-flexible-monthly-calendar-in-django
 class StatsCalendar(HTMLCalendar):
  
     def __init__(self, stats):
         super(StatsCalendar, self).__init__()
-        self.stats = self.group_by_day(stats)
+        self.stats = stats
  
     def formatday(self, day, weekday):
         if day != 0:
@@ -774,8 +774,33 @@ def statistics_calendar(request):
             raise ValueError("Year out of range month")
     else:
         year = datetime.date.today().year
+        
+    searches = Search.objects.filter(add_date__year=year, add_date__month=month)
+    languages = request.GET.getlist('languages')
+    if languages:
+        languages = [x.lower() for x in languages]
+        if 'en' in languages:
+            searches = searches.filter(language__istartswith='en')
+            languages.remove('en')
+        if languages:
+            searches = searches.filter(language__in=languages)
     
-    stats = Search.objects.filter(add_date__year=year, add_date__month=month)
+    stats = defaultdict(int)
+    for s in searches:
+        stats[s.add_date.day] += 1
+        
+    if stats.keys():
+        max_day = max(stats.keys())
+    else:
+        max_day = 1
+    for i in range(1, max_day):
+        if i not in stats:
+            stats[i] = 0
+        
+    language_options = get_language_options(request, be_clever=False)
+    for each in language_options:
+        each['checked'] = each['code'].lower() in languages
+    #language_options.append(dict(code='en', label='English (both)'))
     calendar = StatsCalendar(stats)
     html_calendar = calendar.formatmonth(year, month)
     return _render('statistics_calendar.html', locals(), request)
