@@ -82,9 +82,11 @@ def solve(request, json=False):
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
         cache_key = '_find_alternatives_%s_%s' % (search, language)
         cache_key = cache_key.replace(' ','_')
+        print "85. %r" % cache_key
         alternatives = cache.get(cache_key)
         if alternatives is None:
             alternatives = _find_alternatives(slots[:length], language)
+            print "88. %r" % cache_key
             cache.set(cache_key, alternatives, ONE_DAY)
             
         alternatives_count = len(alternatives)
@@ -196,6 +198,7 @@ def get_search_stats(language, refresh_today_stats=True, use_cache=True):
     
     if use_cache:
         cache_key = '_get_search_stats' + language
+        print "200. %r" % cache_key
         res = cache.get(cache_key)
     else:
         res = None
@@ -206,6 +209,7 @@ def get_search_stats(language, refresh_today_stats=True, use_cache=True):
         #print time()-t0, "to generate stats"
         if use_cache:
             seconds_since_midnight = (today - today_midnight).seconds
+            print "210. %r" % cache_key
             cache.set(cache_key, res, seconds_since_midnight)
         
     if refresh_today_stats:
