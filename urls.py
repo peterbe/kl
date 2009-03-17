@@ -7,10 +7,19 @@ admin.autodiscover()
 
 from settings import MEDIA_ROOT
 
+from django.contrib.sitemaps import FlatPageSitemap
+sitemaps = {
+    'flatpages': FlatPageSitemap,
+}
+
 urlpatterns = patterns('',
     # Example:
     (r'', include('kl.search.urls')),
     (r'^i18n/', include('django.conf.urls.i18n')),
+                       
+    (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', 
+     {'sitemaps': sitemaps}),
+                       
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

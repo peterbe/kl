@@ -94,6 +94,8 @@ INSTALLED_APPS = (
     'search',
     'djangodblog',
     'django.contrib.flatpages',
+    'django.contrib.sitemaps',
+                  
 )
 
 
