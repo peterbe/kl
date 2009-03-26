@@ -36,5 +36,8 @@ def context(request):
     data.update(dict(language_options=get_language_options(request)))
     
     data['render_form_ts'] = int(time.time())
+    
+    if request.META.get('GEO'):
+        data['geo'] = request.META.get('GEO')
 
     return data
