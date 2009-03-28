@@ -131,13 +131,35 @@ class ViewTestCase(TestCase):
         response = client.get('/los/json/?' + qs.replace('_',''))
         print response.content
         
-    def test__get_variations(self):
+    def test__get_variations_simple(self):
         """ test the private method _get_variations() """
         from search.views import wordnet
         if wordnet is None:
             return
+
+        r= _get_variations(u'partying')
+        self.assertTrue(u'partying' not in r)
+        self.assertTrue(u'party' in r)
+        self.assertTrue(u'parties' in r)
+        self.assertTrue(u'celebrate' in r)
+        self.assertTrue(u'celebrates' in r)
         
-        print _get_variations(u'partying')
+        r = _get_variations(u'party')
+        self.assertTrue(u'party' not in r)
+        self.assertTrue(u'partying' in r)
+        self.assertTrue(u'parties' in r)
+        
+        
+    def test__get_variations_name(self):
+        """ test the private method _get_variations() """
+        from search.views import wordnet
+        if wordnet is None:
+            return
+
+        r= _get_variations(u'Peter')
+        self.assertTrue(not bool(r))
+        
+        
         
         
         

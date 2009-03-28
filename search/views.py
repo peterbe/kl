@@ -399,7 +399,7 @@ def _get_variations(word, greedy=False,
     
 
     def ok_word(w):
-        return not w.count('_')
+        return not w.count('_') and w != word
     
     for each in morph_variations(word):
         if each in all:
@@ -415,7 +415,7 @@ def _get_variations(word, greedy=False,
             # e.g. 'horizontal_surface'
             continue
         
-        print plural(each)
+        #print plural(each)
         
         all.append(each)
         for synset in wordnet.synsets(each):
@@ -425,9 +425,12 @@ def _get_variations(word, greedy=False,
                 if not ok_word(synonym):
                     continue
                 
+                print "\t", repr(synonym)
+                
                 for synonym_variation in morph_variations(synonym):
                     if not wordnet.morphy(synonym_variation):
                         # then it's not a word
+                        print "\t", "skip", repr(synonym_variation)
                         continue
                     
                     if synonym_variation in all:
@@ -436,8 +439,13 @@ def _get_variations(word, greedy=False,
                     
                     all.append(synonym_variation)
                     
-                    print plural(synonym_variation)
-    
+                    print "\t\t", repr(synonym_variation)
+                    synonym_variation_plural = plural(synonym_variation)
+                    if synonym_variation_plural and synonym_variation_plural != synonym_variation:
+                        if wordnet.morphy(synonym_variation_plural) and ok_word(synonym_variation_plural):
+                            print "\t\t\t", repr(synonym_variation_plural)
+                            all.append(synonym_variation_plural)
+                                          
     return all
     
 
