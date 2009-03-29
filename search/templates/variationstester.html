@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content_sidebar_outer %}{% endblock %}
+{% block main %}
+<h3>Variations tester</h3>
+
+{% if variations %}
+  <p>Variations:</p>
+  {% for v in variations %}
+  <ul>
+    {% for each in v %}
+    <li><code>{{ each }}</code></li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+{% endif %}
+
+<form action="./">
+Word(s): <input name="words" size="50" {% if words %}value="{{ words }}"{% endif %} /><br/>
+<abbr title="Gladly morph the synonyms">Greedy</abbr> 
+<input type="checkbox" name="greedy" value="1" {% if greedy %}checked="checked"{% endif %}/><br/>
+
+<input type="submit" value="Test" onclick="this.value='Please wait...'"/>
+</form>
+{% endblock %}
+
+{% block feedback_form %}
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+{% endblock %}

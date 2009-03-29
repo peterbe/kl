@@ -1,6 +1,8 @@
 import datetime
+import urllib2
 import re
 from pprint import pprint
+from cStringIO import StringIO
 import logging
 from time import time
 from random import randint
@@ -75,7 +77,8 @@ def solve(request, json=False):
         search_results = [] # the final simple list that is sent back
         
         for clue in clues:
-            alternatives = _find_alternative_synonyms(clue, slots[:length], language)
+            alternatives = _find_alternative_synonyms(clue, slots[:length], language, 
+                                                      request=request)
             search_results.extend([SearchResult(x, by_clue=clue) for x in alternatives])
 
         # find some alternatives
@@ -85,11 +88,9 @@ def solve(request, json=False):
         if re.findall('\s', cache_key):
             raise ValueError("invalid cache_key search=%r, language=%r" % (search, language))
         
-        print "85. %r" % cache_key
         alternatives = cache.get(cache_key)
         if alternatives is None:
             alternatives = _find_alternatives(slots[:length], language)
-            print "88. %r" % cache_key
             cache.set(cache_key, alternatives, ONE_DAY)
             
         alternatives_count = len(alternatives)
@@ -169,7 +170,7 @@ def solve(request, json=False):
     
     accept_clues = wordnet is not None and \
       request.LANGUAGE_CODE.lower() in ('en', 'en-gb', 'en-us')
-    accept_clues=False# disabled for the time being
+    #accept_clues=False# disabled for the time being
 
     data = locals()
 
@@ -269,7 +270,7 @@ except ImportError:
     wordnet = None
 
     
-def _find_alternative_synonyms(word, slots, language):
+def XXX_find_alternative_synonyms(word, slots, language):
     if wordnet is None:
         return []
     
@@ -381,22 +382,171 @@ def _find_alternative_synonyms(word, slots, language):
         
     return matched_words
 
+
+def _find_alternative_synonyms(word, slots, language, request=None):
+    length = len(slots)
+    
+    slots = [x and x.lower() or ' ' for x in slots]
+    search = ''.join(slots)
+    start = ''
+    end = ''
+    try:
+        start = re.findall('^\w+', search)[0]
+    except IndexError:
+        pass
+    
+    try:
+        end = re.findall('\w+$', search)[0]
+    except IndexError:
+        pass
+
+    def filter_match(word):
+        
+        if end and not word.endswith(end):
+            # Don't even bother
+            return False
+        elif start and not word.startswith(start):
+            # Don't even bother
+            return False
+
+        if end:
+            matchable_string = search[len(start):-len(end)]
+            found_string = word[len(start):-len(end)]
+        else:
+            matchable_string = search[len(start):]
+            found_string = word[len(start):]
+        assert len(matchable_string) == len(found_string)
+        for i, each in enumerate(matchable_string):
+            if each != u' ' and each != found_string[i]:
+                # can't be match
+                return False
+        return True
+
+    def test(word):
+        if len(word) == length:
+            return filter_match(word)
+    
+    
+    for variation in _get_variations(word, greedy=True, request=request):
+        if test(variation):
+            yield variation
+        
+    
+
+
+def variationstester(request):
+    if request.GET.get('words'):
+        words = request.GET.get('words')
+        greedy = request.GET.get('greedy')
+        if words.count(','):
+            splitted = words.split(',')
+        else:
+            splitted = words.split()
+        all_words = [x.strip() for x in splitted if x.strip()]
+        variations = []
+        for word in all_words:
+            block = _get_variations(word,
+                                    greedy=greedy,
+                                    store_definitions=request.GET.get('store_definitions'),
+                                    request=request)
+            block.sort()
+            variations.append(block)
+            
+    return _render('variationstester.html', locals(), request)
+
+
+def plural(word):
+    if word.endswith('y'):
+        return word[:-1] + 'ies'
+    elif word[-1] in 'sx' or word[-2:] in ['sh', 'ch']:
+        return word + 'es'
+    elif word.endswith('an'):
+        return word[:-2] + 'en'
+    return word + 's'
+
+
 def _get_variations(word, greedy=False,
-                    store_definitions=True):
+                    store_definitions=True,
+                    request=None):
+    a = _get_variations_wordnet(word, greedy=greedy, 
+                                store_definitions=store_definitions)
+    
+    b = _get_variations_synonym_dot_com(word, greedy=greedy,
+                                        store_definitions=store_definitions,
+                                        request=request)
+    return a + b
+    return a
+
+
+versus_synonym_string = re.compile('(\w+) \(vs\. \w+\)')
+def _get_variations_synonym_dot_com(word, greedy=False,
+                                    store_definitions=True,
+                                    request=None):
+    from lxml.html import parse
+    from lxml import etree
+    
+    from lxml.cssselect import CSSSelector
+    assert not word.count(' '), "Word can not have a space in it"
+    
+    url = 'http://www.synonym.com/synonyms/%s/' % word
+    if request is None:
+        page = parse(url).getroot()
+    else:
+        print url
+        cache_key = 'syndotcom_download_%s' % url.replace('http://','')
+        html = cache.get(cache_key)
+        if html is None:
+            html = _download_url(url, request.META)
+            cache.set(cache_key, html)
+        assert len(html) > 1000, "HTML too short %r" % html
+        parser = etree.HTMLParser()
+        if isinstance(html, unicode):
+            html = html.encode('utf8')
+        tree = etree.parse(StringIO(html), parser)
+        page = tree.getroot()
+        assert page is not None, "root is None!"
+
+    sel = CSSSelector('span.equals')
+    
+    all = set()
+    for span in sel(page):
+        synonyms = span.text
+        for synonym in [x.strip().lower() for x in synonyms.split(',') if x.strip()]:
+            if '(' in synonym:
+                synonym = versus_synonym_string.sub(r'\1', synonym)
+            all.add(synonym)
+            
+            if greedy:
+                #all.add(plural(synonym))# unsure this helps much
+                for morph in morph_variations(synonym):
+                    morphed_back = wordnet.morphy(morph)
+                    if morphed_back:
+                        all.add(morphed_back)
+
+    return list(all)
+
+def _download_url(url, request_meta):
+    
+    headers = {}
+    if request_meta.get('HTTP_USER_AGENT'):
+        headers['User-Agent'] = request_meta.get('HTTP_USER_AGENT')
+    if request_meta.get('HTTP_ACCEPT_LANGUAGE'):
+        headers['Accept-Language'] = request_meta.get('HTTP_ACCEPT_LANGUAGE')
+    if request_meta.get('HTTP_ACCEPT'):
+        headers['Accept-Encoding'] = request_meta.get('HTTP_ACCEPT')
+        
+    req = urllib2.Request(url, None, headers)
+    u = urllib2.urlopen(req)
+    headers = u.info()
+    return u.read()
+        
+
+def _get_variations_wordnet(word, greedy=False,
+                            store_definitions=True):
     """return a list of words if possible.
     If greedy, return a
     """
     all = []
-    
-    def plural(word):
-        if word.endswith('y'):
-            return word[:-1] + 'ies'
-        elif word[-1] in 'sx' or word[-2:] in ['sh', 'ch']:
-            return word + 'es'
-        elif word.endswith('an'):
-            return word[:-2] + 'en'
-        return word + 's'
-    
 
     def ok_word(w):
         return not w.count('_') and w != word
@@ -425,12 +575,12 @@ def _get_variations(word, greedy=False,
                 if not ok_word(synonym):
                     continue
                 
-                print "\t", repr(synonym)
+                #print "\t", repr(synonym)
                 
                 for synonym_variation in morph_variations(synonym):
                     if not wordnet.morphy(synonym_variation):
                         # then it's not a word
-                        print "\t", "skip", repr(synonym_variation)
+                        #print "\t", "skip", repr(synonym_variation)
                         continue
                     
                     if synonym_variation in all:
@@ -439,7 +589,7 @@ def _get_variations(word, greedy=False,
                     
                     all.append(synonym_variation)
                     
-                    print "\t\t", repr(synonym_variation)
+                    #print "\t\t", repr(synonym_variation)
                     synonym_variation_plural = plural(synonym_variation)
                     if synonym_variation_plural and synonym_variation_plural != synonym_variation:
                         if wordnet.morphy(synonym_variation_plural) and ok_word(synonym_variation_plural):
