@@ -53,6 +53,7 @@ class Search(models.Model):
     user_agent =  models.CharField(max_length=200, default=u'')
     ip_address =  models.CharField(max_length=15, default=u'')
     language = models.CharField(max_length=5, default=u'')
+    search_type = models.CharField(max_length=50, default=u'')
     
     found_word = models.ForeignKey(Word, null=True, blank=True)
     

@@ -23,7 +23,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 
 from models import Word, Search
-from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm
+from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
 from utils import uniqify, any_true, ValidEmailAddress
 from morph_en import variations as morph_variations
 
@@ -178,7 +178,8 @@ def solve(request, json=False):
 
 def _record_search(search_word, user_agent=u'', ip_address=u'',
                    found_word=None,
-                   language=None):
+                   language=None,
+                   search_type=u''):
     if len(user_agent) > 200:
         user_agent = user_agent[:200]
     if len(ip_address) > 15:
@@ -190,7 +191,8 @@ def _record_search(search_word, user_agent=u'', ip_address=u'',
                           user_agent=user_agent.strip(),
                           ip_address=ip_address.strip(),
                           found_word=found_word,
-                          language=language
+                          language=language,
+                          search_type=search_type,
                           )
 
 def get_search_stats(language, refresh_today_stats=True, use_cache=True):
@@ -202,7 +204,6 @@ def get_search_stats(language, refresh_today_stats=True, use_cache=True):
     
     if use_cache:
         cache_key = '_get_search_stats' + language
-        print "200. %r" % cache_key
         if re.findall('\s', cache_key):
             raise ValueError("invalid cache_key language=%r" % language)
         res = cache.get(cache_key)
@@ -766,13 +767,13 @@ def send_feedback(request):
     if not request.method == "POST":
         return HttpResponseRedirect('/?error=feedback')
     
-    form = FeedbackForm(data=request.POST)
-    if form.is_valid():
-        name = form.cleaned_data.get('name')
-        email = form.cleaned_data.get('email')
+    feedbackform = FeedbackForm(data=request.POST)
+    if feedbackform.is_valid():
+        name = feedbackform.cleaned_data.get('name')
+        email = feedbackform.cleaned_data.get('email')
         geo = request.META.get('GEO')
 
-        _send_feedback(form.cleaned_data.get('text'),
+        _send_feedback(feedbackform.cleaned_data.get('text'),
                        name=name,
                        email=email,
                        geo=geo)
@@ -962,3 +963,116 @@ def statistics_calendar(request):
     calendar = StatsCalendar(stats)
     html_calendar = calendar.formatmonth(year, month)
     return _render('statistics_calendar.html', locals(), request)
+
+
+def solve_simple(request):
+    if request.GET.get('slots'):
+        if not request.GET.get('language'):
+            request.GET['language'] = request.LANGUAGE_CODE
+        
+        form = SimpleSolveForm(request.GET)
+        if form.is_valid():
+            language = form.cleaned_data['language']
+            slots = form.cleaned_data['slots']
+            slots = slots.replace('.', ' ').replace('*', ' ').replace('_',' ')
+            slots = list(slots)
+            clues = form.cleaned_data.get('clues', [])
+            length = len(slots)
+            
+            search_results = [] # the final simple list that is sent back
+            
+            assert length == len(slots)
+            for clue in clues:
+                alternatives = _find_alternative_synonyms(clue, slots, language, 
+                                                        request=request)
+                search_results.extend([SearchResult(x, by_clue=clue) for x in alternatives])
+    
+            # find some alternatives
+            search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
+            cache_key = '_find_alternatives_%s_%s' % (search, language)
+            cache_key = cache_key.replace(' ','_')
+            if re.findall('\s', cache_key):
+                raise ValueError("invalid cache_key search=%r, language=%r" % (search, language))
+            
+            alternatives = cache.get(cache_key)
+            if alternatives is None:
+                alternatives = _find_alternatives(slots[:length], language)
+                cache.set(cache_key, alternatives, ONE_DAY)
+                
+            alternatives_count = len(alternatives)
+            alternatives_truncated = False
+            if alternatives_count > 100:
+                alternatives = alternatives[:100]
+                alternatives_truncated = True
+                
+            result = dict(length=length,
+                        search=search,
+                        word_count=alternatives_count,
+                        alternatives_truncated=alternatives_truncated,
+                        )
+            already_found = [x.word for x in search_results]
+            search_results.extend([SearchResult(each.word,
+                                                definition=each.definition)
+                                for each in alternatives
+                                if each.word not in already_found])
+            match_points = None
+            match_points = []
+            if search_results:
+                first_word = search_results[0].word
+                for i, letter in enumerate(first_word):
+                    if letter.lower() == search[i]:
+                        match_points.append(1)
+                    else:
+                        match_points.append(0)
+                result['match_points'] = match_points
+                
+            result['words'] = []
+            for search_result in search_results:
+                v = dict(word=search_result.word)
+                if search_result.definition:
+                    v['definition'] = search_result.definition
+                if search_result.by_clue:
+                    v['by_clue'] = search_result.by_clue
+                result['words'].append(v)
+                    
+            
+            if alternatives_count == 1:
+                result['match_text'] = _("1 found")
+            elif alternatives_count:
+                if alternatives_truncated:
+                    result['match_text'] = _("%(count)s found but only showing first 100")\
+                    % dict(count=alternatives_count)
+                else:
+                    result['match_text'] = _("%(count)s found") % \
+                    dict(count=alternatives_count)
+            else:
+                result['match_text'] = _("None found unfortunately :(")
+                
+            found_word = None
+            if len(search_results) == 1:
+                try:
+                    found_word = Word.objects.get(word=search_results[0].word, 
+                                                language=language)
+                except Word.DoesNotExist:
+                    # this it was probably not from the database but
+                    # from the wordnet stuff
+                    found_word = None
+            
+            _record_search(search,
+                           user_agent=request.META.get('HTTP_USER_AGENT',''),
+                           ip_address=request.META.get('REMOTE_ADDR',''),
+                           found_word=found_word,
+                           language=language,
+                           search_type="simple")
+            
+            request.session['has_searched'] = True
+    
+        
+    else:
+        language = request.LANGUAGE_CODE
+        form = SimpleSolveForm(initial={'language':language})
+        
+        show_example_search = not bool(request.session.get('has_searched'))
+        
+    return _render('simple.html', locals(), request)
+    

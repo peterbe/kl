@@ -2,7 +2,7 @@ import time
 # project
 from kl import settings
 
-#from MobileUserAgent import parseUserAgent
+from MobileUserAgent import parseUserAgent
 from views import get_search_stats, get_saved_cookies, get_language_options
 
 def context(request):
@@ -21,12 +21,12 @@ def context(request):
     #else:
     #    data['ADMIN_MEDIA_PREFIX'] = settings.ADMIN_MEDIA_PREFIX
             
-    #if request.GET.get('MOBILE_TEMPLATE') or \
-    #  request.META.get('HTTP_USER_AGENT', None) and \
-    #  parseUserAgent(request.META.get('HTTP_USER_AGENT')):
-    #    data['mobile_user_agent'] = True
-    #    data['base_template'] = "mobile_base.html"
-    #    data['mobile_version'] = True
+    if request.GET.get('MOBILE_TEMPLATE') or \
+      request.META.get('HTTP_USER_AGENT', None) and \
+      parseUserAgent(request.META.get('HTTP_USER_AGENT')):
+        data['mobile_user_agent'] = True
+        data['base_template'] = "mobile_base.html"
+        data['mobile_version'] = True
 
     language = request.LANGUAGE_CODE
     data.update(get_search_stats(language))
@@ -39,5 +39,7 @@ def context(request):
     
     if request.META.get('GEO'):
         data['geo'] = request.META.get('GEO')
+        
+    data['use_google_analytics'] = True
 
     return data

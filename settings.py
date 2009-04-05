@@ -3,7 +3,7 @@
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-HOME = '/home/peterbe/dev/DJANGO/kl_env/kl'
+HOME = '/home/peterbe/kl'
 
 #TEST_RUNNER = 'kl.testrunner.run_tests'
 

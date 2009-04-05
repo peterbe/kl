@@ -1,5 +1,7 @@
+import re
 import time
 from django import forms
+from django.utils.translation import ugettext as _
 
 
 class DSSOUploadForm(forms.Form):
@@ -63,4 +65,31 @@ class FeedbackForm(forms.Form):
                 if akismet_api.comment_check(smart_str(self.cleaned_data['body']), data=akismet_data, build_data=True):
                     raise forms.ValidationError(u"Akismet thinks this message is spam")
         return self.cleaned_data['body']
+    
+
+
+class SimpleSolveForm(forms.Form):
+    slots = forms.CharField(max_length=30,
+                            widget=forms.widgets.TextInput(attrs={'size':30}))
+    language = forms.CharField(max_length=6,
+                              widget=forms.widgets.HiddenInput())
+    
+    
+    
+    def clean_slots(self):
+        slots = self.cleaned_data['slots']
+        if re.findall('\d', slots):
+            raise forms.ValidationError(_(u"Can not contain numbers"))
+        if re.findall('[^\w ]', slots):
+            raise forms.ValidationError(_(u"Can only contain alphabetical characters"))
+        slots = slots.replace('*',' ').replace('.',' ').replace('_', ' ')
+        count_non_blanks = len(slots) - slots.count(' ')
+        if not count_non_blanks:
+            raise forms.ValidationError(_(u"Must pass at least 1 character"))
+        return slots
+    
+
+
+    
+    
     

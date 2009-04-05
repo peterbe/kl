@@ -1,0 +1,105 @@
+{% extends base_template %}
+{% load i18n %}
+{% load highlighter %}
+{% load django_slimmer %}
+
+{% block extracss %}
+<style type="text/css">
+input#id_slots { font-family:Courier, "Courier New", Mono; font-size:120%; letter-spacing:4px;}
+#results span {
+  font-family:"courier new",courier; font-size:120%; letter-spacing:1px;
+}
+span.match { font-weight:bold; background-color:#ccc;}
+</style>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+function __clean_slots(slots) {
+  slots = slots.toUpperCase();
+  slots = slots.replace(' ','_');
+  slots = slots.replace('*','_');
+  if (/\d/.test(slots)) {
+     slots = slots.replace(/\d/, '');
+     alert("Only alphabetic characters allowed");
+  }
+  return slots;
+}
+$(function() {
+  $('#id_slots').bind('keyup', function() {
+    this.value = __clean_slots(this.value);
+  });
+  if (!$('#id_slots').val())
+    $('#id_slots')[0].focus();
+});
+</script>
+{% endblock %}
+
+
+{% block main %}
+
+<form action="." id="simple">
+
+<label>{% trans "Known letters (with spaces for letters you don't know)" %}:</label><br/>
+{{ form.slots.errors }}
+{{ form.slots }}
+
+
+{{ form.language }}
+
+  <input type="submit" 
+   {% if result %}
+   value="{% trans "Search again" %}"
+   {% else %}
+   value="{% trans "Search" %}"
+   {% endif %}
+  />
+  
+{% if not result and form.errors %}
+<br/>
+<a href="." id="clear-search">{% trans "clear search" %}</a>
+{% endif %}
+
+
+</form>
+<br/>
+
+{% if result %}
+<p>
+  <strong>{{ result.match_text }}</strong>
+  &nbsp;
+  <a href="." id="clear-search">{% trans "clear search" %}</a>
+</p>
+  <p id="results">
+  {% for each in result.words %}
+   {{ each.word|highlight_suggestion:result.search|safe }}<br/>
+  {% endfor %}
+  </p>
+  
+{% else %}
+
+{% if show_example_search %}
+<br/>
+
+<div id="for-example">
+<p>{% blocktrans %}
+Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. 
+Enter the length of the word and fill in the known letters.
+{% endblocktrans %}</p>
+
+{% ifequal request.LANGUAGE_CODE "sv" %}
+<p>Till exempel, <a href="/simple/?slots=KO__O_D">vilket ord b&ouml;rjar p&auml; KO, femte bokstaven O och slutar p&auml; bokstaven D?</a>
+{% else %}
+<p>For example, <a href="/simple/?slots=C_O____RD">what's
+a 9 letter word that starts with C, third letter O and ends with RD?</a>
+{% endifequal %}
+</div>
+{% endif %}
+
+
+{% endif %}
+
+
+
+
+{% endblock %}

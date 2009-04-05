@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.1//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
+{% load i18n %}
+{% load django_slimmer %}
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>{% block title %}Korsordsl&ouml;saren{% endblock %}</title>
-<link href="{{ MEDIA_URL }}/css/style.css" rel="stylesheet" type="text/css" />
+  <title>{% block title %}{% trans "Crosstips" %} - {% trans "helps you solve your crossword puzzles" %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/mobile.css" %}" type="text/css" media="screen" charset="utf-8"/>
 {% block extracss %}
 {% endblock %}
 </head>
@@ -13,8 +14,37 @@
 {% block main %}
 {% endblock %}
 
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascript/jquery-1.2.6.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascript/jquery.form.js"></script>
+
+
+<hr/>
+      <p class="copyright">
+        <small>
+          {% trans "Crosstips" %} &copy; 2009
+          {% ifequal request.LANGUAGE_CODE "sv" %}
+          <a href="/om/krysstips/">Om Krysstips</a>
+          <a href="/om/dsso/">Om DSSO</a>
+          {% else %}
+          <a href="/about/crosstips/">About Crosstips</a>
+          {% endifequal %}
+        </small>
+      </p>
+
+{% if DEBUG %}<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery-1.3.1.min.js" %}"></script>
+{% else %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+{% endif %}
 {% block extrajs %}{% endblock %}
+
+{% if use_google_analytics %}
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try{
+var pageTracker = _gat._getTracker("UA-94373-9");
+pageTracker._trackPageview();
+}catch(err){}</script>
+{% endif %}
 </body>
 </html>

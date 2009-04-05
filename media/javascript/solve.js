@@ -227,4 +227,13 @@ $(function() {
    
    $('form#solutions').ajaxForm(submit_options);
    
+   $('input[name="clues"]', '#solutions').bind('keyup', function() {
+      if ($(this).attr('size') <= 12 && $(this).val().indexOf(',') > -1) {
+         $(this).attr('size', parseInt($(this).attr('size')) * 2);
+         $(this).unbind('keyup');
+      }
+      
+   });
+   
+   
 });

@@ -80,7 +80,7 @@
     <div id="footer">
       {% block feedback_form %}
       <form action="/feedback/" method="post" class="feedback_form" id="feedback">
-        {% if form.errors %}
+        {% if feedbackform.errors %}
          <p style="color:red">Error! Please try to fill in the form again.</p>
         {% endif %}
         <input type="hidden" name="render_form_ts" value="{{ render_form_ts }}"/>
