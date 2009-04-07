@@ -79,9 +79,9 @@ class SimpleSolveForm(forms.Form):
         slots = self.cleaned_data['slots']
         if re.findall('\d', slots):
             raise forms.ValidationError(_(u"Can not contain numbers"))
+        slots = slots.replace('*',' ').replace('.',' ').replace('_', ' ')
         if re.findall('[^\w ]', slots):
             raise forms.ValidationError(_(u"Can only contain alphabetical characters"))
-        slots = slots.replace('*',' ').replace('.',' ').replace('_', ' ')
         count_non_blanks = len(slots) - slots.count(' ')
         if not count_non_blanks:
             raise forms.ValidationError(_(u"Must pass at least 1 character"))

@@ -42,6 +42,12 @@ input#id_length, #allslots input { font-weight:bold; font-size:120% }
 
 {% block main %}
 
+{% if mobile_user_agent %}
+<p>
+{% blocktrans %}If you use a mobile device try the <a href="/simple/">simple interface</a> instead.{% endblocktrans %}
+</p>
+{% endif %}
+
 <form action="./" id="solutions">
 <p>
   <label for="id_length">{% trans "Number of letters" %}:</label>
@@ -95,7 +101,8 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 {% endif %}
 
 <p>&nbsp;</p>
-<p><strong>New!</strong> 
-Try the <a href="/simple/">simple inferface</a>.</p>
+<p><strong>{% trans "New!" %}</strong> 
+{% blocktrans %}Try the <a href="/simple/">simple inferface</a>.{% endblocktrans %}
+</p>
 
 {% endblock %}

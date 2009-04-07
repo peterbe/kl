@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:48+0000\n"
+"POT-Creation-Date: 2009-04-07 17:17+0100\n"
 "PO-Revision-Date: 2009-03-13 10:50+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,37 +15,49 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: settings.py:113
+#: settings.py:115
 msgid "Swedish"
 msgstr "Svenska"
 
-#: settings.py:114
+#: settings.py:116
 msgid "British English"
 msgstr "Brittisk engelska"
 
-#: settings.py:115
+#: settings.py:117
 msgid "American English"
 msgstr "Amerikansk engelska"
 
-#: search/views.py:128
+#: search/forms.py:81
+msgid "Can not contain numbers"
+msgstr ""
+
+#: search/forms.py:84
+msgid "Can only contain alphabetical characters"
+msgstr ""
+
+#: search/forms.py:87
+msgid "Must pass at least 1 character"
+msgstr ""
+
+#: search/views.py:134 search/views.py:1087
 msgid "1 found"
 msgstr "1 hittad"
 
-#: search/views.py:131
+#: search/views.py:137 search/views.py:1090
 #, python-format
 msgid "%(count)s found but only showing first 100"
 msgstr "%(count)s hiddade men visar bara 100 första"
 
-#: search/views.py:134
+#: search/views.py:140 search/views.py:1093
 #, python-format
 msgid "%(count)s found"
 msgstr "%(count)s hiddade"
 
-#: search/views.py:137
+#: search/views.py:143 search/views.py:1096
 msgid "None found unfortunately :("
 msgstr "Inga hittade tyvärr :("
 
-#: search/views.py:653
+#: search/views.py:810
 #, fuzzy
 msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
@@ -62,9 +74,8 @@ msgstr "Sidoproblem :)"
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
 msgstr "Tyvärr gick nånting åt skogen. Förhoppningsvis fixas det snart."
 
-#: search/templates/base.html:8
-#: search/templates/base.html.py:10
-#: search/templates/base.html:48
+#: search/templates/base.html:8 search/templates/base.html.py:10
+#: search/templates/base.html:48 search/templates/mobile_base.html:8
 msgid "helps you solve your crossword puzzles"
 msgstr "hjälper dig lösa korsord"
 
@@ -72,9 +83,9 @@ msgstr "hjälper dig lösa korsord"
 msgid "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles"
 msgstr "krysstips, kryss, korsord, puzzel, kryss puzzel, korsordspuzzel"
 
-#: search/templates/base.html:10
-#: search/templates/base.html.py:49
-#: search/templates/base.html:115
+#: search/templates/base.html:10 search/templates/base.html.py:49
+#: search/templates/base.html:115 search/templates/mobile_base.html:8
+#: search/templates/mobile_base.html:22
 msgid "Crosstips"
 msgstr "Krysstips"
 
@@ -114,8 +125,7 @@ msgstr "Skicka förslag, feedback eller tips"
 msgid "Your name:"
 msgstr "Ditt namn:"
 
-#: search/templates/base.html:94
-#: search/templates/base.html.py:98
+#: search/templates/base.html:94 search/templates/base.html.py:98
 msgid "optional"
 msgstr "valfritt"
 
@@ -147,53 +157,96 @@ msgstr "Feedback skickad. Tack så mycket!"
 msgid "Go back to the Crosstips"
 msgstr "Gå tillbaka till Krysstips"
 
-#: search/templates/solve.html:47
-msgid "Number of letters"
-msgstr "Antal bokstäver"
+#: search/templates/simple.html:43
+msgid "Known letters (with spaces for letters you don't know)"
+msgstr ""
 
-#: search/templates/solve.html:50
-msgid "Slots"
-msgstr "Rutor"
+#: search/templates/simple.html:52
+#, fuzzy
+msgid "Search again"
+msgstr "Sök"
 
-#: search/templates/solve.html:56
-msgid "Clue(s):"
-msgstr "Ledtråd(ar):"
-
-#: search/templates/solve.html:60
+#: search/templates/simple.html:54 search/templates/solve.html:68
 msgid "Search"
 msgstr "Sök"
 
-#: search/templates/solve.html:61
-msgid "Loading"
-msgstr "Laddar"
-
-#: search/templates/solve.html:62
+#: search/templates/simple.html:60 search/templates/simple.html.py:70
+#: search/templates/solve.html:70
 msgid "clear search"
 msgstr "ta bort sökningen"
 
-#: search/templates/solve.html:67
-msgid "No letters all?"
-msgstr "Inga bokstäver alls?"
-
-#: search/templates/solve.html:70
-msgid "Sorry. Unable to do a search right now. Please try again a bit later."
-msgstr "Tyvärr funkar inte sökningen just nu. Försök lite senare."
-
-#: search/templates/solve.html:80
+#: search/templates/simple.html:84 search/templates/solve.html:88
 msgid ""
 "\n"
-"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. \n"
+"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your "
+"<strong>crossword puzzles</strong>. \n"
 "Enter the length of the word and fill in the known letters.\n"
 msgstr ""
 "\n"
-"Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara in antal bokstäver och de bokstäver du vet redan.\n"
+"Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara "
+"in antal bokstäver och de bokstäver du vet redan.\n"
 
+#: search/templates/solve.html:47
+msgid ""
+"If you use a mobile device try the <a href=\"/simple/\">simple interface</a> "
+"instead."
+msgstr ""
+
+#: search/templates/solve.html:53
+msgid "Number of letters"
+msgstr "Antal bokstäver"
+
+#: search/templates/solve.html:56
+msgid "Slots"
+msgstr "Rutor"
+
+#: search/templates/solve.html:63
+msgid "Clue(s):"
+msgstr "Ledtråd(ar):"
+
+#: search/templates/solve.html:69
+msgid "Loading"
+msgstr "Laddar"
+
+#: search/templates/solve.html:75
+msgid "No letters all?"
+msgstr "Inga bokstäver alls?"
+
+#: search/templates/solve.html:78
+msgid "Sorry. Unable to do a search right now. Please try again a bit later."
+msgstr "Tyvärr funkar inte sökningen just nu. Försök lite senare."
+
+#: search/templates/solve.html:104
+msgid "New!"
+msgstr ""
+
+#: search/templates/solve.html:105
+msgid "Try the <a href=\"/simple/\">simple inferface</a>."
+msgstr ""
+
+#: search/templates/statistics_calendar.html:14
+#, fuzzy
+msgid "Statistics Calendar"
+msgstr "Statistik"
+
+#: search/templates/statistics_calendar.html:21
+#, fuzzy
+msgid "Language(s):"
+msgstr "Ledtråd(ar):"
+
+#: search/templates/statistics_calendar.html:33
+#: search/templates/statistics_graph.html:25
 #: search/templates/flatpages/default.html:13
 msgid "Go back to home page"
 msgstr "Gå tillbaka till hemsidan"
 
+#: search/templates/statistics_graph.html:11
+#, fuzzy
+msgid "Statistics Graph"
+msgstr "Statistik"
+
 #~ msgid "Length"
 #~ msgstr "Antal bokstäver"
+
 #~ msgid "Crossword solver"
 #~ msgstr "Krysstips"
-
