@@ -4,7 +4,7 @@ import re
 from pprint import pprint
 from cStringIO import StringIO
 import logging
-from time import time
+from time import time, mktime
 from random import randint
 try:
     import simplejson
@@ -377,7 +377,6 @@ def XXX_find_alternative_synonyms(word, slots, language):
                         test(variation, None)
     
     tested_words.sort()
-    print tested_words
         
     del tested_words
         
@@ -493,7 +492,6 @@ def _get_variations_synonym_dot_com(word, greedy=False,
     if request is None:
         page = parse(url).getroot()
     else:
-        print url
         cache_key = 'syndotcom_download_%s' % url.replace('http://','')
         html = cache.get(cache_key)
         if html is None:
@@ -566,22 +564,17 @@ def _get_variations_wordnet(word, greedy=False,
             # e.g. 'horizontal_surface'
             continue
         
-        #print plural(each)
-        
         all.append(each)
         for synset in wordnet.synsets(each):
             for synonym_synset in synset.hypernyms():
-                #print synonym_synset
                 synonym = synonym_synset.name.split('.')[0]
                 if not ok_word(synonym):
                     continue
                 
-                #print "\t", repr(synonym)
                 
                 for synonym_variation in morph_variations(synonym):
                     if not wordnet.morphy(synonym_variation):
                         # then it's not a word
-                        #print "\t", "skip", repr(synonym_variation)
                         continue
                     
                     if synonym_variation in all:
@@ -590,11 +583,9 @@ def _get_variations_wordnet(word, greedy=False,
                     
                     all.append(synonym_variation)
                     
-                    #print "\t\t", repr(synonym_variation)
                     synonym_variation_plural = plural(synonym_variation)
                     if synonym_variation_plural and synonym_variation_plural != synonym_variation:
                         if wordnet.morphy(synonym_variation_plural) and ok_word(synonym_variation_plural):
-                            print "\t\t\t", repr(synonym_variation_plural)
                             all.append(synonym_variation_plural)
                                           
     return all
@@ -606,7 +597,6 @@ def _find_alternatives(slots, language):
     if length == 1:
         return Word.objects.filter(length=1, word=slots[0], language=language)
     
-    #print language, repr(''.join([x==u'' and u'_' or x for x in slots]))
     
     filter_ = dict(length=length, language=language)
     slots = [x and x.lower() or ' ' for x in slots]
@@ -917,45 +907,21 @@ class StatsCalendar(HTMLCalendar):
         return '<td class="%s">%s</td>' % (cssclass, body)
 
 def statistics_calendar(request):
+    languages = request.GET.getlist('languages')
     
     month = request.GET.get('month')
-    if month:
-        month = int(month)
-        if month < 1 or month > 12:
-            raise ValueError("Invalid month")
-    else:
+    if not month:
         month = datetime.date.today().month
-    
+        
     year = request.GET.get('year')
-    if year:
-        year = int(year)
-        if year < 2008 or year > 2020:
-            raise ValueError("Year out of range month")
-    else:
+    if not year:
         year = datetime.date.today().year
         
-    searches = Search.objects.filter(add_date__year=year, add_date__month=month)
-    languages = request.GET.getlist('languages')
-    if languages:
-        languages = [x.lower() for x in languages]
-        if 'en' in languages:
-            searches = searches.filter(language__istartswith='en')
-            languages.remove('en')
-        if languages:
-            searches = searches.filter(language__in=languages)
-    
-    stats = defaultdict(int)
-    for s in searches:
-        stats[s.add_date.day] += 1
-        
-    if stats.keys():
-        max_day = max(stats.keys())
-    else:
-        max_day = 1
-    for i in range(1, max_day):
-        if i not in stats:
-            stats[i] = 0
-        
+    stats = _get_searches_stats(month=month,
+                                year=year,
+                                languages=languages,
+                                calendar_stats=True)
+
     language_options = get_language_options(request, be_clever=False)
     for each in language_options:
         each['checked'] = each['code'].lower() in languages
@@ -965,14 +931,95 @@ def statistics_calendar(request):
     return _render('statistics_calendar.html', locals(), request)
 
 
+def _get_searches_stats(month=None, year=None, languages=[],
+                        calendar_stats=False):
+    
+    if year:
+        year = int(year)
+        if year < 2008 or year > 2020:
+            raise ValueError("Year out of range month")
+    #else:
+    #    year = datetime.date.today().year
+
+    if month:
+        if not year:
+            year = datetime.date.today().year
+        month = int(month)
+        if month < 1 or month > 12:
+            raise ValueError("Invalid month")
+    #else:
+    #    month = datetime.date.today().month
+
+    searches = Search.objects.all()
+    if year:
+        searches = searches.filter(add_date__year=year)
+    if month:
+        searches = searches.filter(add_date__month=month)
+        
+    if languages:
+        languages = [x.lower() for x in languages]
+        if 'en' in languages:
+            searches = searches.filter(language__istartswith='en')
+            languages.remove('en')
+        if languages:
+            searches = searches.filter(language__in=languages)
+
+    stats = defaultdict(int)
+    for s in searches:
+        if calendar_stats:
+            key = s.add_date.day
+        else:
+            key = datetime.date(s.add_date.year,
+                                s.add_date.month, 
+                                s.add_date.day)
+            key = int(mktime(key.timetuple())) * 1000
+        
+        stats[key] += 1
+
+    if calendar_stats:
+        if stats.keys():
+            max_day = max(stats.keys())
+        else:
+            max_day = 1
+        for i in range(1, max_day):
+            if i not in stats:
+                stats[i] = 0
+                
+            
+    return stats
+
+def statistics_graph(request):
+    languages = request.GET.getlist('languages')
+    
+    month = request.GET.get('month')
+    #if not month:
+    #    month = datetime.date.today().month
+        
+    year = request.GET.get('year')
+    #if not year:
+    #    year = datetime.date.today().year
+        
+    stats = _get_searches_stats(month=month,
+                                year=year,
+                                languages=languages)
+    
+    # turn this into a sorted list
+    stats = [[k, v] for (k,v) in stats.items()]
+    stats.sort()
+    stats_json = simplejson.dumps(stats)
+    return _render('statistics_graph.html', locals(), request)
+
+
 def solve_simple(request):
     if request.GET.get('slots'):
-        if not request.GET.get('language'):
-            request.GET['language'] = request.LANGUAGE_CODE
         
         form = SimpleSolveForm(request.GET)
         if form.is_valid():
-            language = form.cleaned_data['language']
+            
+            language = form.cleaned_data.get('language')
+            if not language:
+                language = request.LANGUAGE_CODE
+                
             slots = form.cleaned_data['slots']
             slots = slots.replace('.', ' ').replace('*', ' ').replace('_',' ')
             slots = list(slots)

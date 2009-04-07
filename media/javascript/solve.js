@@ -154,6 +154,11 @@ function __process_submission(res) {
    if (res.word_count>1)
      $('#matches').text(res.match_text);
    
+   if (res.alternatives_truncated)
+     $('#clues').show();
+   else
+     $('#clues').hide();
+   
    //if (res.alternatives_truncated)
    //  $('#matches').text($('#matches').text() + " (men begransar till 100)");
    

@@ -53,9 +53,11 @@ input#id_length, #allslots input { font-weight:bold; font-size:120% }
   </span>
   <br/>
   {% if accept_clues %}
+    <span id="clues" style="display:none">
     <label>{% trans "Clue(s):" %}</label>
     <input name="clues" value="" size="12" />
-    <br/><br/>
+      <small>(word clues separated by a comma)</small>
+    </span><br/>
   {% endif %}
   <input type="submit" value="{% trans "Search" %}"/>
   <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15"/>
@@ -90,9 +92,10 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 {% endifequal %}
 </div>
 
-{% else %}
+{% endif %}
+
+<p>&nbsp;</p>
 <p><strong>New!</strong> 
 Try the <a href="/simple/">simple inferface</a>.</p>
-{% endif %}
 
 {% endblock %}

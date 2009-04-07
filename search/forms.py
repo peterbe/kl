@@ -71,9 +71,8 @@ class FeedbackForm(forms.Form):
 class SimpleSolveForm(forms.Form):
     slots = forms.CharField(max_length=30,
                             widget=forms.widgets.TextInput(attrs={'size':30}))
-    language = forms.CharField(max_length=6,
+    language = forms.CharField(max_length=6, required=False,
                               widget=forms.widgets.HiddenInput())
-    
     
     
     def clean_slots(self):

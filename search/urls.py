@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^los/json/$', solve, {'json':True}),
     url(r'^feedback/$', send_feedback),
     url(r'^statistics/calendar/$', statistics_calendar),
+    url(r'^statistics/graph/$', statistics_graph),
     url(r'^variationstester/$', variationstester),
                        
 )
