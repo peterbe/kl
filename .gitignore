@@ -1,3 +1,4 @@
+.venv
 tags
 .secret
 settings_local.py
