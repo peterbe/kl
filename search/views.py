@@ -932,7 +932,8 @@ def statistics_calendar(request):
 
 
 def _get_searches_stats(month=None, year=None, languages=[],
-                        calendar_stats=False):
+                        calendar_stats=False,
+                        **extra_filter):
     
     if year:
         year = int(year)
@@ -955,6 +956,9 @@ def _get_searches_stats(month=None, year=None, languages=[],
         searches = searches.filter(add_date__year=year)
     if month:
         searches = searches.filter(add_date__month=month)
+        
+    if extra_filter:
+        searches = searches.filter(**extra_filter)
         
     if languages:
         languages = [x.lower() for x in languages]
@@ -991,17 +995,12 @@ def _get_searches_stats(month=None, year=None, languages=[],
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
     
-    month = request.GET.get('month')
-    #if not month:
-    #    month = datetime.date.today().month
+    extra_filter = {}
+    if request.GET.get('daterange'):
+        logging.warn("Don't support daterange yet")
         
-    year = request.GET.get('year')
-    #if not year:
-    #    year = datetime.date.today().year
-        
-    stats = _get_searches_stats(month=month,
-                                year=year,
-                                languages=languages)
+    stats = _get_searches_stats(languages=languages,
+                                **extra_filter)
     
     # turn this into a sorted list
     stats = [[k, v] for (k,v) in stats.items()]
