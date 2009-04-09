@@ -4,6 +4,7 @@
 
 {% block extracss %}
 <link rel="stylesheet" href="{{ MEDIA_URL }}{% staticfile "/css/ui.daterangepicker.css" %}" type="text/css" />
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css" type="text/css" rel="stylesheet" />
 {% endblock %}
 
 {% block main %}
@@ -13,14 +14,18 @@
 <div id="placeholder" style="width:550px;height:300px;"></div>
 
 <br/>
-<p>Searches per day. Try zooming.</p>
+<p>{% trans "Searches per day" %}</p>
 
+{% if daterange %}
+{% else %}
 <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
+{% endif %}
 
 <form action=".">
   <p>
   <label>Date or date range:</label>
-  <input name="daterange" value="" size="40" /> <input type="submit" value="{% trans "Redraw" %}"/>
+  <input name="daterange" value="{% if daterange %}{{ daterange }}{% endif %}" size="40" />
+  <input type="submit" value="{% trans "Redraw" %}"/>
   </p>
 </form>
 
@@ -38,6 +43,10 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery-ui-1.7.1.custom.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/daterangepicker.jQuery.js" %}"></script>
 <script type="text/javascript">
+
+var datepicker_options = {{ datepicker_options|safe }};
+
+
 $(function() {
     var d = {{ stats_json }};
 
@@ -100,7 +109,7 @@ $(function() {
         plot.setSelection(ranges);
     });
     
-    $('input[name="daterange"]').daterangepicker();
+    $('input[name="daterange"]').daterangepicker(datepicker_options);
 
 });
 </script>

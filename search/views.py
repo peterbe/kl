@@ -992,12 +992,39 @@ def _get_searches_stats(month=None, year=None, languages=[],
             
     return stats
 
+daterange_iso_regex = re.compile('(?P<yy>\d{4})/(?P<mm>\d{2})/(?P<dd>\d{2}) - (?P<yy2>\d{4})/(?P<mm2>\d{2})/(?P<dd2>\d{2})')
+daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P<mm2>\d{2})/(?P<dd2>\d{2})/(?P<yy2>\d{4})')
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
     
     extra_filter = {}
     if request.GET.get('daterange'):
-        logging.warn("Don't support daterange yet")
+        
+        daterange = request.GET.get('daterange')
+        print repr(daterange)
+        date1 = date2 = None
+        match = None
+        
+        if daterange_iso_regex.findall(daterange):
+            match = daterange_regex.match(daterange)
+            
+        elif daterange_us_regex.findall(daterange):
+            match = daterange_us_regex.match(daterange)
+            
+        if match:
+            date1 = datetime.date(int(match.group('yy')),
+                                  int(match.group('mm')),
+                                  int(match.group('dd')))
+            
+            date2 = datetime.date(int(match.group('yy2')),
+                                  int(match.group('mm2')),
+                                  int(match.group('dd2')))
+            
+            
+        if date1:
+            extra_filter['add_date__gte'] = date1
+        if date2:
+            extra_filter['add_date__lt'] = date2
         
     stats = _get_searches_stats(languages=languages,
                                 **extra_filter)
@@ -1006,6 +1033,25 @@ def statistics_graph(request):
     stats = [[k, v] for (k,v) in stats.items()]
     stats.sort()
     stats_json = simplejson.dumps(stats)
+    
+    datepicker2_options = {}
+    # 'earliestDate':
+    
+    datepicker_options = {}
+    if request.META.get('GEO') == 'US' or 1:
+        datepicker2_options['dateFormat'] = 'mm/dd/yy'
+    else:
+        datepicker_options['firstDay'] = 1
+        datepicker2_options['dateFormat'] = 'yy/mm/dd'
+        
+    if datepicker_options:
+        datepicker2_options['datepickerOptions'] = datepicker_options
+    
+    # finally, for the locals() below, change the variable 'datepicker_options' 
+    # to mean the overall one which embeds the jQuery UI Datepicker options
+    datepicker_options = datepicker2_options
+    datepicker_options_json = simplejson.dumps(datepicker_options)
+        
     return _render('statistics_graph.html', locals(), request)
 
 
