@@ -124,6 +124,8 @@ DJANGO_SLIMMER = True
 
 SESSION_ENGINE="django.contrib.sessions.backends.cache"
 
+GOOGLE_ANALYTICS = True
+
 # must be last
 try:
     from settings_local import *
