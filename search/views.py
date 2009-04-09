@@ -1005,7 +1005,7 @@ def statistics_graph(request):
         match = None
         
         if daterange_iso_regex.findall(daterange):
-            match = daterange_regex.match(daterange)
+            match = daterange_iso_regex.match(daterange)
             
         elif daterange_us_regex.findall(daterange):
             match = daterange_us_regex.match(daterange)
