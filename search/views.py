@@ -1001,7 +1001,6 @@ def statistics_graph(request):
     if request.GET.get('daterange'):
         
         daterange = request.GET.get('daterange')
-        print repr(daterange)
         date1 = date2 = None
         match = None
         
@@ -1038,7 +1037,7 @@ def statistics_graph(request):
     # 'earliestDate':
     
     datepicker_options = {}
-    if request.META.get('GEO') == 'US' or 1:
+    if request.META.get('GEO') == 'US':
         datepicker2_options['dateFormat'] = 'mm/dd/yy'
     else:
         datepicker_options['firstDay'] = 1
