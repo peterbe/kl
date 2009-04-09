@@ -14,6 +14,7 @@ def context(request):
             'base_template': "base.html",
             'mobile_version': False,
             'mobile_user_agent': False,
+            'GOOGLE_ANALYTICS': settings.GOOGLE_ANALYTICS,
             }
     
     #if settings.DEBUG:
