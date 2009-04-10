@@ -4,6 +4,7 @@ from kl import settings
 
 from MobileUserAgent import parseUserAgent
 from views import get_search_stats, get_saved_cookies, get_language_options
+from data import get_amazon_advert
 
 def context(request):
             
@@ -37,6 +38,9 @@ def context(request):
     data.update(dict(language_options=get_language_options(request)))
     
     data['render_form_ts'] = int(time.time())
+    
+    if 1 or not settings.DEBUG:
+        data['amazon_advert'] = get_amazon_advert(language)
     
     if request.META.get('GEO'):
         data['geo'] = request.META.get('GEO')
