@@ -7,9 +7,13 @@ admin.autodiscover()
 
 from settings import MEDIA_ROOT
 
-from django.contrib.sitemaps import FlatPageSitemap
+#from sitemap import FlatPageSitemap, OtherSitemap, sitemap
+from sitemap import FlatPageSitemap, sitemap, CustomSitemap
+#from sitemap import CustomSitemap, sitemap
+
 sitemaps = {
     'flatpages': FlatPageSitemap,
+    'otherpages': CustomSitemap,
 }
 
 urlpatterns = patterns('',
@@ -17,7 +21,7 @@ urlpatterns = patterns('',
     (r'', include('kl.search.urls')),
     (r'^i18n/', include('django.conf.urls.i18n')),
                        
-    (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', 
+    (r'^sitemap.xml$', sitemap,
      {'sitemaps': sitemaps}),
                        
 
