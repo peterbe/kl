@@ -116,7 +116,9 @@ LANGUAGES = (
   ('en-GB', ugettext("British English")),
   ('en-US', ugettext("American English")),
 
-)             
+)
+
+DEFAULT_LANGUAGE = 'en-us'
 
 TEMPLATE_STRING_IF_INVALID = ''
 

@@ -25,7 +25,8 @@ class LocaleMiddleware(LocaleMiddleware):
         if domain in settings.LANGUAGE_DOMAINS.values():
             language = [k for (k,v) in settings.LANGUAGE_DOMAINS.items() if v==domain][0]
         if not language:
-            language = translation.get_language_from_request(request)
+            language = settings.DEFAULT_LANGUAGE
+            #language = translation.get_language_from_request(request)
             
         translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
