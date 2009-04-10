@@ -858,7 +858,7 @@ def get_language_options(request, be_clever=True):
                 option['label'] = 'English'
                 
         options.append(option)
-        
+
     return options
     
 def change_language(request, language=None):
@@ -1050,7 +1050,11 @@ def statistics_graph(request):
     # to mean the overall one which embeds the jQuery UI Datepicker options
     datepicker_options = datepicker2_options
     datepicker_options_json = simplejson.dumps(datepicker_options)
-        
+
+    language_options = get_language_options(request, be_clever=False)
+    for each in language_options:
+        each['checked'] = each['code'].lower() in [x.lower() for x in languages]
+    
     return _render('statistics_graph.html', locals(), request)
 
 

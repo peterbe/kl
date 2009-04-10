@@ -14,11 +14,11 @@
 <div id="placeholder" style="width:550px;height:300px;"></div>
 
 <br/>
-<p>{% trans "Searches per day" %}</p>
+<!--<p>{% trans "Searches per day" %}</p>-->
 
 {% if daterange %}
 {% else %}
-<div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div>
+{# <div id="overview" style="margin-left:50px;margin-top:20px;width:400px;height:50px"></div> #}
 {% endif %}
 
 <form action=".">
@@ -27,11 +27,21 @@
   <input name="daterange" value="{% if daterange %}{{ daterange }}{% endif %}" size="40" />
   <input type="submit" value="{% trans "Redraw" %}"/>
   </p>
+
+<label>{% trans "Language(s):" %}</label>
+{% for option in language_options %}
+<input type="checkbox" name="languages" value="{{ option.code }}" onchange="this.form.submit()"
+       {% if option.checked %}checked="checked"{% endif %}/>
+{{ option.label }}
+&nbsp;
+{% endfor %}
+
 </form>
 
 <br/><br/>
 
 <p style="font-size:80%;padding-top:60px">
+<a href="/statistics/calendar/">{% trans "Statistics Calendar" %} >&gt;&gt;</a><br/>
 <a href="/">&lt;&lt; {% trans "Go back to home page" %}</a>
 </p>
 
@@ -43,9 +53,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery-ui-1.7.1.custom.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/daterangepicker.jQuery.js" %}"></script>
 <script type="text/javascript">
-
 var datepicker_options = {{ datepicker_options|safe }};
-
 
 $(function() {
     var d = {{ stats_json }};
@@ -84,13 +92,15 @@ $(function() {
     
     var plot = $.plot($("#placeholder"), [d], options);
     
+    /*
     var overview = $.plot($("#overview"), [d], {
         lines: { show: true, lineWidth: 1 },
         shadowSize: 0,
         xaxis: { ticks: [], mode: "time" },
         yaxis: { ticks: [], min: 0, max: 4000 },
         selection: { mode: "x" }
-    });
+    })
+    */;
 
     // now connect the two
     
@@ -100,14 +110,17 @@ $(function() {
                       $.extend(true, {}, options, {
                           xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to }
                       }));
-
+        /*
         // don't fire event on the overview to prevent eternal loop
         overview.setSelection(ranges, true);
+        */
     });
     
+    /*
     $("#overview").bind("plotselected", function (event, ranges) {
         plot.setSelection(ranges);
     });
+    */
     
     $('input[name="daterange"]').daterangepicker(datepicker_options);
 
