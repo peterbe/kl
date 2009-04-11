@@ -921,6 +921,7 @@ def statistics_calendar(request):
                                 year=year,
                                 languages=languages,
                                 calendar_stats=True)
+    
 
     language_options = get_language_options(request, be_clever=False)
     for each in language_options:
@@ -989,8 +990,7 @@ def _get_searches_stats(month=None, year=None, languages=[],
             if i not in stats:
                 stats[i] = 0
                 
-            
-    return stats
+    return dict(stats)
 
 daterange_iso_regex = re.compile('(?P<yy>\d{4})/(?P<mm>\d{2})/(?P<dd>\d{2}) - (?P<yy2>\d{4})/(?P<mm2>\d{2})/(?P<dd2>\d{2})')
 daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P<mm2>\d{2})/(?P<dd2>\d{2})/(?P<yy2>\d{4})')

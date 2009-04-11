@@ -46,9 +46,10 @@ def context(request):
         if 1 or not settings.DEBUG:
             if request.session.get('has_searched'):
                 geo = request.META.get('GEO')
-                #geo = 'US'
+     #           geo = 'US'
                 data['amazon_advert'] = get_amazon_advert(geo)
     
+    #data['amazon_advert'] = get_amazon_advert('CA')
         
     data['use_google_analytics'] = True
 
