@@ -3,13 +3,13 @@ from string import Template
 
 AMAZON_PRODUCT_LINK_TEMPLATE_UK = Template("""
 <iframe
-src="http://rcm-uk.amazon.co.uk/e/cm?t=peterbecom-21&o=2&p=8&l=as1&asins=$asins&fc1=$foreground&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=$bordercolor&bg1=$background&f=ifr&nou=1"
+src="http://rcm-uk.amazon.co.uk/e/cm?t=peterbecom-21&o=2&p=8&l=as1&asins=$asins&fc1=$foreground&IS2=1&lt1=_blank&m=amazon&lc1=$linkcolor&bc1=$bordercolor&bg1=$background&f=ifr&nou=1"
 style="width:120px;height:240px;" scrolling="no" marginwidth="0"
 marginheight="0" frameborder="0"></iframe>
 """.strip())
 
 AMAZON_PRODUCT_LINK_TEMPLATE_US = Template("""
-<iframe src="http://rcm.amazon.com/e/cm?t=crosstips-20&o=1&p=8&l=as1&asins=$asins&fc1=$foreground&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=$bordercolor&bg1=$background&f=ifr&nou=1" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+<iframe src="http://rcm.amazon.com/e/cm?t=crosstips-20&o=1&p=8&l=as1&asins=$asins&fc1=$foreground&IS2=1&lt1=_blank&m=amazon&lc1=$linkcolor&bc1=$bordercolor&bg1=$background&f=ifr&nou=1" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 """.strip())
 
 ALL_ASINS_UK = """
@@ -109,9 +109,11 @@ def get_amazon_advert(geo):
 
         
     if asins:
-        variables = {'foreground': '000000',
-                     'background': 'FFFFFF',
+        variables = {'foreground':  '000000',
+                     'background':  'FFFFFF',
                      'bordercolor': 'FFFFFF',
+                     'linkcolor':   '0000FF',
+                     
                      'asins': asins,
                     }
         html = template.substitute(variables)
