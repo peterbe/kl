@@ -1,11 +1,16 @@
 from random import choice
 from string import Template
 
-AMAZON_PRODUCT_LINK_TEMPLATE = Template("""
+AMAZON_PRODUCT_LINK_TEMPLATE_UK = Template("""
 <iframe
 src="http://rcm-uk.amazon.co.uk/e/cm?t=peterbecom-21&o=2&p=8&l=as1&asins=$asins&fc1=$foreground&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=$bordercolor&bg1=$background&f=ifr&nou=1"
 style="width:120px;height:240px;" scrolling="no" marginwidth="0"
 marginheight="0" frameborder="0"></iframe>
+""".strip())
+
+AMAZON_PRODUCT_LINK_TEMPLATE_US = Template("""
+<iframe src="http://rcm.amazon.com/e/cm?t=crosstips-20&o=1&p=8&l=as1&asins$asins&fc1=$foreground&IS2=1&lt1=_blank&m=amazon&lc1=0000FF&bc1=$bordercolor&bg1=$background&f=ifr&nou=1"
+style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 """.strip())
 
 ALL_ASINS_UK = """
@@ -60,21 +65,55 @@ B0018BG3G0&
 B0002I8VSI
 B001UGDM30
 B0002A45AY
-""".split()
+""".strip().split()
+
+ALL_ASINS_US = """
+0877799296
+031254636X
+1598695363
+031236122X
+0312316224
+0060517573
+1593374313
+1558507647
+0312382790
+1402743998
+0486294005
+0312386257
+B001F7AXJ0
+B001F7AXJ0
+0740770322
+1402725914
+1603207716
+081293122X
+1933821027
+031230515X
+1603207694
+0761143866
+B001CGMV30
+B001CGMV30
+B00006IFTO
+B0017X1P4E
+""".strip().split()
 
 
-def get_amazon_advert(language):
+def get_amazon_advert(geo):
     
     asins = None
-    if language == 'en-gb':
+    if geo == ('GB','IR'):
         asins = choice(ALL_ASINS_UK)
+        template = AMAZON_PRODUCT_LINK_TEMPLATE_UK
+    elif geo in ('US','CA'):
+        asins = choice(ALL_ASINS_US)
+        template = AMAZON_PRODUCT_LINK_TEMPLATE_US
+        
     if asins:
         variables = {'foreground': '000000',
-                    'background': 'FFFFFF',
-                    'bordercolor': 'FFFFFF',
-                    'asins': asins,
+                     'background': 'FFFFFF',
+                     'bordercolor': 'FFFFFF',
+                     'asins': asins,
                     }
-        html = AMAZON_PRODUCT_LINK_TEMPLATE.substitute(variables)
+        html = templates.substitute(variables)
         
         return html
     

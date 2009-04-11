@@ -39,12 +39,16 @@ def context(request):
     
     data['render_form_ts'] = int(time.time())
     
-    if 1 or not settings.DEBUG:
-        if request.session.get('has_searched'):
-            data['amazon_advert'] = get_amazon_advert(language)
     
     if request.META.get('GEO'):
         data['geo'] = request.META.get('GEO')
+        
+        if 1 or not settings.DEBUG:
+            if request.session.get('has_searched'):
+                geo = request.META.get('GEO')
+                geo = 'US'
+                data['amazon_advert'] = get_amazon_advert(geo)
+    
         
     data['use_google_analytics'] = True
 
