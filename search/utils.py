@@ -53,3 +53,12 @@ def ValidEmailAddress(address, debug=None):
             return 0
     return 1
 
+
+def stats(r):
+    #returns the median, average, standard deviation, min and max of a sequence
+    tot = sum(r)
+    avg = tot/len(r)
+    sdsq = sum([(i-avg)**2 for i in r])
+    s = list(r)
+    s.sort()
+    return s[len(s)//2], avg, (sdsq/(len(r)-1 or 1))**.5, min(r), max(r)

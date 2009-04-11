@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^feedback/$', send_feedback),
     url(r'^statistics/calendar/$', statistics_calendar),
     url(r'^statistics/graph/$', statistics_graph),
+    url(r'^statistics/uniqueness/$', statistics_uniqueness),
     url(r'^variationstester/$', variationstester),
                        
 )

@@ -24,7 +24,7 @@ from django.conf import settings
 
 from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
-from utils import uniqify, any_true, ValidEmailAddress
+from utils import uniqify, any_true, ValidEmailAddress, stats
 from morph_en import variations as morph_variations
 
 def _render_json(data):
@@ -1171,3 +1171,33 @@ def solve_simple(request):
         
     return _render('simple.html', locals(), request)
     
+    
+
+
+def statistics_uniqueness(request):
+    today = datetime.datetime.today()
+    since = datetime.datetime(today.year, today.month, 1)
+    
+    cache_key = 'statistics_uniqueness_' + since.strftime('%Y%m%d')
+    data = cache.get(cache_key)
+    if data is None:
+        data = _get_statistics_uniquess_numbers(since)
+        cache.set(cache_key, data, ONE_DAY)
+        
+    return _render('statistics_uniqueness.html', data, request)
+
+
+def _get_statistics_uniquess_numbers(since):
+    hashes = defaultdict(int)
+    
+    for search in Search.objects.filter(add_date__gte=since):
+        string = search.user_agent + search.ip_address
+        hashed = hash(string)
+        hashes[hashed] += 1
+        
+    no_one_search = len([x for x in hashes.values() if x ==1])
+    no_searchers = len(hashes)
+    no_searches = sum(hashes.values())
+    
+    median, average, std, min_, max_ = stats([float(x) for x in hashes.values()])
+    return locals()
