@@ -99,13 +99,15 @@ B0017X1P4E
 
 def get_amazon_advert(geo):
     
-    asins = None
     if geo == ('GB','IR'):
         asins = choice(ALL_ASINS_UK)
         template = AMAZON_PRODUCT_LINK_TEMPLATE_UK
     elif geo in ('US','CA'):
         asins = choice(ALL_ASINS_US)
         template = AMAZON_PRODUCT_LINK_TEMPLATE_US
+    else:
+        asins = None
+
         
     if asins:
         variables = {'foreground': '000000',
@@ -113,7 +115,7 @@ def get_amazon_advert(geo):
                      'bordercolor': 'FFFFFF',
                      'asins': asins,
                     }
-        html = templates.substitute(variables)
+        html = template.substitute(variables)
         
         return html
     
