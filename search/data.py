@@ -98,7 +98,7 @@ B0017X1P4E
 
 def get_amazon_advert(geo):
     
-    if geo == ('GB','IR'):
+    if geo in ('GB','IR'):
         asins = choice(ALL_ASINS_UK)
         template = AMAZON_PRODUCT_LINK_TEMPLATE_UK
     elif geo in ('US','CA'):
