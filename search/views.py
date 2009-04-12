@@ -513,14 +513,16 @@ def _get_variations_synonym_dot_com(word, greedy=False,
         for synonym in [x.strip().lower() for x in synonyms.split(',') if x.strip()]:
             if '(' in synonym:
                 synonym = versus_synonym_string.sub(r'\1', synonym)
-            all.add(synonym)
+            if ' ' not in synonym:
+                all.add(synonym)
             
             if greedy:
                 #all.add(plural(synonym))# unsure this helps much
                 for morph in morph_variations(synonym):
                     morphed_back = wordnet.morphy(morph)
                     if morphed_back:
-                        all.add(morphed_back)
+                        if ' ' not in morphed_back:
+                            all.add(morphed_back)
 
     return list(all)
 
@@ -548,7 +550,7 @@ def _get_variations_wordnet(word, greedy=False,
     all = []
 
     def ok_word(w):
-        return not w.count('_') and w != word
+        return not w.count('_') and w != word and not w.count(' ')
     
     for each in morph_variations(word):
         if each in all:
