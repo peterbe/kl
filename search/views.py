@@ -498,9 +498,9 @@ def _get_variations_synonym_dot_com(word, greedy=False,
             html = _download_url(url, request.META)
             cache.set(cache_key, html)
         assert len(html) > 1000, "HTML too short %r" % html
-        parser = etree.HTMLParser()
         if isinstance(html, unicode):
             html = html.encode('utf8')
+        parser = etree.HTMLParser()
         tree = etree.parse(StringIO(html), parser)
         page = tree.getroot()
         assert page is not None, "root is None!"
