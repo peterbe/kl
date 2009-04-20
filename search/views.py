@@ -49,6 +49,16 @@ def set_cookie(response, key, value, expire=None):
 
 ONE_DAY = 60 * 60 * 24 # one day in seconds
 
+STOPWORDS = (
+      "a", "and", "are", "as", "at", "be", "but", "by",
+      "for", "if", "in", "into", "is", "it",
+      "no", "not", "of", "on", "or", "such",
+      "that", "the", "their", "then", "there", "these",
+      "they", "this", "to", "was", "will", "with"
+      )
+
+
+
 class SearchResult(object):
     def __init__(self, word, definition=u'', by_clue=None):
         self.word = word
@@ -70,14 +80,17 @@ def solve(request, json=False):
             return HttpResponseRedirect('/los/?error=slots&error=length')
         
         clues = request.GET.get('clues', u'')
-        clues = [x.strip() for x in clues.split(',') if x.strip()]
+        if clues and ' ' in clues and ',' not in clues:
+            clues = clues.replace(' ',', ')
+        clues = [x.strip() for x in clues.split(',') 
+                 if x.strip() and x.strip().lower() not in STOPWORDS]
         
         language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
         
         search_results = [] # the final simple list that is sent back
         
         for clue in clues:
-            alternatives = _find_alternative_synonyms(clue, slots[:length], language, 
+            alternatives = _find_alternative_synonyms(clue, slots[:length], language,
                                                       request=request)
             search_results.extend([SearchResult(x, by_clue=clue) for x in alternatives])
 
