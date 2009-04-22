@@ -1,6 +1,13 @@
 import re
 import itertools
 
+def niceboolean(value):
+    if type(value) is bool:
+        return value
+    falseness = ('','no','off','false','none','0', 'f')
+    return str(value).lower().strip() not in falseness
+
+
 def uniqify(seq, idfun=None): # Alex Martelli ******* order preserving
     if idfun is None:
         def idfun(x): return x

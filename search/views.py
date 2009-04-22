@@ -24,7 +24,7 @@ from django.conf import settings
 
 from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
-from utils import uniqify, any_true, ValidEmailAddress, stats
+from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean
 from morph_en import variations as morph_variations
 
 def _render_json(data):
@@ -66,7 +66,14 @@ class SearchResult(object):
         self.by_clue = by_clue
         
         
-def solve(request, json=False):
+def solve(request, json=False, record_search=True):
+    
+    # By default we are set to record the search in our stats
+    # This can be overwritten by a CGI variable called 'r'
+    # E.g. r=0 or r=no
+    if request.GET.get('r'):
+        record_search = niceboolean(request.GET.get('r'))
+    
     if request.GET.get('l'):
         try:
             length = int(request.GET.get('l'))
@@ -164,12 +171,14 @@ def solve(request, json=False):
                 # this it was probably not from the database but
                 # from the wordnet stuff
                 found_word = None
-        
-        _record_search(search,
-                       user_agent=request.META.get('HTTP_USER_AGENT',''),
-                       ip_address=request.META.get('REMOTE_ADDR',''),
-                       found_word=found_word,
-                       language=language)
+
+        if record_search:
+            
+            _record_search(search,
+                           user_agent=request.META.get('HTTP_USER_AGENT',''),
+                           ip_address=request.META.get('REMOTE_ADDR',''),
+                           found_word=found_word,
+                           language=language)
         
         request.session['has_searched'] = True
 
@@ -199,6 +208,8 @@ def _record_search(search_word, user_agent=u'', ip_address=u'',
         import warnings
         warnings.warn("ip_address too long (%r)" % ip_address)
         ip_address = u''
+        
+    print "Storing search!", search_word
     
     Search.objects.create(search_word=search_word,
                           user_agent=user_agent.strip(),
@@ -1073,8 +1084,14 @@ def statistics_graph(request):
     return _render('statistics_graph.html', locals(), request)
 
 
-def solve_simple(request):
+def solve_simple(request, record_search=True):
     if request.GET.get('slots'):
+        
+        # By default we are set to record the search in our stats
+        # This can be overwritten by a CGI variable called 'r'
+        # E.g. r=0 or r=no
+        if request.GET.get('r'):
+            record_search = niceboolean(request.GET.get('r'))
         
         form = SimpleSolveForm(request.GET)
         if form.is_valid():
@@ -1168,13 +1185,14 @@ def solve_simple(request):
                     # from the wordnet stuff
                     found_word = None
             
-            _record_search(search,
-                           user_agent=request.META.get('HTTP_USER_AGENT',''),
-                           ip_address=request.META.get('REMOTE_ADDR',''),
-                           found_word=found_word,
-                           language=language,
-                           search_type="simple")
-            
+            if record_search:
+                _record_search(search,
+                            user_agent=request.META.get('HTTP_USER_AGENT',''),
+                            ip_address=request.META.get('REMOTE_ADDR',''),
+                            found_word=found_word,
+                            language=language,
+                            search_type="simple")
+                
             request.session['has_searched'] = True
     
         
