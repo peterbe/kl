@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 from django.contrib.sitemaps import Sitemap as DjangoSitemap
@@ -11,6 +12,8 @@ from django.utils.encoding import smart_str
 from django.template import loader
 from django.http import HttpResponse, Http404
 from django.core.paginator import EmptyPage, PageNotAnInteger
+
+from kl.search.models import Search
 
 def sitemap(request, sitemaps, section=None):
     maps, urls = [], []
@@ -51,9 +54,12 @@ class Sitemap(DjangoSitemap):
             loc = "http://%s%s" % (current_site.domain, self.__get('location', item))
             url_info = {
                 'location':   loc,
-                'lastmod':    self.__get('lastmod', item, None),
-                'changefreq': self.__get('changefreq', item, None),
-                'priority':   self.__get('priority', item, None)
+                'lastmod':    self.__get('lastmod', item, 
+                                         getattr(item, 'lastmod', None)),
+                'changefreq': self.__get('changefreq', item, 
+                                         getattr(item, 'changefreq', None)),
+                'priority':   self.__get('priority', item, 
+                                         getattr(item, 'priority', None))
             }
             urls.append(url_info)
         return urls
@@ -73,7 +79,8 @@ class CustomSitemap(Sitemap):
     #    return obj['location']
     
     def items(self):
-        return [
+        all = []
+        all += [
                 Page("/",
                      changefreq="daily",
                      ),
@@ -83,8 +90,34 @@ class CustomSitemap(Sitemap):
                 
                 Page("/statistics/graph/",
                      changefreq="weekly",
+                     ),
+                Page("/statistics/uniqueness/",
+                     changefreq="weekly",
                      ),                
                 ]
+        
+        first_search = Search.objects.all().order_by('add_date')[0]
+        y = first_search.add_date.year
+        m = first_search.add_date.month
+        d = 1
+            
+        last_search = Search.objects.all().order_by('-add_date')[0]
+        last_y = last_search.add_date.year
+        last_m = last_search.add_date.month
+        last_d = 1
+        
+        while True:
+            if m >= last_m and y >= last_y:
+                break
+            
+            m += 1
+            if m > 12:
+                m = 1
+                y += 1
+            all.append(Page(datetime.datetime(y, m, 1).strftime('/searches/%Y/%B/'),
+                            changefreq="monthly"))
+            
+        return all
 
 
 class FlatPageSitemap(Sitemap):

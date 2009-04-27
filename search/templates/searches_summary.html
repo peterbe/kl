@@ -1,0 +1,44 @@
+{% extends base_template %}
+{% load i18n %}
+{% load language %}
+{% load django_slimmer %}
+
+{% block title %}{% trans "Searches summary in" %} {{ month }} {{ year }} - {% trans "Crosstips" %}{% endblock %}
+
+
+{% block main %}
+<h3>{% trans "Searches summary in" %} {{ month }} {{ year }}</h3>
+
+<p>Crosstips helped to find the following words this month:</p>
+{% for language, words in found_words_repeats.items %}
+  {% if words %}
+    <p><strong>{{ language|show_language_verbose }}</strong></p>
+    <ul>
+    {% for word in words %}
+    <li>{{ word }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}
+<br/>
+
+<br/>
+<p>These are words that are found when someone searches with exactly so many clues
+that only one single alternative is found.
+</p>
+
+<p style="font-size:80%;padding-top:60px">
+
+{% if previous_month_link %}
+<a href="{{ previous_month_link }}">&lt;&lt;&lt; {% trans "Previous month" %}</a>
+{% endif %}
+&nbsp;
+{% if next_month_link %}
+<a href="{{ next_month_link }}">{% trans "Next month" %} &gt;&gt;&gt;</a>
+<br/>
+{% endif %}
+<br/>
+<a href="/">&lt;&lt; {% trans "Go back to home page" %}</a>
+</p>
+
+{% endblock %}

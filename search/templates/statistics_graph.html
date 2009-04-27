@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load django_slimmer %}
 
+{% block title %}{% trans "Statistics Graph" %} - {% trans "Crosstips" %}{% endblock %}
+
 {% block extracss %}
 <link rel="stylesheet" href="{{ MEDIA_URL }}{% staticfile "/css/ui.daterangepicker.css" %}" type="text/css" />
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css" type="text/css" rel="stylesheet" />

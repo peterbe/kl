@@ -20,6 +20,7 @@ from django.core.cache import cache
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
+from django.views.decorators.cache import cache_page, never_cache
 from django.conf import settings
 
 from models import Word, Search
@@ -57,6 +58,13 @@ STOPWORDS = (
       "they", "this", "to", "was", "will", "with"
       )
 
+ALL_LANGUAGE_OPTIONS = (
+        {'code':'sv', 'label':'Svenska', 'domain':'krysstips.se'},
+        {'code':'en-US', 'label':'English (US)', 'domain':'en-us.crosstips.org',
+         'title':"American English"},
+        {'code':'en-GB', 'label':'English (GB)', 'domain':'en-us.crosstips.org',
+         'title':"British English"},
+)        
 
 
 class SearchResult(object):
@@ -839,13 +847,7 @@ def _send_feedback(text, name=u'', email=u'', fail_silently=False,
 
 def get_language_options(request, be_clever=True):
     current_language = request.LANGUAGE_CODE
-    all_options = (
-        {'code':'sv', 'label':'Svenska', 'domain':'krysstips.se'},
-        {'code':'en-US', 'label':'English (US)', 'domain':'en-us.crosstips.org',
-         'title':"American English"},
-        {'code':'en-GB', 'label':'English (GB)', 'domain':'en-us.crosstips.org',
-         'title':"BritishEnglish"},
-    )
+    all_options = ALL_LANGUAGE_OPTIONS
     
     # if your browser says 'en-GB' then hide the US option and relabel
     # 'English (GB)' as just 'English' so that british and US users don't
@@ -1238,3 +1240,79 @@ def _get_statistics_uniquess_numbers(since):
     
     median, average, std, min_, max_ = stats([float(x) for x in hashes.values()])
     return locals()
+
+
+MONTH_NAMES = []
+for i in range(1, 13):
+    d = datetime.date(2009, i, 1)
+    MONTH_NAMES.append(d.strftime('%B'))
+
+@cache_page(60 * 60 * 24) # 24 hours
+def searches_summary(request, year, month):
+    
+    first_search_date = Search.objects.all().order_by('add_date')[0].add_date
+    last_search_date = Search.objects.all().order_by('-add_date')[0].add_date
+    
+    year = int(year)
+    try:
+        month_nr = [x.lower() for x in MONTH_NAMES].index(month.lower()) + 1
+    except ValueError:
+        raise Http404("Unrecognized month name")
+    # turn that into a date
+    since = datetime.date(year, month_nr, 1)
+    
+    if (month_nr + 1) > 12:
+        since_month_later = datetime.date(year+1, 1, 1)
+    else:
+        since_month_later = datetime.date(year, month_nr+1, 1)
+        
+    since_month_later_datetime = datetime.datetime(since_month_later.year,
+                                                   since_month_later.month,
+                                                   since_month_later.day)
+    
+    if since_month_later_datetime < first_search_date:
+        raise Http404("Too far back in time")
+    if since_month_later_datetime < last_search_date:
+        next_month_link = since_month_later.strftime("/searches/%Y/%B/")
+        
+    since_datetime = datetime.datetime(since.year, since.month, since.day)
+      
+    if since_datetime > last_search_date:
+        raise Http404("Too far into the future")
+    elif since_datetime > first_search_date:
+        if (month_nr - 1) < 1:
+            since_month_earlier = datetime.date(year-1, 12, 1)
+        else:
+            since_month_earlier = datetime.date(year, month_nr-1, 1)
+            
+        previous_month_link = since_month_earlier.strftime("/searches/%Y/%B/")
+        
+    base_searches = Search.objects.filter(add_date__gte=since, 
+                                          add_date__lt=since_month_later)
+    
+    found_searches = base_searches.exclude(found_word=None)\
+                                  .select_related('found_word')\
+                                  .exclude(found_word__word='crossword')\
+                                  .exclude(found_word__word='korsord')\
+                                  .exclude(found_word__word='fuck')
+    
+    found_words = defaultdict(list)
+    for each in found_searches:
+        found_words[each.language].append(each.found_word.word)
+    found_words = dict(found_words)
+    
+    found_words_repeats = {}
+    for language, words in found_words.items():
+        counts = defaultdict(int)
+        for word in words:
+            if len(word) < 2:
+                # don't want to find single character words
+                # It's a bug that they're even in there
+                continue
+            counts[word.lower()] += 1
+        found_words_repeats[language] = sorted([k for (k,v) in counts.items() if v>1],
+                                               lambda x,y: cmp(y[1], x[1]))
+    
+    #pprint(found_words_repeats)
+    
+    return _render('searches_summary.html', locals(), request)
