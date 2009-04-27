@@ -938,11 +938,15 @@ def statistics_calendar(request):
     month = request.GET.get('month')
     if not month:
         month = datetime.date.today().month
+    else:
+        month = int(month)
         
     year = request.GET.get('year')
     if not year:
         year = datetime.date.today().year
-        
+    else:
+        year = int(year)
+    
     stats = _get_searches_stats(month=month,
                                 year=year,
                                 languages=languages,
@@ -951,7 +955,7 @@ def statistics_calendar(request):
 
     language_options = get_language_options(request, be_clever=False)
     for each in language_options:
-        each['checked'] = each['code'].lower() in languages
+        each['checked'] = each['code'].lower() in [x.lower() for x in languages]
     #language_options.append(dict(code='en', label='English (both)'))
     calendar = StatsCalendar(stats)
     html_calendar = calendar.formatmonth(year, month)
