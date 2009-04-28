@@ -1,3 +1,4 @@
+import datetime
 import time
 # project
 from kl import settings
@@ -38,6 +39,9 @@ def context(request):
     data.update(dict(language_options=get_language_options(request)))
     
     data['render_form_ts'] = int(time.time())
+    
+    # for the link the Searches summary of the latest month
+    data['searches_summary_link'] = datetime.datetime.today().strftime('/searches/%Y/%B/')
     
     
     if request.META.get('GEO'):

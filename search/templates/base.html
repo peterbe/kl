@@ -132,9 +132,12 @@
           {% else %}
           <a href="/about/crosstips/">About Crosstips</a>
           {% endifequal %}
-          <a href="/statistics/calendar/">Statistics Calendar</a> 
-	  <a href="/statistics/graph/">Statistics Graph</a>
-	  <a href="/statistics/uniqueness/">Statistics Uniqueness</a>
+          <a href="/statistics/calendar/">{% trans "Calendar" %}</a> 
+	  <a href="/statistics/graph/">{% trans "Graph" %}</a>
+	  <a href="/statistics/uniqueness/">{% trans "Uniqueness" %}</a>
+          {% if searches_summary_link %}
+          <a href="{{ searches_summary_link }}">{% trans "Searches summary" %}</a>
+          {% endif %}
         </small>
       </p>
     </div>
