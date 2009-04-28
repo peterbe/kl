@@ -77,6 +77,11 @@
     <li><a>{% trans "Searches this year" %} <em>{{ no_searches_this_year }}</em></a></li>
     <li><a>{% trans "Total number of words" %} <em>{{ no_total_words }}</em></a></li>
   </ul>
+  <br/><br/>
+  <br/><br/>
+  <br/>
+  <a style="padding-left:4px" href="{{ sparklines_href }}" title="{% trans "Searches this month" %}"
+  ><img src="{{ sparklines_url }}" alt="{% trans "Searches this month" %}" border="0"/></a>
   {% endblock %}
 
 

@@ -1,11 +1,14 @@
 import datetime
+from urllib import quote
 import time
+
 # project
 from kl import settings
 
 from MobileUserAgent import parseUserAgent
 from views import get_search_stats, get_saved_cookies, get_language_options
 from data import get_amazon_advert
+from googlecharts import get_sparklines
 
 def context(request):
             
@@ -43,6 +46,14 @@ def context(request):
     # for the link the Searches summary of the latest month
     data['searches_summary_link'] = datetime.datetime.today().strftime('/searches/%Y/%B/')
     
+    
+    data['sparklines_url'] = get_sparklines(150, 100)
+    today = datetime.datetime.today()
+    first_date = datetime.datetime(today.year, today.month, 1)
+    data['sparklines_href'] = '/statistics/graph/?daterange='+\
+                              quote(first_date.strftime('%Y/%m/%d')) +\
+                              quote(' - ') +\
+                              quote(today.strftime('%Y/%m/%d'))
     
     if request.META.get('GEO'):
         data['geo'] = request.META.get('GEO')
