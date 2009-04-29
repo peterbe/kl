@@ -128,6 +128,11 @@ SESSION_ENGINE="django.contrib.sessions.backends.cache"
 
 GOOGLE_ANALYTICS = True
 
+CANONICAL_DOMAINS = {
+    'en-gb.crosstips.org':'crosstips.org',
+    'en-us.crosstips.org':'crosstips.org',
+    }
+
 # must be last
 try:
     from settings_local import *

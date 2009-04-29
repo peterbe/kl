@@ -1,4 +1,5 @@
 import datetime
+from urlparse import urlparse, urljoin
 import urllib2
 import re
 from pprint import pprint
@@ -217,8 +218,6 @@ def _record_search(search_word, user_agent=u'', ip_address=u'',
         warnings.warn("ip_address too long (%r)" % ip_address)
         ip_address = u''
         
-    print "Storing search!", search_word
-    
     Search.objects.create(search_word=search_word,
                           user_agent=user_agent.strip(),
                           ip_address=ip_address.strip(),
@@ -1316,3 +1315,12 @@ def searches_summary(request, year, month):
     #pprint(found_words_repeats)
     
     return _render('searches_summary.html', locals(), request)
+
+
+
+def get_canonical_url(url):
+    
+    scheme, netloc, path, params, query, fragment = urlparse(url)
+    if netloc in settings.CANONICAL_DOMAINS:
+        return url.replace(netloc, 
+                           settings.CANONICAL_DOMAINS[netloc])

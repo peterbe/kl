@@ -2,11 +2,14 @@ import datetime
 from urllib import quote
 import time
 
+# django
+
 # project
 from kl import settings
 
 from MobileUserAgent import parseUserAgent
 from views import get_search_stats, get_saved_cookies, get_language_options
+from views import get_canonical_url
 from data import get_amazon_advert
 from googlecharts import get_sparklines
 
@@ -54,6 +57,11 @@ def context(request):
                               quote(first_date.strftime('%Y/%m/%d')) +\
                               quote(' - ') +\
                               quote(today.strftime('%Y/%m/%d'))
+    
+    
+    canonical_url = get_canonical_url(request.build_absolute_uri())
+    if canonical_url:
+        data['canonical_url'] = canonical_url
     
     if request.META.get('GEO'):
         data['geo'] = request.META.get('GEO')

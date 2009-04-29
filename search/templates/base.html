@@ -8,6 +8,9 @@
 
   <meta http-equiv="Content-Language" content="{{ request.LANGUAGE_CODE }}"/>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  {% if canonical_url %}
+  <link rel="canonical" href="{{ canonical_url }}" />
+  {% endif %}
   <meta name="description" content="{% trans "helps you solve your crossword puzzles" %}">
   <meta name="keywords" content="{% trans "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles" %}">
   {#<title>{% block title %}{% trans "Crosstips" %} - {% trans "helps you solve your crossword puzzles" %}{% endblock %}</title>#}
