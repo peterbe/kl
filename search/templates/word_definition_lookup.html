@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load language %}
+
+{% block content_sidebar_outer %}{% endblock %}
+{% block main %}
+<h3>{% trans "Word definition lookup" %}</h3>
+
+{% if unrecognized_word %}
+  <p><em>{% trans "Sorry word could not be found" %}</em></p>
+{% else %}
+  {% if word_object %}
+    <p><strong>{{ word_object.word }}</strong> <small>{{ word_object.language|show_language_verbose }}</small></p>
+    {% if definition %}
+    <blockquote>{{ definition }}</blockquote>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+<form action="./">
+{% trans "Word:" %} <input name="word" size="30" /><br/>
+<input type="hidden" name="language" value="{{ request.LANGUAGE_CODE }}"/>
+<input type="submit" value="{% trans "Lookup!" %}" onclick="this.value='{% trans "Please wait..." %}'"/>
+</form>
+{% endblock %}
+
+{% block feedback_form %}
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+{% endblock %}

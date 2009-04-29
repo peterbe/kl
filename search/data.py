@@ -1,5 +1,18 @@
+# python
 from random import choice
 from string import Template
+
+# app
+from models import Word
+
+def add_word_definition(word, definition, language=None):
+    filter_ = dict(word=word)
+    if language:
+        filter_ = dict(filter_, language=language)
+        
+    w = Word.objects.get(**filter_)
+    w.definition = definition.strip()
+    w.save()
 
 AMAZON_PRODUCT_LINK_TEMPLATE_UK = Template("""
 <iframe

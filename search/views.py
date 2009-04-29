@@ -28,6 +28,7 @@ from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
 from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean
 from morph_en import variations as morph_variations
+from data import add_word_definition
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -375,7 +376,7 @@ def XXX_find_alternative_synonyms(word, slots, language):
         s_word = synset.name.split('.')[0]
         if synset.definition:
             try:
-                _add_word_definition(s_word, synset.definition, language=language)
+                add_word_definition(s_word, synset.definition, language=language)
             except Word.DoesNotExist:
                 pass
         print "s", repr(s_word)
@@ -394,7 +395,7 @@ def XXX_find_alternative_synonyms(word, slots, language):
             s_word = sub_synset.name.split('.')[0]
             if sub_synset.definition:
                 try:
-                    _add_word_definition(s_word, sub_synset.definition, language=language)
+                    add_word_definition(s_word, sub_synset.definition, language=language)
                 except Word.DoesNotExist:
                     pass
             if s_word not in tested_words and not s_word.count('_'):
@@ -485,6 +486,57 @@ def variationstester(request):
             
     return _render('variationstester.html', locals(), request)
 
+def word_definition_lookup(request):
+    if request.GET.get('word'):
+        filter_ = dict(word__iexact=request.GET.get('word'))
+        if request.GET.get('language'):
+            filter_ = dict(filter_, language=request.GET.get('language'))
+
+        try:
+            word_object = Word.objects.get(**filter_)
+        except Word.DoesNotExist:
+            word_object = None
+            unrecognized_word = True
+            
+        if word_object is not None:
+            definition = word_object.definition
+            
+            if not definition:
+                definition = _get_word_definition(word_object.word, 
+                                                  language=word_object.language)
+                
+                if definition:
+                    add_word_definition(word_object.word,
+                                        definition,
+                                        language=word_object.language)
+                    
+                    # Most words have the same definition in US English as
+                    # in British English
+                    other_filter = None
+                    if word_object.language == 'en-us':
+                        other_filter = dict(filter_, language='en-gb')
+                    elif word_object.language == 'en-gb':
+                        other_filter = dict(filter_, language='en-us')
+                        
+                    if other_filter:
+                        try:
+                            other_word_object = Word.objects.get(**other_filter)
+                            if not other_word_object.definition:
+                                add_word_definition(other_word_object.word,
+                                                    definition,
+                                                    language=other_word_object.language)
+                        except Word.DoesNotExist:
+                            pass
+                    
+    return _render('word_definition_lookup.html', locals(), request)
+
+def _get_word_definition(word, language=None):
+    if language.lower() in ('en-us', 'en-gb'):
+        for synset in wordnet.synsets(word):
+            if synset.name.split('.')[0] == word:
+                return synset.definition
+            
+    
 
 def plural(word):
     if word.endswith('y'):
@@ -681,14 +733,6 @@ def _find_alternatives(slots, language):
                    lambda x: x.word.lower())
 
 
-def _add_word_definition(word, definition, language=None):
-    filter_ = dict(word=word)
-    if language:
-        filter_ = dict(filter_, language=language)
-        
-    w = Word.objects.get(**filter_)
-    w.definition = definition.strip()
-    w.save()
 
 @login_required
 def upload_wordlist(request):

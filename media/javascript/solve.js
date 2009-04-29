@@ -189,7 +189,7 @@ function __process_submission(res) {
          if (r.by_clue)
            all.append($('<span class="by_clue"></span>').text('~ ' + r.by_clue));
          if (r.definition)
-           all.append($('<abbr>definition</abbr>').attr('title', r.definition));
+           all.append($('<em class="definition"></em>').text(r.definition));
          $('#alternatives').append(all);
       });
    } else {

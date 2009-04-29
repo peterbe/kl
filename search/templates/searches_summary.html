@@ -5,6 +5,11 @@
 
 {% block title %}{% trans "Searches summary in" %} {{ month }} {{ year }} - {% trans "Crosstips" %}{% endblock %}
 
+{% block extracss %}
+<style type="text/css">
+em.definition { font-size:80%; padding-left:10px; color:#666666; }
+</style>
+{% endblock %}
 
 {% block main %}
 <h3>{% trans "Searches summary in" %} {{ month }} {{ year }}</h3>
@@ -15,7 +20,8 @@
     <p><strong>{{ language|show_language_verbose }}</strong></p>
     <ul>
     {% for word in words %}
-    <li>{{ word }}</li>
+      <li class="{{ language }}">{{ word }}
+      </li>
     {% endfor %}
     </ul>
   {% endif %}

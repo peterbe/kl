@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^statistics/uniqueness/$', statistics_uniqueness),
     url(r'^variationstester/$', variationstester),
     url(r'^searches/(?P<year>\d{4})/(?P<month>\w+)/$', searches_summary),
-                       
+    url(r'^word-definition-lookup/$', word_definition_lookup),
+    
 )
