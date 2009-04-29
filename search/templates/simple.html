@@ -25,12 +25,29 @@ function __clean_slots(slots) {
   }
   return slots;
 }
+
+var _original_document_title = null;
+
+function __update_document_title(result) {
+   if (_original_document_title)
+      document.title = result + " - " + $.trim(document.title.split('-')[1]);
+   else {
+      _original_document_title = document.title;
+      document.title = result + " - " + $.trim(document.title.split('-')[0]);
+   }
+}
+
+
 $(function() {
   $('#id_slots').bind('keyup', function() {
     this.value = __clean_slots(this.value);
   });
   if (!$('#id_slots').val())
     $('#id_slots')[0].focus();
+    
+  if ($('#match_text').text())
+    __update_document_title($('#match_text').text());
+    //console.log($('#match_text').text());
 });
 </script>
 {% endblock %}
@@ -65,7 +82,7 @@ $(function() {
 
 {% if result %}
 <p>
-  <strong>{{ result.match_text }}</strong>
+  <strong id="match_text">{{ result.match_text }}</strong>
   &nbsp;
   <a href="." id="clear-search">{% trans "clear search" %}</a>
 </p>

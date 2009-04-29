@@ -159,16 +159,16 @@ def solve(request, json=False, record_search=True):
                 
         
         if alternatives_count == 1:
-            result['match_text'] = _("1 found")
+            result['match_text'] = _("1 match found")
         elif alternatives_count:
             if alternatives_truncated:
-                result['match_text'] = _("%(count)s found but only showing first 100")\
+                result['match_text'] = _("%(count)s matches found but only showing first 100")\
                   % dict(count=alternatives_count)
             else:
-                result['match_text'] = _("%(count)s found") % \
+                result['match_text'] = _("%(count)s matches found") % \
                   dict(count=alternatives_count)
         else:
-            result['match_text'] = _("None found unfortunately :(")
+            result['match_text'] = _("No matchesfound unfortunately :(")
             
         found_word = None
         if len(search_results) == 1:
@@ -1170,16 +1170,16 @@ def solve_simple(request, record_search=True):
                     
             
             if alternatives_count == 1:
-                result['match_text'] = _("1 found")
+                result['match_text'] = _("1 match found")
             elif alternatives_count:
                 if alternatives_truncated:
-                    result['match_text'] = _("%(count)s found but only showing first 100")\
+                    result['match_text'] = _("%(count)s matches found but only showing first 100")\
                     % dict(count=alternatives_count)
                 else:
-                    result['match_text'] = _("%(count)s found") % \
+                    result['match_text'] = _("%(count)s matches found") % \
                     dict(count=alternatives_count)
             else:
-                result['match_text'] = _("None found unfortunately :(")
+                result['match_text'] = _("No matches found unfortunately :(")
                 
             found_word = None
             if len(search_results) == 1:

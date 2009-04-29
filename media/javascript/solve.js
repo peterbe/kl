@@ -143,15 +143,25 @@ function __before_ajaxSubmit(form_data, form_obj) {
    return true;
 }
 
+var _original_document_title = null;
+
+function __update_document_title(result) {
+   if (_original_document_title)
+      document.title = result + " - " + $.trim(document.title.split('-')[1]);
+   else {
+      _original_document_title = document.title;
+      document.title = result + " - " + $.trim(document.title.split('-')[0]);
+   }
+}
+
 
 function __process_submission(res) {
     
    // make sure any error messages are hidden
    $('div.error:visible').hide();
-   
-   if (res.word_count==1)
-     $('#matches').text(res.match_text);
-   if (res.word_count>1)
+
+   __update_document_title(res.match_text);
+   if (res.word_count>=1)
      $('#matches').text(res.match_text);
    
    if (res.alternatives_truncated)
