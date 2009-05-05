@@ -1,6 +1,17 @@
 import re
 import itertools
 
+def print_sql(qs):
+    q = qs.query.as_sql()
+    statement = q[0] % q[1]
+    try:
+        import sqlparse
+        print sqlparse.format(statement, reindent=True, keyword_case='upper')
+    except ImportError:
+        import warnings
+        warnings.warn("sqlparse not installed")
+        print statement
+
 def niceboolean(value):
     if type(value) is bool:
         return value
