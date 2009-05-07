@@ -4,33 +4,36 @@
 
 {% block title %}{% trans "Statistics Uniqueness" %} - {% trans "Crosstips" %}{% endblock %}
 
+{% block meta_content %}{% trans "Statistics Uniqueness" %} {% trans "Since" %} {{ since|date:"jS F Y" }}{% endblock %}
+{% block meta_keywords %}{% trans "searches" %},{% trans "searchers" %},{% trans "average" %}{% endblock %}
+
 {% block main %}
 <h3>{% trans "Statistics Uniqueness" %}</h3>
 
 <br/>
 <br/>
 <br/>
-<p><strong>Since {{ since|date:"jS F Y" }}...</strong></p>
+<p><strong>{% trans "Since" %} {{ since|date:"jS F Y" }}...</strong></p>
 
 <dl>
-  <dt>Number searches:</dt>
+  <dt>{% trans "Number searches:" %}</dt>
   <dd>{{ no_searches }}</dd>
   
-  <dt>Number searche<em>r</em>s:</dt>
+  <dt>{% trans "Number searche<em>r</em>s:" %}</dt>
   <dd>{{ no_searchers }}</dd>
   
-  <dt>Number searchers doing one search only:</dt>
+  <dt>{% trans "Number searchers doing one search only:" %}</dt>
   <dd>{{ no_one_search }}</dd>
 
-  <dt>Average number of searches per searcher:</dt>
+  <dt>{% trans "Average number of searches per searcher:" %}</dt>
   <dd>{{ average|floatformat }}</dd>
 
-  <dt>Median number of searches per searcher:</dt>
+  <dt>{% trans "Median number of searches per searcher:" %}</dt>
   <dd>{{ median }}</dd>
 
 </dl>
 <br/>
-<p style="font-size:80%">Statistics updated once a day.</p>
+<p style="font-size:80%">{% trans "Statistics updated once a day." %}</p>
 
 <p style="font-size:80%;padding-top:60px">
 <a href="/statistics/calendar/">{% trans "Statistics Calendar" %} >&gt;&gt;</a><br/>

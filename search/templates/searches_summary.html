@@ -13,7 +13,7 @@ ul.words a { padding-left:10px; font-size:70%; }
 {% endblock %}
 
 {% block meta_content %}{% trans "Searches summary in" %} {{ month }} {{ year }}{% endblock %}
-{% block meta_keywords %}{% for word in all_words_plain %}{{ word }} {% endfor %}{% endblock %}
+{% block meta_keywords %}{% for word in all_words_plain %}{{ word }},{% endfor %}{% endblock %}
 
 {% block main %}
 <h3>{% trans "Searches summary in" %} {{ month }} {{ year }}</h3>
