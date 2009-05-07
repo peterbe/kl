@@ -1428,8 +1428,12 @@ def searches_summary(request, year, month, atleast_count=1,
                 try:
                     definitions[lang][word]
                 except KeyError:
-                    
-                    definition = _get_word_definition(word, language=lang)
+                    if lang in ('en-us','en-gb'):
+                        # wordnet
+                        definition = _get_word_definition(word, language=lang)
+                    else:
+                        definition = None
+                        
                     if not definition:
                         print "failed to lookup %r (%s) with wordnet" % (word, lang)
                         definition = _get_word_definition_google(word, language=lang)
