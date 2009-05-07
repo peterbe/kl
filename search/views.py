@@ -541,7 +541,10 @@ def _get_word_definition_google(word, language=None):
     cache_key = 'google_define_download_%s' % url.replace('http://','')
     html = cache.get(cache_key)
     if html is None:
+        print "URL", url
         html = _download_url(url, request_meta)
+        print "Downloaded", len(html), "bytes"
+        print
         cache.set(cache_key, html)
     
     if "No definitions of" in html and "were found in English" in html:
@@ -1428,8 +1431,10 @@ def searches_summary(request, year, month, atleast_count=1,
                     
                     definition = _get_word_definition(word, language=lang)
                     if not definition:
+                        print "failed to lookup %r (%s) with wordnet" % (word, lang)
                         definition = _get_word_definition_google(word, language=lang)
                     if definition:
+                        print "found definition for %r (%s)" % (word, lang)
                         add_word_definition(word, definition, language=lang)
 
     # bake the definitions into found_words_repeats
