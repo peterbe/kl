@@ -6,7 +6,7 @@ import re
 from pprint import pprint
 from cStringIO import StringIO
 import logging
-from time import time, mktime
+from time import time, mktime, sleep
 from random import randint
 try:
     import simplejson
@@ -543,6 +543,7 @@ def _get_word_definition_google(word, language=None):
     if html is None:
         print "URL", url
         html = _download_url(url, request_meta)
+        sleep(2) # to not piss off Google
         print "Downloaded", len(html), "bytes"
         print
         cache.set(cache_key, html)
@@ -1435,10 +1436,8 @@ def searches_summary(request, year, month, atleast_count=1,
                         definition = None
                         
                     if not definition:
-                        print "failed to lookup %r (%s) with wordnet" % (word, lang)
                         definition = _get_word_definition_google(word, language=lang)
                     if definition:
-                        print "found definition for %r (%s)" % (word, lang)
                         add_word_definition(word, definition, language=lang)
 
     # bake the definitions into found_words_repeats
