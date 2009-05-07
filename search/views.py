@@ -1448,6 +1448,12 @@ def searches_summary(request, year, month, atleast_count=1,
                 if word in definitions[lang]:
                     words_dict = dict(words_dict, definitions=definitions[lang][word])
             found_words_repeats[lang][i] = words_dict
+            
+    all_words_plain = set()
+    for records in found_words_repeats.values():
+        for record in records:
+            all_words_plain.add(record['word'].lower())
+    all_words_plain = list(all_words_plain)
                     
     return _render('searches_summary.html', locals(), request)
 
