@@ -5,14 +5,30 @@ from string import Template
 # app
 from models import Word
 
-def add_word_definition(word, definition, language=None):
+def add_word_definition(word, definition, language=None, 
+                        clever_english_duplicate=True):
     filter_ = dict(word=word)
     if language:
+        language = language.lower()
         filter_ = dict(filter_, language=language)
-        
-    w = Word.objects.get(**filter_)
+
+    try:
+        w = Word.objects.get(**filter_)
+    except Word.DoesNotExist:
+        # slower but necessary
+        filter_['word__iexact'] = filter_.pop('word')
+        w = Word.objects.get(**filter_)
     w.definition = definition.strip()
     w.save()
+    
+    if clever_english_duplicate and language and language in ('en-us','en-gb'):
+        if language == 'en-us':
+            filter_['language'] = 'en-gb'
+        else:
+            filter_['language'] = 'en-us'
+        w = Word.objects.get(**filter_)
+        w.definition = definition.strip()
+        w.save()
 
 AMAZON_PRODUCT_LINK_TEMPLATE_UK = Template("""
 <iframe

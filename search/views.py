@@ -1,5 +1,6 @@
 import datetime
 from urlparse import urlparse, urljoin
+from urllib import urlencode
 import urllib2
 import re
 from pprint import pprint
@@ -26,7 +27,7 @@ from django.conf import settings
 
 from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
-from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean
+from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, print_sql
 from morph_en import variations as morph_variations
 from data import add_word_definition
 
@@ -510,23 +511,6 @@ def word_definition_lookup(request):
                                         definition,
                                         language=word_object.language)
                     
-                    # Most words have the same definition in US English as
-                    # in British English
-                    other_filter = None
-                    if word_object.language == 'en-us':
-                        other_filter = dict(filter_, language='en-gb')
-                    elif word_object.language == 'en-gb':
-                        other_filter = dict(filter_, language='en-us')
-                        
-                    if other_filter:
-                        try:
-                            other_word_object = Word.objects.get(**other_filter)
-                            if not other_word_object.definition:
-                                add_word_definition(other_word_object.word,
-                                                    definition,
-                                                    language=other_word_object.language)
-                        except Word.DoesNotExist:
-                            pass
                     
     return _render('word_definition_lookup.html', locals(), request)
 
@@ -535,6 +519,77 @@ def _get_word_definition(word, language=None):
         for synset in wordnet.synsets(word):
             if synset.name.split('.')[0] == word:
                 return synset.definition
+            
+def _get_word_definition_google(word, language=None):
+    if language.lower() not in ('en-us','en-gb'):
+        return 
+    
+    url = "http://www.google.com/search"#?hl=en&client=firefox-a&rls=com.ubuntu%3Aen-GB%3Aunofficial&q=define%3Abanyans&btnG=Search&meta=
+    if language.lower() == 'en-gb':
+        url = url.replace('.com', '.co.uk')
+    query = {'hl': language.lower().split('-')[0],
+             'q': 'define:%s' % word.encode('utf-8'),
+             'ie': 'utf-8',
+             'oe': 'utf-8'
+             }
+    url += '?%s' % urlencode(query)
+    
+    # take a random search from Searches to
+    request_meta = {}
+    request_meta['HTTP_USER_AGENT'] = _get_random_used_user_agent()
+    
+    cache_key = 'google_define_download_%s' % url.replace('http://','')
+    html = cache.get(cache_key)
+    if html is None:
+        html = _download_url(url, request_meta)
+        cache.set(cache_key, html)
+    
+    if "No definitions of" in html and "were found in English" in html:
+        return 
+    
+    definitions = _extract_definitions(html)
+    if definitions:
+        # perhaps combined it becomes larger than 245 characters
+        # (actually 250 but worried about line breaks)
+        while sum([len(x) for x in definitions]) > 245:
+            definitions = definitions[:-1]
+            if len(definitions) == 1 and len(definitions[0]) > 245:
+                definitions = [definitions[0][:245]]
+                break
+            
+        return '\n'.join([x.strip() for x in definitions if x.strip()])
+    
+
+def _extract_definitions(html, max_definitions=3):
+    definitions = []
+    
+    from lxml.html import parse
+    from lxml import etree
+
+    from lxml.cssselect import CSSSelector
+    
+    if isinstance(html, unicode):
+        html = html.encode('utf8')
+    parser = etree.HTMLParser()
+    tree = etree.parse(StringIO(html), parser)
+    page = tree.getroot()
+    assert page is not None, "root is None!"
+    sel = CSSSelector('ul.std li')
+    
+    for li in sel(page):
+        if li.text:
+            definitions.append(li.text.strip())
+        if len(definitions) > max_definitions:
+            break
+        
+    return definitions
+    
+    
+def _get_random_used_user_agent(span=20):
+    from random import choice
+    user_agents = [x.user_agent for x in 
+                   Search.objects.all().order_by('-add_date')[:span]]
+    return choice(user_agents)
             
     
 
@@ -818,7 +873,6 @@ def upload_dsso(request):
         
 def _add_word(word, part_of_speech, language, name):
     #pass
-    print "\t", repr(word), language
     length = len(word)
     try:
         Word.objects.get(word=word, length=length, language=language)
@@ -1233,7 +1287,7 @@ def solve_simple(request, record_search=True):
                     # this it was probably not from the database but
                     # from the wordnet stuff
                     found_word = None
-            
+                    
             if record_search:
                 _record_search(search,
                             user_agent=request.META.get('HTTP_USER_AGENT',''),
@@ -1290,8 +1344,9 @@ for i in range(1, 13):
     d = datetime.date(2009, i, 1)
     MONTH_NAMES.append(d.strftime('%B'))
 
-@cache_page(60 * 60 * 24) # 24 hours
-def searches_summary(request, year, month):
+#@cache_page(60 * 60 * 24) # 24 hours
+def searches_summary(request, year, month, atleast_count=1,
+                     lookup_definitions=False):
     
     first_search_date = Search.objects.all().order_by('add_date')[0].add_date
     last_search_date = Search.objects.all().order_by('-add_date')[0].add_date
@@ -1335,13 +1390,20 @@ def searches_summary(request, year, month):
     
     found_searches = base_searches.exclude(found_word=None)\
                                   .select_related('found_word')\
-                                  .exclude(found_word__word='crossword')\
-                                  .exclude(found_word__word='korsord')\
-                                  .exclude(found_word__word='fuck')
+                                  .exclude(found_word__word__in=['crossword','korsord','fuck','peter'])
     
     found_words = defaultdict(list)
+    definitions = {}
     for each in found_searches:
         found_words[each.language].append(each.found_word.word)
+            
+        if each.language not in definitions:
+            definitions[each.found_word.language] = {}
+        if each.found_word.definition:
+            definitions[each.found_word.language][each.found_word.word.lower()]\
+              = each.found_word.definition.splitlines()
+            
+            
     found_words = dict(found_words)
     
     found_words_repeats = {}
@@ -1353,11 +1415,32 @@ def searches_summary(request, year, month):
                 # It's a bug that they're even in there
                 continue
             counts[word.lower()] += 1
-        found_words_repeats[language] = sorted([k for (k,v) in counts.items() if v>1],
+        found_words_repeats[language] = sorted([k for (k,v) in counts.items() if v>atleast_count],
                                                lambda x,y: cmp(y[1], x[1]))
-    
-    #pprint(found_words_repeats)
-    
+
+
+    if lookup_definitions:
+        for lang, words in found_words_repeats.items():
+            for word in words:
+                try:
+                    definitions[lang][word]
+                except KeyError:
+                    
+                    definition = _get_word_definition(word, language=lang)
+                    if not definition:
+                        definition = _get_word_definition_google(word, language=lang)
+                    if definition:
+                        add_word_definition(word, definition, language=lang)
+
+    # bake the definitions into found_words_repeats
+    for lang, words in found_words_repeats.items():
+        for i, word in enumerate(words):
+            words_dict = dict(word=word)
+            if lang in definitions:
+                if word in definitions[lang]:
+                    words_dict = dict(words_dict, definitions=definitions[lang][word])
+            found_words_repeats[lang][i] = words_dict
+                    
     return _render('searches_summary.html', locals(), request)
 
 

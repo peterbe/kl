@@ -7,7 +7,8 @@
 
 {% block extracss %}
 <style type="text/css">
-em.definition { font-size:80%; padding-left:10px; color:#666666; }
+ul.words em { padding-left:10px; font-size:70%; color:#666666; line-height:1px;}
+ul.words a { padding-left:10px; font-size:70%; }
 </style>
 {% endblock %}
 
@@ -18,9 +19,17 @@ em.definition { font-size:80%; padding-left:10px; color:#666666; }
 {% for language, words in found_words_repeats.items %}
   {% if words %}
     <p><strong>{{ language|show_language_verbose }}</strong></p>
-    <ul>
+    <ul class="words">
     {% for word in words %}
-      <li class="{{ language }}">{{ word }}
+      <li class="{{ language }} {% if not word.definitions %}definitionless{% endif %}">{{ word.word }}
+        
+        {% if word.definitions %}
+        <br/>
+                  
+          {% for definition in word.definitions %}
+          <em>{{ definition }}</em>{% if not forloop.last %};<br/>{% endif %}
+          {% endfor %}
+        {% endif %}
       </li>
     {% endfor %}
     </ul>
