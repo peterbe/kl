@@ -1348,7 +1348,7 @@ for i in range(1, 13):
     d = datetime.date(2009, i, 1)
     MONTH_NAMES.append(d.strftime('%B'))
 
-#@cache_page(60 * 60 * 24) # 24 hours
+@cache_page(60 * 60 * 24) # 24 hours
 def searches_summary(request, year, month, atleast_count=1,
                      lookup_definitions=False):
     
