@@ -1419,7 +1419,8 @@ def searches_summary(request, year, month, atleast_count=1,
                 # It's a bug that they're even in there
                 continue
             counts[word.lower()] += 1
-        found_words_repeats[language] = sorted([k for (k,v) in counts.items() if v>atleast_count],
+            found_words_repeats[language] = sorted([k for (k,v) 
+                                                in counts.items() if v >= atleast_count],
                                                lambda x,y: cmp(y[1], x[1]))
 
 
