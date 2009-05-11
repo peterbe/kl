@@ -129,7 +129,10 @@ class ViewTestCase(TestCase):
         qs = urlencode(dict(l=7, s=list('surfac_'), lang='en-gb', clues='floor'), 
                        doseq=True)
         response = client.get('/los/json/?' + qs.replace('_',''))
-        print response.content
+        struct = simplejson.loads(response.content)
+        # Incomplete test!
+        #print struct
+        
         
     def test__get_variations_simple(self):
         """ test the private method _get_variations() """
@@ -159,6 +162,30 @@ class ViewTestCase(TestCase):
         r= _get_variations(u'Peter')
         self.assertTrue(not bool(r))
         
+        
+    def test_regression__general_search(self):
+        """stupidity test that checks that _E_E_A_ matches
+        'GENERAL'
+        """
+        #Word.objects.create(word='peter', language='en-us')
+        #response = self.client.get('/simple/?slots=_E_E_&language=en-us')
+        #print response.content
+        
+        Word.objects.create(word='general', language='en-us')
+        response = self.client.get('/simple/?slots=_E_E_A_&language=en-us')
+        #print response.content
+        self.assertTrue('1 match found' in response.content)
+
+        # hack to reset the cache for this search
+        cache_key = '_find_alternatives__e_e_a__en-us'
+        from django.core.cache import cache
+        cache.delete(cache_key)
+        
+        Word.objects.create(word='federal', language='en-us')
+        response = self.client.get('/simple/?slots=_E_E_A_&language=en-us')
+        #print response.content
+        self.assertTrue('2 matches found' in response.content)
+
         
         
         

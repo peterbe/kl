@@ -171,7 +171,7 @@ def solve(request, json=False, record_search=True):
                 result['match_text'] = _("%(count)s matches found") % \
                   dict(count=alternatives_count)
         else:
-            result['match_text'] = _("No matchesfound unfortunately :(")
+            result['match_text'] = _("No matches found unfortunately :(")
             
         found_word = None
         if len(search_results) == 1:
@@ -766,6 +766,7 @@ def _find_alternatives(slots, language):
         else:
             matchable_string = search[len(start):]
             found_string = match.word[len(start):]
+            
         assert len(matchable_string) == len(found_string)
         for i, each in enumerate(matchable_string):
             if each != u' ' and each != found_string[i]:
@@ -773,6 +774,7 @@ def _find_alternatives(slots, language):
                 return False
         return True
     
+    search_base = Word.objects
     limit = 10000
     # if the filter is really vague and the length is high we're going to get 
     # too many objects and we need to cut our losses.
@@ -785,8 +787,25 @@ def _find_alternatives(slots, language):
             limit = 2500
         else:
             limit = 1000
-
-    all_matches = [x for x in Word.objects.filter(**filter_).order_by('word')[:limit]
+    # if there's neither a start or a end (e.g. '_E_E_A_') it will get all words 
+    # that are of that length then end truncate the result set then filter them
+    # as a string operation. Then there's a chance it might not ever test word we 
+    # are looking for. 
+    if not start and not end:
+        # must come up with some other crazy icontains filter
+        # Look for the longest lump of letter. For example in '_E_ERA_' 'era' is
+        # the longest lump
+        lumps = re.findall('\w+', search)
+        longest = sorted(lumps, lambda x,y: cmp(len(y), len(x)))[0]
+        if len(longest) > 1:
+            filter_['word__icontains'] = longest
+        else:
+            for each in uniqify(lumps):
+                search_base = search_base.filter(word__icontains=each)
+                
+            limit = search_base.filter(**filter_).order_by('word').count()
+            
+    all_matches = [x for x in search_base.filter(**filter_).order_by('word')[:limit]
                    if filter_match(x)]
     return uniqify(all_matches,
                    lambda x: x.word.lower())
@@ -1228,7 +1247,7 @@ def solve_simple(request, record_search=True):
             if re.findall('\s', cache_key):
                 raise ValueError("invalid cache_key search=%r, language=%r" % (search, language))
             
-            alternatives = cache.get(cache_key)
+            alternatives = cache.get(cache_key) #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx
             if alternatives is None:
                 alternatives = _find_alternatives(slots[:length], language)
                 cache.set(cache_key, alternatives, ONE_DAY)
@@ -1347,6 +1366,15 @@ MONTH_NAMES = []
 for i in range(1, 13):
     d = datetime.date(2009, i, 1)
     MONTH_NAMES.append(d.strftime('%B'))
+    
+@login_required
+def searches_summary_lookup_definitions(request, year, month, atleast_count=1):
+    """wrapper on searches_summary(lookup_definitions=True)"""
+    from django.utils.cache import get_cache_key
+    cache_key = get_cache_key(request)
+    print "cache_key", repr(cache_key)
+    return searches_summary(request, year, month, atleast_count=atleast_count,
+                            lookup_definitions=True)
 
 @cache_page(60 * 60 * 24) # 24 hours
 def searches_summary(request, year, month, atleast_count=1,
