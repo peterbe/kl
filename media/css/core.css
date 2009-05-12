@@ -135,23 +135,7 @@ body#profile_6 { background: #EAEADD url(/images/backgrounds/body-bg.png) repeat
 .content_sidebar .rating ul { margin: 0 auto; }
 .content_sidebar .rating ul li a:active { background: url(/images/star.gif) 0 -30px no-repeat; }
 
-.content_sidebar .on a,
-body.user_book_detail .content_sidebar .reader_copy a,
-body.reader_override_form .content_sidebar .edit_book a,
-body.book_profile .content_sidebar .profile a,
-body.book_readers .content_sidebar .readers a,
-body.book_tumble .content_sidebar .tumble a,
-body.book_notes .content_sidebar .notes a,
-
-body.friends .content_sidebar .friends a,
-body.fans .content_sidebar .fans a,
-body.followers .content_sidebar .followers a,
-
-body.profile_public .content_sidebar .profile_public a,
-body.profile_form .content_sidebar .profile_form a,
-body.book_import .content_sidebar .book_import a,
-body.change_password .content_sidebar .change_password a,
-body.find_friends .content_sidebar .find_friends a { background-color: #999; border-bottom: none; color: #fff; }
+.content_sidebar .on a { background-color: #999; border-bottom: none; color: #fff; }
 
 .content_sidebar .sidebar_button { margin: 0 15px 20px 15px; padding: 0; }
 .content_sidebar .sidebar_button a { display: block; padding: 6px 0; width: auto; }
@@ -179,8 +163,6 @@ body.find_friends .content_sidebar .find_friends a { background-color: #999; bor
 
 /* SIDEBAR */
 .sidebar { float: left; margin-right: 20px; width: 140px; }
-.sidebar .mugshot { display: block; margin-bottom: 10px; padding: 10px; width: 120px; height: 120px; background: url(/images/backgrounds/opaque_30.png); -webkit-border-radius: 10px; -moz-border-radius: 10px; }
-.sidebar .mugshot a { display: block; width: 120px; height: 120px; -webkit-border-radius: 6px; -moz-border-radius: 6px; }
 .sidebar .cover { display: block; margin-bottom: 10px; padding: 10px; width: 120px; background: url(/images/backgrounds/opaque_30.png); -webkit-border-radius: 6px; -moz-border-radius: 6px; }
 .sidebar .cover img { display: block; padding: 0; width: 120px; background-image: none; }
 .sidebar h2 { margin-bottom: 0; font-size: 15px; line-height: 20px; color: rgba(0, 0, 0, .4); text-align: center; }
@@ -212,7 +194,6 @@ body.find_friends .content_sidebar .find_friends a { background-color: #999; bor
 .error { font-size: 12px; color: #ff0000; }
 
 
-
 /* SITE MESSAGE */
 .site_message { margin-bottom: 20px; padding: 10px; background: #fff; -webkit-border-radius: 10px; -moz-border-radius: 10px; }
 .site_message p { margin: 0; }
@@ -220,4 +201,10 @@ body.find_friends .content_sidebar .find_friends a { background-color: #999; bor
 
 
 
+
+/* For flat pages
+-------------------------------------------------------------- */
+div.content ul li {
+  margin-bottom:18px;
+}
 

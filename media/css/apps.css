@@ -210,15 +210,6 @@ body.note_edit .note_form .note_labels { height: 415px; }
 .comment_login_form { padding: 10px 0 0 0; border-top: 1px solid #ddd; }
 
 
-/* TAGS
--------------------------------------------------------------- */
-div.tag_cloud p { margin: 0; padding-bottom: 40px; font-size: .85em; line-height: 2em; -webkit-border-radius: 8px; -moz-border-radius: 8px; }
-
-.tag_columns { overflow: hidden; }
-.tag_column { float: left; list-style: none; padding: 0; width: 150px; font-size: 13px; }
-.tag_column a { display: block; padding: 0 10px; color: #333; }
-.tag_column a:hover { background: #2598db; color: #fff; text-decoration: none; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
-
 
 /* AUTH
 -------------------------------------------------------------- */
@@ -229,16 +220,6 @@ div.tag_cloud p { margin: 0; padding-bottom: 40px; font-size: .85em; line-height
 .login_form td button { width: auto; }
 
 
-/* SEARCH
--------------------------------------------------------------- */
-table.book_list { margin-bottom: 30px; }
-table.book_list td { padding: 0; }
-table.book_list td span.bar { margin-bottom: 0; display: block; height: 1px; background: #bbb; }
-table.book_list .title { padding-right: 20px; width: 600px; font-size: 14px; line-height: 25px; }
-table.book_list .title a { font-weight: bold; }
-table.book_list .count { font-size: 12px; color: #777; }
-
-
 /* BOOK CONTENTS
 -------------------------------------------------------------- */
 .book_contents_form { float: left; margin-right: 20px; }
@@ -246,14 +227,6 @@ table.book_list .count { font-size: 12px; color: #777; }
 .book_contents_form textarea { width: 400px; height: 350px; }
 
 .outline_help { float: left; margin-top: 25px; padding: 10px; width: 155px; background: #eee; }
-
-.content_layout h1 { font-size: 16px; line-height: 20px; }
-.content_layout ol { margin-left: 20px; font-size: 13px; }
-
-.chapter_progress { width: 100%; }
-.chapter_progress tr { border: none; }
-.chapter_progress td { padding: 0; margin: 0; }
-.chapter_progress td a { display: block; width: 100%; height: 20px; background: #ddd; border: 1px solid #fff; }
 
 
 /* BOOK LISTS
@@ -265,169 +238,3 @@ body.list_detail #comments { margin-top: 40px; }
 
 
 
-/* LIST ITEMS
--------------------------------------------------------------- */
-
-/* NOTE */
-.list .note { overflow: hidden; }
-.list .note a.cover { position: relative; float: left; display: block; margin: 0 15px 10px 0; padding: 0; }
-.list .note a.cover img { display: block; }
-.list .note a.cover img.avatar { position: absolute; right: -3px; bottom: -3px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.list .note a.avatar { float: left; display: block; margin: 0 15px 10px 0; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.list .note .object { float: left; padding-bottom: 10px; width: 495px; }
-.list .note .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
-.list .note .object p small { font-size: 13px; font-style: italic; color: #777; }
-.list .note .object p small a { color: #777; }
-.list .note .object p small a:hover { color: #2598db; text-decoration: underline; }
-.list .note .object p .more { display: inline-block; margin: 0 2px -4px 2px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
-.list .note .object p .more:hover { background-position: 0 -14px; }
-.list .note .object p.header { font-weight: bold; }
-.list .note .actions { list-style: none; padding: 0; margin-left: 20px; float: left; width: 15px; }
-.list .note .actions a { display: block; margin-bottom: 5px; width: 15px; height: 15px; overflow: hidden; text-indent: -1000px; }
-.list .note .actions .favorite a { background: url(../images/star.gif) 0 -15px no-repeat; }
-.list .note .actions .favorite a.favorited,
-.list .note .actions .favorite a:hover { background-position: 0 -30px; }
-.list .note .actions .comment a { background: url(../images/comment.gif) no-repeat; }
-.list .note .actions .comment a:hover { background-position: 0 -15px; }
-
-/* NOTE COMMENT */
-.list .note_comment { position: relative; overflow: hidden; }
-.list .note_comment .icon { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; width: 50px; height: 50px; background: url(../images/icons/notes.gif) no-repeat; }
-.list .note_comment .icon img.avatar { position: absolute; top: 28px; left: 28px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.list .note_comment .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #eee; }
-.list .note_comment .object { float: left; padding-bottom: 10px; width: 530px; }
-.list .note_comment .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
-.list .note_comment .object p small { font-size: 13px; font-style: italic; color: #777; }
-.list .note_comment .object p small a { color: #777; }
-.list .note_comment .object p small a:hover { color: #2598db; text-decoration: underline; }
-.list .note_comment .object p small a.edit,
-.list .note_comment .object p small a.remove { margin-left: 5px; font-family: helvetica, arial, sans-serif; font-size: 12px; font-style: normal; color: #2598db; }
-.list .note_comment .object p .more { display: inline-block; margin: 0 5px -2px 5px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
-.list .note_comment .object p .more:hover { background-position: 0 -14px; }
-
-/* LIST COMMENT */
-.list .list_comment { position: relative; overflow: hidden; }
-.list .list_comment .icon { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; width: 50px; height: 50px; background: url(../images/icons/lists.gif) no-repeat; }
-.list .list_comment .icon img.avatar { position: absolute; top: 28px; left: 28px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.list .list_comment .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #eee; }
-.list .list_comment .object { float: left; padding-bottom: 10px; width: 530px; }
-.list .list_comment .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
-.list .list_comment .object p small { font-size: 13px; font-style: italic; color: #777; }
-.list .list_comment .object p small a { color: #777; }
-.list .list_comment .object p small a:hover { color: #2598db; text-decoration: underline; }
-.list .list_comment .object p small a.edit,
-.list .list_comment .object p small a.remove { margin-left: 5px; font-family: helvetica, arial, sans-serif; font-size: 12px; font-style: normal; color: #2598db; }
-.list .list_comment .object p .more { display: inline-block; margin: 0 5px -2px 5px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
-.list .list_comment .object p .more:hover { background-position: 0 -14px; }
-
-/* WALL COMMENT */
-.list .wall_comment { position: relative; overflow: hidden; }
-.list .wall_comment .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #ddd; }
-.list .wall_comment .avatar2 { position: absolute; top: 28px; left: 28px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.list .wall_comment .avatar2 img { display: block; }
-.list .wall_comment .object { float: left; padding-bottom: 10px; width: 530px; }
-.list .wall_comment .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
-.list .wall_comment .object p small { font-size: 13px; font-style: italic; color: #777; }
-.list .wall_comment .object p small a { color: #777; }
-.list .wall_comment .object p small a:hover { color: #2598db; text-decoration: underline; }
-.list .wall_comment .object p small a.reply,
-.list .wall_comment .object p small a.edit,
-.list .wall_comment .object p small a.remove { margin-left: 5px; font-family: helvetica, arial, sans-serif; font-size: 12px; font-style: normal; color: #2598db; }
-.list .wall_comment .object p .more { display: inline-block; margin: 0 5px -2px 5px; width: 24px; height: 14px; background: url(../images/more.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
-.list .wall_comment .object p .more:hover { background-position: 0 -14px; }
-
-/* PAGE */
-.list .page { overflow: hidden; }
-.list .page .cover { position: relative; float: left; display: block; margin: 0 15px 10px 0; padding: 0; }
-.list .page .cover img { display: block; }
-.list .page .cover img.avatar { position: absolute; right: -3px; bottom: -3px; display: block; padding: 3px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.list .page .object { float: left; padding-bottom: 10px; width: 531px; }
-.list .page .object .progress { float: right; margin: 0 35px 0 0; width: 200px; height: 21px; border: 1px solid #ddd; font-size: 11px; line-height: 20px; -webkit-border-radius: 11px; -moz-border-radius: 11px; }
-.list .page .object .progress .current_page { min-width: 13%; max-width: 99%; height: 19px; background-color: #bbb; -webkit-border-radius: 9px; -moz-border-radius: 9px; }
-.list .page .object .description { float: left; margin: 0; width: 280px; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 20px; }
-.list .page .object .description small { white-space: nowrap; font-size: 13px; font-style: italic; color: #777; }
-.list .page .object .description small a { color: #777; }
-.list .page .object .description small a:hover { color: #2598db; text-decoration: underline; }
-.list .finished_book .object { background: url(../images/icons/finished.gif) 510px 0 no-repeat; }
-
-/* BOOK */
-.list .book .object .info { width: 400px; }
-.list .book .object .info h4,
-.list .book .object .info p.authors { font-family: Palatino, Georgia, Times, serif; font-size: 14px; line-height: 20px; }
-.list .book .object .info .progress { margin-top: 5px; width: 370px; height: 21px; line-height: 21px; -webkit-border-radius: 11px; -moz-border-radius: 11px; }
-.list .book .object .info .progress .current_page { min-width: 7%; height: 19px; line-height: 19px; -webkit-border-radius: 9px; -moz-border-radius: 9px; }
-.list .book .object .info .rating { margin-top: 5px; }
-.list .book .object .book_editions { margin-bottom: 10px; padding: 3px 10px; border: 1px solid #ddd; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
-.list .book .object .book_editions h3 { margin-bottom: 2px; padding: 0; font-size: 13px; line-height: 15px; color: #777; }
-.list .book .object .book_editions h3:hover { cursor: pointer; }
-.list .book .object .book_editions .book_edition_list { margin-top: 10px; display: none; }
-.list .book .object .book_editions .book_edition_list .book_edition { position: relative; margin-bottom: 10px; border-bottom: 1px solid #eee; zoom: 1; }
-.list .book .object .book_editions .book_edition_list .book_edition:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
-.list .book .object .book_editions .book_edition_list .book_edition .cover { float: left; display: block; width: 50px; }
-.list .book .object .book_editions .book_edition_list .book_edition .info { float: left; width: 180px; }
-.list .book .object .book_editions .book_edition_list .book_edition_last { border: none; }
-
-/* BOOK ADD */
-.list .book_add { overflow: hidden; }
-.list .book_add a.cover { position: relative; float: left; display: block; margin: 0 15px 10px 0; padding: 0; }
-.list .book_add a.cover img { display: block; width: 48px; }
-.list .book_add a.cover img.avatar { position: absolute; right: -3px; bottom: -3px; display: block; padding: 3px; width: 25px; background: #ddd; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.list .book_add .object { float: left; padding-bottom: 10px; width: 531px; }
-.list .book_add .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
-.list .book_add .object p small { font-size: 13px; font-style: italic; color: #777; }
-.list .book_add .object p small a { color: #777; }
-.list .book_add .object p small a:hover { color: #2598db; text-decoration: underline; }
-
-.book_add_grid:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
-.book_add_grid .book_add { position: relative; float: left; margin-right: 20px; width: 100px; height: 160px; }
-.book_add_grid .book_add a.cover { position: absolute; bottom: 0; }
-.book_add_grid .book_add a.cover img { width: auto; }
-.book_add_grid .book_add .object { display: none; }
-
-/* BOOK LIST */
-.list .book_list { overflow: hidden; }
-.list .book_list .avatar { float: left; display: block; margin: 0 10px 10px 0; padding: 3px; background: #eee; }
-.list .book_list .object { float: left; padding-bottom: 10px; width: 530px; }
-.list .book_list .object h4 { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; font-weight: bold; }
-.list .book_list .object h4 small { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; }
-.list .book_list .object p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
-.list .book_list .object p small { font-size: 13px; font-style: italic; color: #777; }
-.list .book_list .object p small a { color: #777; }
-.list .book_list .object p small a:hover { color: #2598db; text-decoration: underline; }
-
-/* BOOK LIST BOOK */
-.list .book_list_book .object .info { padding-bottom: 10px; width: 400px; }
-.list .book_list_book .object .info p { margin-bottom: 0; font-family: Palatino, Georgia, Times, serif; font-size: 15px; line-height: 22px; }
-
-
-/* BOOK LIST/GRID
--------------------------------------------------------------- */
-.book_grid { overflow: hidden; }
-.book_grid .book { float: left; margin-right: 20px; }
-.book_grid .book .object { position: relative; padding: 0; width: 100px; height: 200px; border: none; -webkit-border-radius: 0; -moz-border-radius: 0; }
-.book_grid .book .object .cover { position: absolute; width: auto; bottom: 15px; left: 0; }
-.book_grid .book .object .cover img { width: auto; }
-.book_grid .book .object h3, .book_grid .item .object h4, .book_grid .item .object p.authors { display: none; }
-.book_grid .book .object .info { position: absolute; bottom: 0; left: 0; width: 100px; }
-.book_grid .book .object .info .progress { width: 98px; height: 12px; overflow: hidden; -webkit-border-radius: 7px; -moz-border-radius: 7px; }
-.book_grid .book .object .info .progress .current_page { min-width: 13%; height: 10px; text-indent: 1000px; -webkit-border-radius: 5px; -moz-border-radius: 5px; }
-.book_grid .book .object .info .rating { margin: -27px 0 0 8px; }
-.book_grid .book .object .book_status { display: none; }
-.book_grid .book .object p.buy { top: -25px; right: 0px; width: 100px;}
-
-
-/* SIGNUP 
--------------------------------------------------------------- 
-body.signup #header { position: relative; top: 0; height: 200px; }
-
-body.signup #body { margin: 20px auto 0 auto; }
-
-body.signup .content_wrapper { margin-bottom: 20px; width: 980px; -webkit-border-radius: 10px; -moz-border-radius: 10px;  }
-body.signup .content_wrapper .join_us { float: left; padding: 20px; width: 370px; }
-body.signup .content_wrapper .join_us #signup_form { margin-bottom: 58px; }
-body.signup .content_wrapper .join_us table th { width: 110px; }
-body.signup .content_wrapper .join_us button { width: 80px; }
-
-body.signup .content_wrapper .activity { float: left; padding: 20px; width: 480px; }
-body.signup .content_wrapper .activity .note_list .note .object { width: 400px; }
-*/
