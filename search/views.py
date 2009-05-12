@@ -101,7 +101,7 @@ def solve(request, json=False, record_search=True):
         if clues and ' ' in clues and ',' not in clues:
             clues = clues.replace(' ',', ')
         clues = [x.strip() for x in clues.split(',') 
-                 if x.strip() and x.strip().lower() not in STOPWORDS]
+                 if x.strip() and x.strip().lower() not in STOPWORDS and not x.count(' ')]
         
         language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
         
