@@ -1,0 +1,135 @@
+{% extends base_template %}
+{% load i18n %}
+{% load highlighter %}
+{% load django_slimmer %}
+
+{% block extracss %}
+<style type="text/css">
+input#id_slots { font-family:Courier, "Courier New", Mono; font-size:120%; letter-spacing:4px;}
+#results span {
+  font-family:"courier new",courier; font-size:120%; letter-spacing:1px;
+}
+span.match { font-weight:bold; background-color:#ccc;}
+</style>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+function __clean_slots(slots) {
+  slots = slots.toUpperCase();
+  slots = slots.replace(' ','_');
+  slots = slots.replace('*','_');
+  if (/\d/.test(slots)) {
+     slots = slots.replace(/\d/, '');
+     alert("Only alphabetic characters allowed");
+  }
+  if (slots.length > 6) 
+    slots = slots.substr(0, 6);
+  if (slots.length < 6)
+    $('#id_submit').attr('disabled','disabled');
+  else if (slots.length == 6)
+    $('#id_submit').removeAttr('disabled');
+  return slots;
+}
+
+var _original_document_title = null;
+
+function __update_document_title(result) {
+   if (_original_document_title)
+      document.title = result + " - " + $.trim(document.title.split('-')[1]);
+   else {
+      _original_document_title = document.title;
+      document.title = result + " - " + $.trim(document.title.split('-')[0]);
+   }
+}
+
+
+$(function() {
+  $('#id_slots').bind('keyup', function() {
+    this.value = __clean_slots(this.value);
+  });
+  if (!$('#id_slots').val())
+    $('#id_slots')[0].focus();
+    
+  if ($('#match_text').text())
+    __update_document_title($('#match_text').text());
+    //console.log($('#match_text').text());
+});
+</script>
+{% endblock %}
+
+
+{% block pagetitletagline %}{% trans "helps you win at Word Whomp" %}{% endblock %}
+{% block pagetitle %}{% trans "Word Whomp" %}{% endblock %}
+
+{% block main %}
+
+<form action="." id="simple">
+
+<label>{% trans "6 known letters" %}:</label><br/>
+{{ form.slots.errors }}
+{{ form.slots }}
+
+
+{{ form.language }}
+
+  <input type="submit" id="id_submit"
+   {% if result %}
+   value="{% trans "List again" %}"
+   {% else %}
+   value="{% trans "List" %}"
+   {% endif %}
+  />
+  
+{% if not result and form.errors %}
+<br/>
+<a href="." id="clear-search">{% trans "clear search" %}</a>
+{% endif %}
+
+
+</form>
+
+{% if result %}
+<p>
+  <strong id="match_text">{{ result.match_text }}</strong>
+  &nbsp;
+  <a href="." id="clear-search">{% trans "clear search" %}</a>
+</p>
+  <p id="results">
+  {% for L, words in result.groups %}
+    <strong>{{ L }}</strong><br/>
+    {% for each in words %}
+     {{ each.word }}<br/>
+    {% endfor %}
+  {% endfor %}
+  </p>
+  
+{% else %}
+
+{% comment %}
+{% if show_example_search %}
+<br/>
+
+<div id="for-example">
+<p>{% blocktrans %}
+Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. 
+Enter the length of the word and fill in the known letters.
+{% endblocktrans %}</p>
+
+{% ifequal request.LANGUAGE_CODE "sv" %}
+<p>Till exempel, <a href="/simple/?slots=KO__O_D">vilket ord b&ouml;rjar p&auml; KO, femte bokstaven O och slutar p&auml; bokstaven D?</a>
+{% else %}
+<p>For example, <a href="/simple/?slots=C_O____RD">what's
+a 9 letter word that starts with C, third letter O and ends with RD?</a>
+{% endifequal %}
+</div>
+{% endif %}
+{% endcomment %}
+
+
+{% endif %}
+
+
+
+
+{% endblock %}

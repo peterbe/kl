@@ -27,6 +27,7 @@ from django.conf import settings
 
 from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
+from forms import WordWhompForm
 from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, print_sql
 from morph_en import variations as morph_variations
 from data import add_word_definition
@@ -1494,3 +1495,136 @@ def get_canonical_url(url):
     if netloc in settings.CANONICAL_DOMAINS:
         return url.replace(netloc, 
                            settings.CANONICAL_DOMAINS[netloc])
+
+
+
+def word_whomp(request, record_search=False):
+    if request.GET.get('slots'):
+        
+        # By default we are set to record the search in our stats
+        # This can be overwritten by a CGI variable called 'r'
+        # E.g. r=0 or r=no
+        if request.GET.get('r'):
+            record_search = niceboolean(request.GET.get('r'))
+        
+        form = WordWhompForm(request.GET)
+        if form.is_valid():
+            
+            language = form.cleaned_data.get('language')
+            if not language:
+                language = request.LANGUAGE_CODE
+                
+            slots = form.cleaned_data['slots']
+            slots = slots.replace('.', ' ').replace('*', ' ').replace('_',' ')
+            slots = list(slots)
+            length = len(slots)
+            
+            search_results = [] # the final simple list that is sent back
+            
+            assert length == len(slots)
+            
+            # find some alternatives
+            search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
+            cache_key = '_word_whomp_%s_%s' % (search, language)
+            cache_key = cache_key.replace(' ','_')
+            
+            alternatives = cache.get(cache_key)
+            if alternatives is None:
+                alternatives = _find_word_whomps(slots[:length], language)
+                cache.set(cache_key, alternatives, ONE_DAY)
+                
+            alternatives_count = len(alternatives)
+            alternatives_truncated = False
+                
+            result = dict(length=length,
+                        search=search,
+                        word_count=alternatives_count,
+                        alternatives_truncated=alternatives_truncated,
+                        )
+            search_results.extend([SearchResult(each.word,
+                                                definition=each.definition)
+                                for each in alternatives])
+            
+            match_points = None
+            match_points = []
+                
+            result['words'] = []
+            for search_result in search_results:
+                v = dict(word=search_result.word)
+                if search_result.definition:
+                    v['definition'] = search_result.definition
+                result['words'].append(v)
+                
+            result['groups'] = []
+            for length in list(set([len(x['word']) for x in result['words']])):
+                group = []
+                result['groups'].append((length,
+                                         [x for x in result['words']
+                                          if len(x['word'])==length
+                                         ]))
+            #for length in (3,4,5,6):
+                
+            
+            if alternatives_count == 1:
+                result['match_text'] = _("1 match found")
+            elif alternatives_count:
+                if alternatives_truncated:
+                    result['match_text'] = _("%(count)s matches found but only showing first 100")\
+                    % dict(count=alternatives_count)
+                else:
+                    result['match_text'] = _("%(count)s matches found") % \
+                    dict(count=alternatives_count)
+            else:
+                result['match_text'] = _("No matches found unfortunately :(")
+                
+            found_word = None
+            if len(search_results) == 1:
+                try:
+                    found_word = Word.objects.get(word=search_results[0].word, 
+                                                language=language)
+                except Word.DoesNotExist:
+                    # this it was probably not from the database but
+                    # from the wordnet stuff
+                    found_word = None
+                    
+            if record_search:
+                _record_search(search,
+                            user_agent=request.META.get('HTTP_USER_AGENT',''),
+                            ip_address=request.META.get('REMOTE_ADDR',''),
+                            found_word=found_word,
+                            language=language,
+                            search_type="simple")
+                
+            request.session['has_searched'] = True
+    
+        
+    else:
+        language = request.LANGUAGE_CODE
+        form = WordWhompForm(initial={'language':language})
+        
+        show_example_search = not bool(request.session.get('has_searched'))
+        
+    return _render('word-whomp.html', locals(), request)
+
+def is_list_subset(subset, all):
+    for each in subset:
+        if each in all:
+            all.remove(each)
+        else:
+            return False
+    return True
+
+def _find_word_whomps(letters, language, skip_names=True):
+    keep = []
+    letters = [x.lower() for x in letters]
+    for length in (3, 4, 5, 6):
+        for word in Word.objects.filter(length=length, language=language):
+            # if the word is a name, skip it
+            if skip_names and word.word[0].isupper() and word.word[1:].islower():
+                continue
+            these_letters = list(word.word.lower())
+                
+            if is_list_subset(these_letters, letters[:]):
+                keep.append(word)
+
+    return keep

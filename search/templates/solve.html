@@ -102,8 +102,12 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 {% endif %}
 
 <p>&nbsp;</p>
-<p><strong>{% trans "New!" %}</strong> 
-{% blocktrans %}Try the <a href="/simple/">simple inferface</a>.{% endblocktrans %}
+<p>
+{% blocktrans %}Try the <a href="/simple/">simple inferface</a>{% endblocktrans %}
+<br/>
+
+<strong>{% trans "New!" %}</strong>
+<a href="/word-whomp/">{% trans "Word Whomp" %}</a>
 </p>
 
 {% endblock %}

@@ -87,7 +87,24 @@ class SimpleSolveForm(forms.Form):
             raise forms.ValidationError(_(u"Must pass at least 1 character"))
         return slots
     
+class WordWhompForm(SimpleSolveForm):
+    slots = forms.CharField(max_length=7,
+                            widget=forms.widgets.TextInput(attrs={'size':7}))
+#    language = forms.CharField(max_length=6, required=False,
+#                              widget=forms.widgets.HiddenInput())
+    
+    
+    def clean_slots(self):
+        slots = super(WordWhompForm, self).clean_slots()
+        if not len(slots) == 6:
+            raise forms.ValidationError(_(u"Must be exactly 6 characters"))
+        return slots
+    
 
+
+    
+    
+    
 
     
     
