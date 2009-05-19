@@ -3,6 +3,8 @@
 {% load highlighter %}
 {% load django_slimmer %}
 
+{% block title %}{% trans "Word Whomp solver and tips" %}{% endblock %}
+
 {% block extracss %}
 <style type="text/css">
 input#id_slots { font-family:Courier, "Courier New", Mono; font-size:120%; letter-spacing:4px;}
@@ -65,6 +67,9 @@ $(function() {
 {% block main %}
 
 <form action="." id="simple">
+<img style="float:right"
+     src="{% staticfile "/images/word-whomp.gif" %}"
+     alt="{% trans "Word Whomp" %}" />
 
 <label>{% trans "6 known letters" %}:</label><br/>
 {{ form.slots.errors }}
