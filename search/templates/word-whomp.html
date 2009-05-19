@@ -104,7 +104,7 @@ $(function() {
   {% for L, words in result.groups %}
     <strong>{{ L }}</strong><br/>
     {% for each in words %}
-     {{ each.word }}<br/>
+     {{ each.word|upper }}<br/>
     {% endfor %}
   {% endfor %}
   </p>

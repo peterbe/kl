@@ -88,10 +88,8 @@ class SimpleSolveForm(forms.Form):
         return slots
     
 class WordWhompForm(SimpleSolveForm):
-    slots = forms.CharField(max_length=7,
-                            widget=forms.widgets.TextInput(attrs={'size':7}))
-#    language = forms.CharField(max_length=6, required=False,
-#                              widget=forms.widgets.HiddenInput())
+    slots = forms.CharField(max_length=6,
+                            widget=forms.widgets.TextInput(attrs={'size':8}))
     
     
     def clean_slots(self):
