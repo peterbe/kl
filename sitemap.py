@@ -93,6 +93,9 @@ class CustomSitemap(Sitemap):
                      ),
                 Page("/statistics/uniqueness/",
                      changefreq="weekly",
+                     ),
+                Page("/word-whomp/",
+                     changefreq="weekly",
                      ),                
                 ]
         

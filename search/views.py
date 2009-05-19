@@ -30,7 +30,7 @@ from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveF
 from forms import WordWhompForm, AddWordForm
 from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, print_sql
 from morph_en import variations as morph_variations
-from data import add_word_definition
+from data import add_word_definition, ip_to_coordinates
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -1657,3 +1657,50 @@ def add_word(request):
     
     return _render('add-word.html', locals(), request)
     
+    
+def crossing_the_world(request):
+    now = datetime.datetime.now()
+    # 10 min ago
+    since = now - datetime.timedelta(minutes=10)
+    
+    searches = _get_recent_located_searches(since=since)
+    GOOGLEMAPS_API_KEY = settings.GOOGLEMAPS_API_KEY
+    
+    return _render('crossing-the-world.html', locals(), request)
+
+def crossing_the_world_json(request):
+    how_many = request.GET.get('how_many', 10)
+    since = int(request.GET.get('since'))
+    since = datetime.datetime.fromtimestamp(float(since)/1000)
+    languages = request.GET.getlist('languages')
+    
+    data = list(_get_recent_located_searches(languages=languages,
+                                             since=since,
+                                             how_many=int(how_many)))
+    
+    return _render_json(data)
+    
+    
+    
+def _get_recent_located_searches(languages=None, how_many=10, since=None):
+    qs = Search.objects.all()
+    if languages:
+        qs = qs.filter(language__in=languages)
+    if since:
+        qs = qs.filter(add_date__gt=since)
+        
+    for search in qs.order_by('-add_date'):
+        if search.user_agent.count('Googlebot'):
+            continue
+        location = ip_to_coordinates(search.ip_address)
+        if location:
+            print "location", location
+            if location.get('country_code') == 'XX':
+                continue
+            if location.get('coordinates'):
+                if search.found_word:
+                    print search.found_word
+                yield dict(location,
+                        language=search.language,
+                        search_word=search.search_word)
+                        

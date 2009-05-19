@@ -133,6 +133,9 @@ CANONICAL_DOMAINS = {
     'en-us.crosstips.org':'crosstips.org',
     }
 
+GOOGLEMAPS_API_KEY = open('default_googlemaps_api.key').read()
+
+
 # must be last
 try:
     from settings_local import *

@@ -1,0 +1,39 @@
+{% extends base_template %}
+{% load i18n %}
+{% load highlighter %}
+{% load django_slimmer %}
+
+{% block title %}{% trans "Crossing the world" %}{% endblock %}
+
+{% block pagetitle %}{% trans "Crossing the world" %}{% endblock %}
+{% block pagetitletagline %}{% trans "Crosstips searches across the globe" %}{% endblock %}
+
+{% block content_sidebar_outer %}{% endblock %}
+
+
+{% block extrajs %}
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLEMAPS_API_KEY }}"
+        type="text/javascript"></script>
+<script type="text/javascript" src="/javascript/crossing-the-world.js">
+</script>
+            
+{% endblock %}
+
+{% block main %}
+<div id="map_canvas" style="width: 780px; height: 600px"></div>
+
+
+<form action="">
+<input type="hidden" name="start_place" id="id_start_place"
+{% ifequal request.LANGUAGE_CODE 'en-gb' %}
+value="uk"
+{% else %}
+{% ifequal request.LANGUAGE_CODE 'en-us' %}
+value="us"
+{% endifequal %}
+{% endifequal %}
+/>
+</form>
+
+
+{% endblock %}

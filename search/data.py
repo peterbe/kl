@@ -1,9 +1,12 @@
 # python
+from urllib import urlopen
 from random import choice
 from string import Template
+from cStringIO import StringIO
 
 # app
 from models import Word
+from utils import cache as cache_function
 
 def add_word_definition(word, definition, language=None, 
                         clever_english_duplicate=True):
@@ -149,6 +152,74 @@ def get_amazon_advert(geo):
         
         return html
     
+@cache_function(3600) # seconds    
+def ip_to_coordinates(ip_address):
+    """return a dict of information with these possible keys:
+    
+    * place_name
+    * country_name
+    * country_code
+    * coordinates
+    
+    """
+    xml = urlopen('http://api.hostip.info/?ip=%s' % ip_address).read()
+    
+    test_xml="""<HostipLookupResultSet version="1.0.0" xmlns="http://www.hostip.info/api" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.hostip.info/api/hostip-1.0.0.xsd">
+ <gml:description>This is the Hostip Lookup Service</gml:description>
+ <gml:name>hostip</gml:name>
+ <gml:boundedBy>
+  <gml:Null>inapplicable</gml:Null>
+ </gml:boundedBy>
+ <gml:featureMember>
+  <Hostip>
+   <gml:name>Sugar Grove, IL</gml:name>
+   <countryName>UNITED STATES</countryName>
+   <countryAbbrev>US</countryAbbrev>
+   <!-- Co-ordinates are available as lng,lat -->
+   <ipLocation>
+    <gml:PointProperty>
+     <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#4326">
+      <gml:coordinates>-88.4588,41.7696</gml:coordinates>
+     </gml:Point>
+    </gml:PointProperty>
+   </ipLocation>
+  </Hostip>
+ </gml:featureMember>
+</HostipLookupResultSet>
+    """.strip()
+    #'" # jed
+    
+    if isinstance(xml, unicode):
+        xml = xml.encode('utf8')
+    
+    from lxml import etree
+    parser = etree.XMLParser()
+    #print xml
+    tree = etree.parse(StringIO(xml), parser)
+    root = tree.getroot()
+    def GML(tag_name):
+        return '{http://www.opengis.net/gml}' + tag_name
+    def NS(tag_name):
+        return '{http://www.hostip.info/api}' + tag_name
+    
+    info = {}
+    
+    for item in root.getiterator():
+        if item.tag == GML('name'):
+            info['place_name'] = item.text
+        elif item.tag == NS('countryName'):
+            info['country_name'] = item.text.title()
+        elif item.tag == NS('countryAbbrev'):
+            info['country_code'] = item.text
+        elif item.tag == GML('coordinates'):
+            info['coordinates'] = [round(float(x), 4) for x in item.text.split(',')]
+        #else:
+        #    print repr(item.tag)
+    
+    return info
+    
+    
+
     
     
     

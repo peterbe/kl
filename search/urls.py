@@ -23,5 +23,7 @@ urlpatterns = patterns('',
     url(r'^word-definition-lookup/$', word_definition_lookup),
     url(r'^word-whomp/$', word_whomp),
     url(r'^add-word/$', add_word),
+    url(r'^crossing-the-world/$', crossing_the_world),
+    url(r'^crossing-the-world.json$', crossing_the_world_json),
     
 )
