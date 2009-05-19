@@ -1379,7 +1379,7 @@ def searches_summary_lookup_definitions(request, year, month, atleast_count=1):
                             lookup_definitions=True)
 
 @cache_page(60 * 60 * 24) # 24 hours
-def searches_summary(request, year, month, atleast_count=1,
+def searches_summary(request, year, month, atleast_count=2,
                      lookup_definitions=False):
     
     first_search_date = Search.objects.all().order_by('add_date')[0].add_date
