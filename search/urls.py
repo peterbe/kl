@@ -22,5 +22,6 @@ urlpatterns = patterns('',
         searches_summary_lookup_definitions),
     url(r'^word-definition-lookup/$', word_definition_lookup),
     url(r'^word-whomp/$', word_whomp),
+    url(r'^add-word/$', add_word),
     
 )

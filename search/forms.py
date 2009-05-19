@@ -100,12 +100,25 @@ class WordWhompForm(SimpleSolveForm):
             raise forms.ValidationError(_(u"Must be exactly 6 characters"))
         return slots
     
+from django.forms.widgets import SelectMultiple
 
+from django.conf import settings
+class AddWordForm(forms.Form):
+    word = forms.CharField(max_length=30,
+                           widget=forms.widgets.TextInput(attrs={'size':30}))
 
+    languages = forms.MultipleChoiceField(choices=settings.LANGUAGES)
     
-    
-    
-
-    
-    
+    def clean(self):
+        from search.models import Word
+        cleaned_data = self.cleaned_data
+        for language in cleaned_data['languages']:
+            try:
+                Word.objects.get(word__iexact=cleaned_data['word'], language=language.lower())
+                raise forms.ValidationError("Word already exists in %s" % language)
+            except Word.DoesNotExist:
+                pass # good!
+            
+        return cleaned_data
+        
     

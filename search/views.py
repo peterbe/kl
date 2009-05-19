@@ -27,7 +27,7 @@ from django.conf import settings
 
 from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
-from forms import WordWhompForm
+from forms import WordWhompForm, AddWordForm
 from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, print_sql
 from morph_en import variations as morph_variations
 from data import add_word_definition
@@ -460,12 +460,10 @@ def _find_alternative_synonyms(word, slots, language, request=None):
         if len(word) == length:
             return filter_match(word)
     
-    
     for variation in _get_variations(word, greedy=True, request=request):
         if test(variation):
             yield variation
         
-    
 
 
 def variationstester(request):
@@ -506,6 +504,9 @@ def word_definition_lookup(request):
             if not definition:
                 definition = _get_word_definition(word_object.word, 
                                                   language=word_object.language)
+                if not definition:
+                    definition = _get_word_definition_google(word_object.word,
+                                                             language=word_object.language)
                 
                 if definition:
                     add_word_definition(word_object.word,
@@ -1628,3 +1629,31 @@ def _find_word_whomps(letters, language, skip_names=True):
                 keep.append(word)
 
     return keep
+
+@login_required
+def add_word(request):
+    if request.method == "POST":
+        form = AddWordForm(request.POST)
+        if form.is_valid():
+            word = form.cleaned_data.get('word')
+            languages = form.cleaned_data.get('languages')
+            languages = [x.lower() for x in languages]
+            for language in languages:
+                Word.objects.create(word=word, language=language,
+                                   )
+            
+            return HttpResponseRedirect('/add-word/?done=1&word=%s' % word.encode('utf8'))
+            
+    else:
+        initial_languages = []
+        for code, label in settings.LANGUAGES:
+            if code.lower() == request.LANGUAGE_CODE.lower():
+                initial_languages.append(code)
+        word = request.GET.get('word', u'')
+        form = AddWordForm(initial={'languages':initial_languages,
+                                    'word': word})
+        
+    done = request.GET.get('done', False)
+    
+    return _render('add-word.html', locals(), request)
+    

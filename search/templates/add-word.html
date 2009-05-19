@@ -1,0 +1,31 @@
+{% extends base_template %}
+{% load i18n %}
+{% load highlighter %}
+{% load django_slimmer %}
+
+{% block extracss %}
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}
+
+
+{% block main %}
+
+{% if done and word %}
+<p><a href="/word-definition-lookup?word={{ word }}&language={{ request.LANGUAGE_CODE }}">Look up definition for
+<strong>{{ word }}</strong> now</a></p>
+
+{% endif %}
+
+<form action="." id="simple" method="post">
+<table>
+{{ form }}
+</table>
+<br/>
+<input type="submit" value="Add" /></form>
+
+
+
+
+{% endblock %}
