@@ -1674,10 +1674,11 @@ def crossing_the_world_json(request):
     since = datetime.datetime.fromtimestamp(float(since)/1000)
     languages = request.GET.getlist('languages')
     
-    data = list(_get_recent_located_searches(languages=languages,
+    items = list(_get_recent_located_searches(languages=languages,
                                              since=since,
                                              how_many=int(how_many)))
     
+    data = dict(items=items, count=len(items))
     return _render_json(data)
     
     
@@ -1698,9 +1699,11 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
             if location.get('country_code') == 'XX':
                 continue
             if location.get('coordinates'):
+                item = dict(location,
+                            language=search.language,
+                            search_word=search.search_word,
+                           )
                 if search.found_word:
-                    print search.found_word
-                yield dict(location,
-                        language=search.language,
-                        search_word=search.search_word)
+                    item = dict(item, found_word=search.found_word.word)
+                yield item
                         
