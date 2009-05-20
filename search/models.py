@@ -61,3 +61,31 @@ class Search(models.Model):
         return self.search_word
     
     
+class IPLookup(models.Model):
+    
+    class Meta:
+        db_table = u'ip_lookups'
+        verbose_name_plural = u"IP Lookups"
+        
+    ip = models.CharField(max_length=15)
+    longitude = models.DecimalField(decimal_places=10, max_digits=14,
+                                    null=True, blank=True)
+    latitude = models.DecimalField(decimal_places=10, max_digits=14,
+                                   null=True, blank=True)
+    country_name = models.CharField(max_length=40)
+    place_name = models.CharField(max_length=60)
+    country_code = models.CharField(max_length=3)
+    add_date = models.DateTimeField('date added', default=datetime.datetime.now)
+    
+    def __unicode__(self):
+        if self.place_name and self.longitude and self.latitude:
+            return u"%s (%s:%s)" % (self.place_name, self.longitude, self.latitude)
+        elif self.place_name:
+            return self.place_name
+        else:
+            return self.country_code
+        
+    
+
+
+    

@@ -1,11 +1,16 @@
 # python
+import os
+import datetime
 from urllib import urlopen
 from random import choice
 from string import Template
 from cStringIO import StringIO
 
+# django
+from django.conf import settings
+
 # app
-from models import Word
+from models import Word, IPLookup
 from utils import cache as cache_function
 
 def add_word_definition(word, definition, language=None, 
@@ -152,8 +157,30 @@ def get_amazon_advert(geo):
         
         return html
     
-@cache_function(3600) # seconds    
+@cache_function(3600) # seconds
 def ip_to_coordinates(ip_address):
+    """return a dict of information with these possible keys:
+    
+    * place_name
+    * country_name
+    * country_code
+    * coordinates
+    
+    """
+    # free one
+    info = __hostip_ip_to_coordinates(ip_address)
+    if info and 'coordinates' in info:
+        print "HOSTIP.info!"
+        return info
+    
+    info = __geoip_ip_to_coordinates(ip_address)
+    if info and 'coordinates' in info:
+        print "GeoIP!"
+        return info
+    
+    return {}
+
+def __hostip_ip_to_coordinates(ip_address):
     """return a dict of information with these possible keys:
     
     * place_name
@@ -219,7 +246,67 @@ def ip_to_coordinates(ip_address):
     return info
     
     
-
+def __geoip_ip_to_coordinates(ip_address):
+    """return a dict of information with these possible keys:
+    
+    * place_name
+    * country_name
+    * country_code
+    * coordinates
+    
+    """
+    import GeoIP
+    try:
+        database_file = settings.GEO_LITE_CITY_DATABASE_FILE
+    except AttributeError:
+        database_file = os.path.expanduser('~/GeoLiteCity.dat')
+        
+    if not os.path.isfile(database_file):
+        import warnings
+        warnings.warn("GeoLiteCity database file %r does not exist" % database_file)
+        return {}
+    
+    gi = GeoIP.open(database_file, GeoIP.GEOIP_STANDARD)
+    data = gi.record_by_addr(ip_address)
+    info = {}
+    if 'country' in data:
+        info['country_name'] = data['country_name']
+    if 'city' in data:
+        info['place_name'] = data['city']
+    if 'longitude' in data and 'latitude' in data:
+        info['coordinates'] = (data['longitude'], data['latitude'])
+    if 'country_code' in data:
+        info['country_code'] = data['country_code']
+    return info
+        
+        
+        
+def save_ip_lookup(ip, location_data):
+    if not location_data['coordinates']:
+        raise ValueError("Must have coordinates")
+    
+    # do we already have it?
+    try:
+        lookup = IPLookup.objects.get(ip=ip)
+        # update the add_date
+        lookup.add_date = datetime.datetime.now()
+    except IPLookup.DoesNotExist:
+        lookup = IPLookup.objects.create(ip=ip)
+        
+    if location_data.get('place_name'):
+        lookup.place_name = location_data.get('place_name')
+    if location_data.get('country_name'):
+        lookup.country_name = location_data.get('country_name')
+    if location_data.get('country_code'):
+        lookup.country_code = location_data.get('country_code')
+        
+    longitude, latitude = location_data['coordinates'] # is this right???
+    lookup.longitude = str(round(longitude, 10))
+    lookup.latitude = str(round(latitude, 10))
+    
+    lookup.save()
+    
+    
     
     
     

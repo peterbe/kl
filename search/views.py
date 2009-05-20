@@ -30,7 +30,7 @@ from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveF
 from forms import WordWhompForm, AddWordForm
 from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, print_sql
 from morph_en import variations as morph_variations
-from data import add_word_definition, ip_to_coordinates
+from data import add_word_definition, ip_to_coordinates, save_ip_lookup
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -1699,11 +1699,15 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
             if location.get('country_code') == 'XX':
                 continue
             if location.get('coordinates'):
+                save_ip_lookup(search.ip_address, location)
                 item = dict(location,
                             language=search.language,
                             search_word=search.search_word,
                            )
                 if search.found_word:
                     item = dict(item, found_word=search.found_word.word)
+                    if search.found_word.definition:
+                        item = dict(item, found_word_definition=search.found_word.definition)
+                    
                 yield item
                         
