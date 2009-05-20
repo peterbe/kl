@@ -67,7 +67,7 @@ class IPLookup(models.Model):
         db_table = u'ip_lookups'
         verbose_name_plural = u"IP Lookups"
         
-    ip = models.CharField(max_length=15)
+    ip = models.CharField(max_length=15, unique=True, db_index=True)
     longitude = models.DecimalField(decimal_places=10, max_digits=14,
                                     null=True, blank=True)
     latitude = models.DecimalField(decimal_places=10, max_digits=14,
@@ -75,7 +75,8 @@ class IPLookup(models.Model):
     country_name = models.CharField(max_length=40)
     place_name = models.CharField(max_length=60)
     country_code = models.CharField(max_length=3)
-    add_date = models.DateTimeField('date added', default=datetime.datetime.now)
+    add_date = models.DateTimeField('date added', default=datetime.datetime.now,
+                                    db_index=True)
     
     def __unicode__(self):
         if self.place_name and self.longitude and self.latitude:
