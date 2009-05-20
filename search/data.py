@@ -167,17 +167,23 @@ def ip_to_coordinates(ip_address):
     * coordinates
     
     """
+    def _log(m):
+        open('/tmp/ip_to_coordinates.log','a').write(m)
+    _log("%s: " % ip_address.strip())
+    
     # free one
     info = __hostip_ip_to_coordinates(ip_address)
     if info and 'coordinates' in info:
+        _log("HOSTIP.info!\n")
         print "HOSTIP.info!"
         return info
     
     info = __geoip_ip_to_coordinates(ip_address)
     if info and 'coordinates' in info:
+        _log("GeoIP!\n")
         print "GeoIP!"
         return info
-    
+    _log("neither :(\n")
     return {}
 
 def __hostip_ip_to_coordinates(ip_address):
