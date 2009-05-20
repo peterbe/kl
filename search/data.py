@@ -288,6 +288,9 @@ def __geoip_ip_to_coordinates(ip_address):
         
         
 def save_ip_lookup(ip, location_data):
+    if isinstance(ip, unicode):
+        ip = ip.encode('utf-8')
+        
     if not location_data['coordinates']:
         raise ValueError("Must have coordinates")
     
@@ -298,6 +301,12 @@ def save_ip_lookup(ip, location_data):
         lookup.add_date = datetime.datetime.now()
     except IPLookup.DoesNotExist:
         lookup = IPLookup.objects.create(ip=ip)
+    except IPLookup.MultipleObjectsReturned:
+        # how did that happen?!
+        import warnings
+        warnings.warn("Multiple ip %r" % ip)
+        print "Multiple ip %r" % ip
+        lookup = IPLookup.objects.filter(ip=ip)[0]
         
     if location_data.get('place_name'):
         lookup.place_name = location_data.get('place_name')
