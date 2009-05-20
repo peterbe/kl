@@ -285,6 +285,7 @@ def __geoip_ip_to_coordinates(ip_address):
     
     if 'country_name' not in info:
         print data
+
     return info
         
         
