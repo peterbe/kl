@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'djangodblog',
     'django.contrib.flatpages',
     'django.contrib.sitemaps',
+    'rosetta',
                   
 )
 
