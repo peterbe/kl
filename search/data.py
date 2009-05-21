@@ -306,16 +306,16 @@ def __geoip_ip_to_coordinates(ip_address):
         raise UnicodeDecodeError('%r is not in %r' % (str_, encodings))
                 
     info = {}
-    if 'country' in data:
+    if data.get('country'):
         info['country_name'] = safe_unicodify(data['country'])
-    elif 'country_name' in data:
+    elif data.get('country_name'):
         info['country_name'] = safe_unicodify(data['country_name'])
         
-    if 'city' in data:
+    if data.get('city'):
         info['place_name'] = safe_unicodify(data['city'])
     if 'longitude' in data and 'latitude' in data:
         info['coordinates'] = (data['longitude'], data['latitude'])
-    if 'country_code' in data:
+    if data.get('country_code'):
         info['country_code'] = data['country_code']
     
     return info
