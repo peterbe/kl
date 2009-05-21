@@ -82,9 +82,9 @@ class IPLookup(models.Model):
         if self.place_name and self.longitude and self.latitude:
             return u"%s (%s:%s)" % (self.place_name, self.longitude, self.latitude)
         elif self.place_name:
-            return self.place_name
+            return "%s (no coordinates)" % self.place_name
         else:
-            return self.country_code
+            return "%s (no coordinates)" % self.country_code
         
     
 

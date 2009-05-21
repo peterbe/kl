@@ -135,6 +135,9 @@ CANONICAL_DOMAINS = {
 
 GOOGLEMAPS_API_KEY = open('default_googlemaps_api.key').read()
 
+import logging
+LOGGING_LOG_FILENAME = 'event.log'
+LOGGING_LEVEL = DEBUG and logging.DEBUG or logging.ERROR
 
 # must be last
 try:
@@ -144,3 +147,9 @@ except ImportError:
 
 # must exist
 HOME, SECRET_KEY, LANGUAGE_DOMAINS
+
+
+logging.basicConfig(filename=LOGGING_LOG_FILENAME,
+                    level=LOGGING_LEVEL,
+                   )
+

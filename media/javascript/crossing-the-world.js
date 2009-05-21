@@ -1,9 +1,15 @@
 
-var since = new Date().getTime();
-var interval = 3;
+var since = new Date().getTime() - 10*1000; // start 10 seconds ago
+var min_interval = 2;
+var interval = min_interval;
 $(function() {
    if (GBrowserIsCompatible()) {
       var map = new GMap2(document.getElementById("map_canvas"));
+      // map, satelite, hybrid
+      //var mapControl = new GMapTypeControl();
+      //map.addControl(mapControl);
+      map.addControl(new GLargeMapControl3D());
+      
       if ($('#id_start_place').val()=='uk')
           map.setCenter(new GLatLng(53.014783, -1.977539), 4); // uk
       else if ($('#id_start_place').val()=='us')
@@ -14,20 +20,13 @@ $(function() {
       var info_window;
       function plot_new_searches(since) {
          $.getJSON('/crossing-the-world.json', {since:since}, function(res) {
-            if (res.count >= 1) interval = 3;
+            if (res.count >= 1) interval = min_interval;
             else interval += 0.2;
             $.each(res.items, function(i, item) {
                if (item.coordinates) {
-                  var text = "Searched for '"+item.search_word.toUpperCase().replace(/ /g,'_')+"'";
-                  if (item.found_word) {
-                     text += "\nand found '" + item.found_word + "'!";
-                     if (item.found_word_definition) {
-                        text += "\n(which means: " + item.found_word_definition + ")";
-                     }
-                  }
                   map.panTo(new GLatLng(item.coordinates[1], item.coordinates[0]));
-                  info_window = map.openInfoWindow(new GLatLng(item.coordinates[1], item.coordinates[0]),
-						   document.createTextNode(text));
+                  info_window = map.openInfoWindowHtml(new GLatLng(item.coordinates[1], item.coordinates[0]),
+                                                       item.text_html);
                }
             });
          });

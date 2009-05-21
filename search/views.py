@@ -1683,23 +1683,39 @@ def crossing_the_world_json(request):
     
     
     
+def _set_text_html(item):
+    """set a key called 'text_html' that describes what the search was as a 
+    html string.
+    This is what is shown in the .openInfoWindowHtml() popup window.
+    """
+    text = ""
+    text += "Searched for %s letter word:<br/>" % len(item['search_word'])
+    text += "'<code>%s</code>'" % item['search_word'].upper().replace(' ','_')
+    if item.get('found_word'):
+        text += "<br/>and found '<code>%s</code>'!" % item['found_word'].upper()
+        if item.get('found_word_definition'):
+            text += '<br/>which means: <small><em>%s</em></small>' % \
+              item.get('found_word_definition')
+    item['text_html'] = text
+    
+    
 def _get_recent_located_searches(languages=None, how_many=10, since=None):
     qs = Search.objects.all()
     if languages:
         qs = qs.filter(language__in=languages)
     if since:
         qs = qs.filter(add_date__gt=since)
-        
+       
     for search in qs.order_by('-add_date'):
         if search.user_agent.count('Googlebot'):
             continue
+        
         location = ip_to_coordinates(search.ip_address)
         if location:
             print "location", location
             if location.get('country_code') == 'XX':
                 continue
             if location.get('coordinates'):
-                save_ip_lookup(search.ip_address, location)
                 item = dict(location,
                             language=search.language,
                             search_word=search.search_word,
@@ -1708,6 +1724,8 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
                     item = dict(item, found_word=search.found_word.word)
                     if search.found_word.definition:
                         item = dict(item, found_word_definition=search.found_word.definition)
+                _set_text_html(item)
+                    
                     
                 yield item
                         

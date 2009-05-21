@@ -1,4 +1,5 @@
 # python
+import logging
 import os
 import datetime
 from urllib import urlopen
@@ -156,7 +157,7 @@ def get_amazon_advert(geo):
         html = template.substitute(variables)
         
         return html
-    
+
 @cache_function(3600) # seconds
 def ip_to_coordinates(ip_address):
     """return a dict of information with these possible keys:
@@ -167,6 +168,22 @@ def ip_to_coordinates(ip_address):
     * coordinates
     
     """
+    
+    def decimal2float(x):
+        return float(x)
+    
+    # search for it here first
+    try:
+        lookup = IPLookup.objects.get(ip=ip_address)
+        return dict(place_name=lookup.place_name,
+                    country_name=lookup.country_name,
+                    country_code=lookup.country_code,
+                    coordinates=(decimal2float(lookup.longitude), decimal2float(lookup.latitude)),
+                    )
+    except IPLookup.DoesNotExist:
+        # continue below
+        pass
+    
     #def _log(m):
     #    open('/tmp/ip_to_coordinates.log','a').write(m)
     #_log("%s: " % ip_address.strip())
@@ -181,6 +198,8 @@ def ip_to_coordinates(ip_address):
     info = __geoip_ip_to_coordinates(ip_address)
     if info and 'coordinates' in info:
         #_log("GeoIP!\n")
+        print "INFO"
+        save_ip_lookup(ip_address, info)
         return info
     #_log("neither :(\n")
     return {}
@@ -272,20 +291,33 @@ def __geoip_ip_to_coordinates(ip_address):
         return {}
     
     gi = GeoIP.open(database_file, GeoIP.GEOIP_STANDARD)
-    data = gi.record_by_addr(ip_address)
+    try:
+        data = gi.record_by_addr(ip_address)
+    except SystemError:
+        logging.error("Unable to lookup %r" % ip_address)
+        return {}
+    
+    def safe_unicodify(str_, encodings=('utf8','latin1')):
+        for encoding in encodings:
+            try:
+                return unicode(str_, encoding)
+            except UnicodeDecodeError:
+                pass
+        raise UnicodeDecodeError('%r is not in %r' % (str_, encodings))
+                
     info = {}
     if 'country' in data:
-        info['country_name'] = data['country_name']
+        info['country_name'] = safe_unicodify(data['country'])
+    elif 'country_name' in data:
+        info['country_name'] = safe_unicodify(data['country_name'])
+        
     if 'city' in data:
-        info['place_name'] = data['city']
+        info['place_name'] = safe_unicodify(data['city'])
     if 'longitude' in data and 'latitude' in data:
         info['coordinates'] = (data['longitude'], data['latitude'])
     if 'country_code' in data:
         info['country_code'] = data['country_code']
     
-    if 'country_name' not in info:
-        print data
-
     return info
         
         
@@ -297,19 +329,7 @@ def save_ip_lookup(ip, location_data):
     if not location_data['coordinates']:
         raise ValueError("Must have coordinates")
     
-    # do we already have it?
-    try:
-        lookup = IPLookup.objects.get(ip=ip)
-        # update the add_date
-        lookup.add_date = datetime.datetime.now()
-    except IPLookup.DoesNotExist:
-        lookup = IPLookup.objects.create(ip=ip)
-    except IPLookup.MultipleObjectsReturned:
-        # how did that happen?!
-        import warnings
-        warnings.warn("Multiple ip %r" % ip)
-        print "Multiple ip %r" % ip
-        lookup = IPLookup.objects.filter(ip=ip)[0]
+    lookup, created = IPLookup.objects.get_or_create(ip=ip)
         
     if location_data.get('place_name'):
         lookup.place_name = location_data.get('place_name')
@@ -318,7 +338,7 @@ def save_ip_lookup(ip, location_data):
     if location_data.get('country_code'):
         lookup.country_code = location_data.get('country_code')
         
-    longitude, latitude = location_data['coordinates'] # is this right???
+    longitude, latitude = location_data['coordinates']
     lookup.longitude = str(round(longitude, 10))
     lookup.latitude = str(round(latitude, 10))
     
