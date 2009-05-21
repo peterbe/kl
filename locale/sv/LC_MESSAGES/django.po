@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-07 17:17+0100\n"
+"POT-Creation-Date: 2009-05-21 19:30+0100\n"
 "PO-Revision-Date: 2009-03-13 10:50+0100\n"
 "Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,15 +15,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: settings.py:115
+#: settings.py:116
 msgid "Swedish"
 msgstr "Svenska"
 
-#: settings.py:116
+#: settings.py:117
 msgid "British English"
 msgstr "Brittisk engelska"
 
-#: settings.py:117
+#: settings.py:118
 msgid "American English"
 msgstr "Amerikansk engelska"
 
@@ -39,25 +39,31 @@ msgstr ""
 msgid "Must pass at least 1 character"
 msgstr ""
 
-#: search/views.py:134 search/views.py:1087
-msgid "1 found"
+#: search/forms.py:98
+msgid "Must be exactly 6 characters"
+msgstr ""
+
+#: search/views.py:166 search/views.py:1295 search/views.py:1570
+#, fuzzy
+msgid "1 match found"
 msgstr "1 hittad"
 
-#: search/views.py:137 search/views.py:1090
-#, python-format
-msgid "%(count)s found but only showing first 100"
+#: search/views.py:169 search/views.py:1298 search/views.py:1573
+#, fuzzy, python-format
+msgid "%(count)s matches found but only showing first 100"
 msgstr "%(count)s hiddade men visar bara 100 första"
 
-#: search/views.py:140 search/views.py:1093
-#, python-format
-msgid "%(count)s found"
+#: search/views.py:172 search/views.py:1301 search/views.py:1576
+#, fuzzy, python-format
+msgid "%(count)s matches found"
 msgstr "%(count)s hiddade"
 
-#: search/views.py:143 search/views.py:1096
-msgid "None found unfortunately :("
+#: search/views.py:175 search/views.py:1304 search/views.py:1579
+#, fuzzy
+msgid "No matches found unfortunately :("
 msgstr "Inga hittade tyvärr :("
 
-#: search/views.py:810
+#: search/views.py:966
 #, fuzzy
 msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
@@ -74,76 +80,121 @@ msgstr "Sidoproblem :)"
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
 msgstr "Tyvärr gick nånting åt skogen. Förhoppningsvis fixas det snart."
 
-#: search/templates/base.html:8 search/templates/base.html.py:10
-#: search/templates/base.html:48 search/templates/mobile_base.html:8
+#: search/templates/base.html:14 search/templates/base.html.py:71
+#: search/templates/mobile_base.html:8
 msgid "helps you solve your crossword puzzles"
 msgstr "hjälper dig lösa korsord"
 
-#: search/templates/base.html:9
+#: search/templates/base.html:15
 msgid "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles"
 msgstr "krysstips, kryss, korsord, puzzel, kryss puzzel, korsordspuzzel"
 
-#: search/templates/base.html:10 search/templates/base.html.py:49
-#: search/templates/base.html:115 search/templates/mobile_base.html:8
+#: search/templates/base.html:17 search/templates/base.html.py:72
+#: search/templates/base.html:142 search/templates/mobile_base.html:8
 #: search/templates/mobile_base.html:22
+#: search/templates/searches_summary.html:6
+#: search/templates/statistics_calendar.html:4
+#: search/templates/statistics_graph.html:5
+#: search/templates/statistics_uniqueness.html:5
 msgid "Crosstips"
 msgstr "Krysstips"
 
-#: search/templates/base.html:60
+#: search/templates/base.html:17
+#, fuzzy
+msgid "crossword solver, fast and simple"
+msgstr "Krysstips"
+
+#: search/templates/base.html:54 search/templates/base.html.py:55
+#: search/templates/base.html:57 search/templates/crossing-the-world.html:9
+msgid "Crosstips searches across the globe"
+msgstr ""
+
+#: search/templates/base.html:56
+msgid "New fun feature!"
+msgstr ""
+
+#: search/templates/base.html:58
+msgid "Crossing the world "
+msgstr ""
+
+#: search/templates/base.html:83
 msgid "Statistics"
 msgstr "Statistik"
 
-#: search/templates/base.html:63
+#: search/templates/base.html:85
 msgid "Searches today"
 msgstr "Sökningar idag"
 
-#: search/templates/base.html:64
+#: search/templates/base.html:86
 msgid "Searches yesterday"
 msgstr "Sökningar igår"
 
-#: search/templates/base.html:65
+#: search/templates/base.html:87
 msgid "Searches this week"
 msgstr "Sökningar denna vecka"
 
-#: search/templates/base.html:66
+#: search/templates/base.html:88 search/templates/base.html.py:95
+#: search/templates/base.html:96
 msgid "Searches this month"
 msgstr "Sökningar denna månad"
 
-#: search/templates/base.html:67
+#: search/templates/base.html:89
 msgid "Searches this year"
 msgstr "Sökningar detta året"
 
-#: search/templates/base.html:68
+#: search/templates/base.html:90
 msgid "Total number of words"
 msgstr "Totalt antal ord"
 
-#: search/templates/base.html:87
+#: search/templates/base.html:114
 msgid "Send suggestions, feedback or tips"
 msgstr "Skicka förslag, feedback eller tips"
 
-#: search/templates/base.html:94
+#: search/templates/base.html:121
 msgid "Your name:"
 msgstr "Ditt namn:"
 
-#: search/templates/base.html:94 search/templates/base.html.py:98
+#: search/templates/base.html:121 search/templates/base.html.py:125
 msgid "optional"
 msgstr "valfritt"
 
-#: search/templates/base.html:98
+#: search/templates/base.html:125
 msgid "Your email:"
 msgstr "Din E-mail:"
 
-#: search/templates/base.html:107
+#: search/templates/base.html:134
 msgid "Send feedback"
 msgstr "Skicka feedback"
 
-#: search/templates/base.html:108
+#: search/templates/base.html:135
 msgid "Cancel"
 msgstr "Äsch, annulera"
+
+#: search/templates/base.html:153
+msgid "Calendar"
+msgstr ""
+
+#: search/templates/base.html:154
+msgid "Graph"
+msgstr ""
+
+#: search/templates/base.html:155
+msgid "Uniqueness"
+msgstr ""
+
+#: search/templates/base.html:157
+#, fuzzy
+msgid "Searches summary"
+msgstr "Sökningar idag"
 
 #: search/templates/change_language.html:5
 msgid "Change language"
 msgstr "Ändra språk"
+
+#: search/templates/crossing-the-world.html:6
+#: search/templates/crossing-the-world.html:8
+msgid "Crossing the world"
+msgstr ""
 
 #: search/templates/feedback_sent.html:5
 msgid "Thank you!"
@@ -157,25 +208,51 @@ msgstr "Feedback skickad. Tack så mycket!"
 msgid "Go back to the Crosstips"
 msgstr "Gå tillbaka till Krysstips"
 
-#: search/templates/simple.html:43
+#: search/templates/searches_summary.html:6
+#: search/templates/searches_summary.html:15
+#: search/templates/searches_summary.html:19
+#, fuzzy
+msgid "Searches summary in"
+msgstr "Sökningar idag"
+
+#: search/templates/searches_summary.html:51
+#, fuzzy
+msgid "Previous month"
+msgstr "Sökningar denna månad"
+
+#: search/templates/searches_summary.html:55
+msgid "Next month"
+msgstr ""
+
+#: search/templates/searches_summary.html:59
+#: search/templates/statistics_calendar.html:36
+#: search/templates/statistics_graph.html:47
+#: search/templates/statistics_uniqueness.html:41
+#: search/templates/flatpages/default.html:13
+msgid "Go back to home page"
+msgstr "Gå tillbaka till hemsidan"
+
+#: search/templates/simple.html:60
 msgid "Known letters (with spaces for letters you don't know)"
 msgstr ""
 
-#: search/templates/simple.html:52
+#: search/templates/simple.html:69
 #, fuzzy
 msgid "Search again"
 msgstr "Sök"
 
-#: search/templates/simple.html:54 search/templates/solve.html:68
+#: search/templates/simple.html:71 search/templates/solve.html:69
 msgid "Search"
 msgstr "Sök"
 
-#: search/templates/simple.html:60 search/templates/simple.html.py:70
-#: search/templates/solve.html:70
+#: search/templates/simple.html:77 search/templates/simple.html.py:87
+#: search/templates/solve.html:71 search/templates/word-whomp.html:91
+#: search/templates/word-whomp.html:101
 msgid "clear search"
 msgstr "ta bort sökningen"
 
-#: search/templates/simple.html:84 search/templates/solve.html:88
+#: search/templates/simple.html:101 search/templates/solve.html:89
+#: search/templates/word-whomp.html:119
 msgid ""
 "\n"
 "Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your "
@@ -186,67 +263,172 @@ msgstr ""
 "Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara "
 "in antal bokstäver och de bokstäver du vet redan.\n"
 
-#: search/templates/solve.html:47
+#: search/templates/solve.html:48
 msgid ""
 "If you use a mobile device try the <a href=\"/simple/\">simple interface</a> "
 "instead."
 msgstr ""
 
-#: search/templates/solve.html:53
+#: search/templates/solve.html:54
 msgid "Number of letters"
 msgstr "Antal bokstäver"
 
-#: search/templates/solve.html:56
+#: search/templates/solve.html:57
 msgid "Slots"
 msgstr "Rutor"
 
-#: search/templates/solve.html:63
+#: search/templates/solve.html:64
 msgid "Clue(s):"
 msgstr "Ledtråd(ar):"
 
-#: search/templates/solve.html:69
+#: search/templates/solve.html:70
 msgid "Loading"
 msgstr "Laddar"
 
-#: search/templates/solve.html:75
+#: search/templates/solve.html:76
 msgid "No letters all?"
 msgstr "Inga bokstäver alls?"
 
-#: search/templates/solve.html:78
+#: search/templates/solve.html:79
 msgid "Sorry. Unable to do a search right now. Please try again a bit later."
 msgstr "Tyvärr funkar inte sökningen just nu. Försök lite senare."
 
-#: search/templates/solve.html:104
+#: search/templates/solve.html:106
+msgid "Try the <a href=\"/simple/\">simple inferface</a>"
+msgstr ""
+
+#: search/templates/solve.html:109
 msgid "New!"
 msgstr ""
 
-#: search/templates/solve.html:105
-msgid "Try the <a href=\"/simple/\">simple inferface</a>."
+#: search/templates/solve.html:110 search/templates/word-whomp.html:65
+#: search/templates/word-whomp.html:72
+msgid "Word Whomp"
 msgstr ""
 
-#: search/templates/statistics_calendar.html:14
+#: search/templates/statistics_calendar.html:4
+#: search/templates/statistics_calendar.html:16
+#: search/templates/statistics_graph.html:46
+#: search/templates/statistics_uniqueness.html:39
 #, fuzzy
 msgid "Statistics Calendar"
 msgstr "Statistik"
 
-#: search/templates/statistics_calendar.html:21
+#: search/templates/statistics_calendar.html:23
+#: search/templates/statistics_graph.html:33
 #, fuzzy
 msgid "Language(s):"
 msgstr "Ledtråd(ar):"
 
-#: search/templates/statistics_calendar.html:33
-#: search/templates/statistics_graph.html:25
-#: search/templates/flatpages/default.html:13
-msgid "Go back to home page"
-msgstr "Gå tillbaka till hemsidan"
-
-#: search/templates/statistics_graph.html:11
+#: search/templates/statistics_calendar.html:35
+#: search/templates/statistics_graph.html:5
+#: search/templates/statistics_graph.html:13
+#: search/templates/statistics_uniqueness.html:40
 #, fuzzy
 msgid "Statistics Graph"
 msgstr "Statistik"
 
+#: search/templates/statistics_graph.html:19
+#, fuzzy
+msgid "Searches per day"
+msgstr "Sökningar igår"
+
+#: search/templates/statistics_graph.html:30
+msgid "Redraw"
+msgstr ""
+
+#: search/templates/statistics_uniqueness.html:5
+#: search/templates/statistics_uniqueness.html:7
+#: search/templates/statistics_uniqueness.html:11
+#, fuzzy
+msgid "Statistics Uniqueness"
+msgstr "Statistik"
+
+#: search/templates/statistics_uniqueness.html:7
+#: search/templates/statistics_uniqueness.html:16
+msgid "Since"
+msgstr ""
+
+#: search/templates/statistics_uniqueness.html:8
+#, fuzzy
+msgid "searches"
+msgstr "Sök"
+
+#: search/templates/statistics_uniqueness.html:8
+#, fuzzy
+msgid "searchers"
+msgstr "Sök"
+
+#: search/templates/statistics_uniqueness.html:8
+msgid "average"
+msgstr ""
+
+#: search/templates/statistics_uniqueness.html:19
+#, fuzzy
+msgid "Number searches:"
+msgstr "ta bort sökningen"
+
+#: search/templates/statistics_uniqueness.html:22
+msgid "Number searche<em>r</em>s:"
+msgstr ""
+
+#: search/templates/statistics_uniqueness.html:25
+msgid "Number searchers doing one search only:"
+msgstr ""
+
+#: search/templates/statistics_uniqueness.html:28
+msgid "Average number of searches per searcher:"
+msgstr ""
+
+#: search/templates/statistics_uniqueness.html:31
+msgid "Median number of searches per searcher:"
+msgstr ""
+
+#: search/templates/statistics_uniqueness.html:36
+#, fuzzy
+msgid "Statistics updated once a day."
+msgstr "Statistik"
+
+#: search/templates/word-whomp.html:6
+msgid "Word Whomp solver and tips"
+msgstr ""
+
+#: search/templates/word-whomp.html:64
+msgid "helps you win at Word Whomp"
+msgstr ""
+
+#: search/templates/word-whomp.html:74
+#, fuzzy
+msgid "6 known letters"
+msgstr "Antal bokstäver"
+
+#: search/templates/word-whomp.html:83
+msgid "List again"
+msgstr ""
+
+#: search/templates/word-whomp.html:85
+msgid "List"
+msgstr ""
+
+#: search/templates/word_definition_lookup.html:7
+msgid "Word definition lookup"
+msgstr ""
+
+#: search/templates/word_definition_lookup.html:10
+msgid "Sorry word could not be found"
+msgstr ""
+
+#: search/templates/word_definition_lookup.html:21
+msgid "Word:"
+msgstr ""
+
+#: search/templates/word_definition_lookup.html:23
+msgid "Lookup!"
+msgstr ""
+
+#: search/templates/word_definition_lookup.html:23
+msgid "Please wait..."
+msgstr ""
+
 #~ msgid "Length"
 #~ msgstr "Antal bokstäver"
-
-#~ msgid "Crossword solver"
-#~ msgstr "Krysstips"
