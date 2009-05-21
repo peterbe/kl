@@ -797,7 +797,9 @@ def _find_alternatives(slots, language):
         # must come up with some other crazy icontains filter
         # Look for the longest lump of letter. For example in '_E_ERA_' 'era' is
         # the longest lump
-        lumps = re.findall('\w+', search)
+        #lumps = re.findall('\w+', search)
+        lumps = search.split()
+        
         longest = sorted(lumps, lambda x,y: cmp(len(y), len(x)))[0]
         if len(longest) > 1:
             filter_['word__icontains'] = longest
