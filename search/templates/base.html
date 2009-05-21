@@ -47,6 +47,16 @@
 	  {% if amazon_advert %}
 	   {{ amazon_advert|safe }}
 	  {% endif %}
+	  
+          <br/>
+          <br/>
+	  {% if show_crossing_the_world_link %}
+	  <a href="/crossing-the-world/" title="{% trans "Crosstips searches across the globe" %}"
+	  ><img src="{{ MEDIA_URL }}{% staticfile "/images/ctw-screenshot.png" %}" border="0" alt="{% trans "Crosstips searches across the globe" %}" /></a><br/>
+          <strong>{% trans "New fun feature!" %}</strong><br/>
+          <a href="/crossing-the-world/" title="{% trans "Crosstips searches across the globe" %}"
+          >{% trans "Crossing the world " %}</a>
+	  {% endif %}
 
 	  
           </div>

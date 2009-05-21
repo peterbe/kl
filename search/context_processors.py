@@ -59,7 +59,9 @@ def context(request):
                               quote(today.strftime('%Y/%m/%d'))
     
     
-    canonical_url = get_canonical_url(request.build_absolute_uri())
+    current_url = request.build_absolute_uri()
+    
+    canonical_url = get_canonical_url(current_url)
     if canonical_url:
         data['canonical_url'] = canonical_url
     
@@ -73,4 +75,6 @@ def context(request):
         
     data['use_google_analytics'] = True
 
+    data['show_crossing_the_world_link'] = '/crossing-the-world' not in current_url
+    
     return data
