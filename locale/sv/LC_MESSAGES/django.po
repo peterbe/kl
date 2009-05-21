@@ -2,18 +2,19 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-21 19:35+0100\n"
-"PO-Revision-Date: 2009-03-13 10:50+0100\n"
-"Last-Translator: Peter Bengtsson <mail@peterbe.com>\n"
+"PO-Revision-Date: 2009-05-21 22:52\n"
+"Last-Translator: <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.4.2.svn\n"
 
 #: settings.py:116
 msgid "Swedish"
@@ -29,42 +30,39 @@ msgstr "Amerikansk engelska"
 
 #: search/forms.py:81
 msgid "Can not contain numbers"
-msgstr ""
+msgstr "Kan inte innehålla siffror"
 
 #: search/forms.py:84
 msgid "Can only contain alphabetical characters"
-msgstr ""
+msgstr "Can bara innehålla alfabetiska bokstäver"
 
 #: search/forms.py:87
 msgid "Must pass at least 1 character"
-msgstr ""
+msgstr "Måste skriva minst 1 bokstav"
 
 #: search/forms.py:98
 msgid "Must be exactly 6 characters"
-msgstr ""
+msgstr "Måste vara exakt 6 bokstäver"
 
 #: search/views.py:166 search/views.py:1295 search/views.py:1570
-#, fuzzy
 msgid "1 match found"
 msgstr "1 hittad"
 
 #: search/views.py:169 search/views.py:1298 search/views.py:1573
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s matches found but only showing first 100"
 msgstr "%(count)s hiddade men visar bara 100 första"
 
 #: search/views.py:172 search/views.py:1301 search/views.py:1576
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s matches found"
 msgstr "%(count)s hiddade"
 
 #: search/views.py:175 search/views.py:1304 search/views.py:1579
-#, fuzzy
 msgid "No matches found unfortunately :("
 msgstr "Inga hittade tyvärr :("
 
 #: search/views.py:966
-#, fuzzy
 msgid "Feedback on Crosstips"
 msgstr "Feedback på Krysstips"
 
@@ -100,22 +98,21 @@ msgid "Crosstips"
 msgstr "Krysstips"
 
 #: search/templates/base.html:17
-#, fuzzy
 msgid "crossword solver, fast and simple"
 msgstr "Krysstips"
 
 #: search/templates/base.html:54 search/templates/base.html.py:55
 #: search/templates/base.html:57 search/templates/crossing-the-world.html:9
 msgid "Crosstips searches across the globe"
-msgstr ""
+msgstr "Krysstips sökningar över hela världen"
 
 #: search/templates/base.html:56
 msgid "New fun feature!"
-msgstr ""
+msgstr "Ny kul funktion"
 
 #: search/templates/base.html:58
 msgid "Crossing the world "
-msgstr ""
+msgstr "Kryssningar runt världen"
 
 #: search/templates/base.html:83
 msgid "Statistics"
@@ -172,18 +169,17 @@ msgstr "Äsch, annulera"
 
 #: search/templates/base.html:153
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 #: search/templates/base.html:154
 msgid "Graph"
-msgstr ""
+msgstr "Graf"
 
 #: search/templates/base.html:155
 msgid "Uniqueness"
-msgstr ""
+msgstr "Unikhet"
 
 #: search/templates/base.html:157
-#, fuzzy
 msgid "Searches summary"
 msgstr "Sökningar idag"
 
@@ -194,7 +190,7 @@ msgstr "Ändra språk"
 #: search/templates/crossing-the-world.html:6
 #: search/templates/crossing-the-world.html:8
 msgid "Crossing the world"
-msgstr ""
+msgstr "Kryssningar runt världen"
 
 #: search/templates/feedback_sent.html:5
 msgid "Thank you!"
@@ -211,18 +207,16 @@ msgstr "Gå tillbaka till Krysstips"
 #: search/templates/searches_summary.html:6
 #: search/templates/searches_summary.html:15
 #: search/templates/searches_summary.html:19
-#, fuzzy
 msgid "Searches summary in"
 msgstr "Sökningar idag"
 
 #: search/templates/searches_summary.html:51
-#, fuzzy
 msgid "Previous month"
 msgstr "Sökningar denna månad"
 
 #: search/templates/searches_summary.html:55
 msgid "Next month"
-msgstr ""
+msgstr "Nästa månad"
 
 #: search/templates/searches_summary.html:59
 #: search/templates/statistics_calendar.html:36
@@ -234,10 +228,9 @@ msgstr "Gå tillbaka till hemsidan"
 
 #: search/templates/simple.html:60
 msgid "Known letters (with spaces for letters you don't know)"
-msgstr ""
+msgstr "Säkrade bokstäver (med mellanslag för de du inte vet)"
 
 #: search/templates/simple.html:69
-#, fuzzy
 msgid "Search again"
 msgstr "Sök"
 
@@ -255,19 +248,15 @@ msgstr "ta bort sökningen"
 #: search/templates/word-whomp.html:119
 msgid ""
 "\n"
-"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your "
-"<strong>crossword puzzles</strong>. \n"
+"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. \n"
 "Enter the length of the word and fill in the known letters.\n"
 msgstr ""
 "\n"
-"Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara "
-"in antal bokstäver och de bokstäver du vet redan.\n"
+"Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara in antal bokstäver och de bokstäver du vet redan.\n"
 
 #: search/templates/solve.html:48
-msgid ""
-"If you use a mobile device try the <a href=\"/simple/\">simple interface</a> "
-"instead."
-msgstr ""
+msgid "If you use a mobile device try the <a href=\"/simple/\">simple interface</a> instead."
+msgstr "Om du använder en mobil telefon pröva <a href=\"/simple/\">det enkla gränssnittet</a> istället."
 
 #: search/templates/solve.html:54
 msgid "Number of letters"
@@ -295,28 +284,26 @@ msgstr "Tyvärr funkar inte sökningen just nu. Försök lite senare."
 
 #: search/templates/solve.html:106
 msgid "Try the <a href=\"/simple/\">simple inferface</a>"
-msgstr ""
+msgstr "Prova <a href=\"/simple/\">det enkla gränssnittet</a>"
 
 #: search/templates/solve.html:109
 msgid "New!"
-msgstr ""
+msgstr "Nytt!"
 
 #: search/templates/solve.html:110 search/templates/word-whomp.html:65
 #: search/templates/word-whomp.html:72
 msgid "Word Whomp"
-msgstr ""
+msgstr "Word Whomp"
 
 #: search/templates/statistics_calendar.html:4
 #: search/templates/statistics_calendar.html:16
 #: search/templates/statistics_graph.html:46
 #: search/templates/statistics_uniqueness.html:39
-#, fuzzy
 msgid "Statistics Calendar"
 msgstr "Statistik"
 
 #: search/templates/statistics_calendar.html:23
 #: search/templates/statistics_graph.html:33
-#, fuzzy
 msgid "Language(s):"
 msgstr "Ledtråd(ar):"
 
@@ -324,111 +311,103 @@ msgstr "Ledtråd(ar):"
 #: search/templates/statistics_graph.html:5
 #: search/templates/statistics_graph.html:13
 #: search/templates/statistics_uniqueness.html:40
-#, fuzzy
 msgid "Statistics Graph"
 msgstr "Statistik"
 
 #: search/templates/statistics_graph.html:19
-#, fuzzy
 msgid "Searches per day"
 msgstr "Sökningar igår"
 
 #: search/templates/statistics_graph.html:30
 msgid "Redraw"
-msgstr ""
+msgstr "Måla om"
 
 #: search/templates/statistics_uniqueness.html:5
 #: search/templates/statistics_uniqueness.html:7
 #: search/templates/statistics_uniqueness.html:11
-#, fuzzy
 msgid "Statistics Uniqueness"
 msgstr "Statistik"
 
 #: search/templates/statistics_uniqueness.html:7
 #: search/templates/statistics_uniqueness.html:16
 msgid "Since"
-msgstr ""
+msgstr "Sedan"
 
 #: search/templates/statistics_uniqueness.html:8
-#, fuzzy
 msgid "searches"
 msgstr "Sök"
 
 #: search/templates/statistics_uniqueness.html:8
-#, fuzzy
 msgid "searchers"
 msgstr "Sök"
 
 #: search/templates/statistics_uniqueness.html:8
 msgid "average"
-msgstr ""
+msgstr "medel"
 
 #: search/templates/statistics_uniqueness.html:19
-#, fuzzy
 msgid "Number searches:"
 msgstr "ta bort sökningen"
 
 #: search/templates/statistics_uniqueness.html:22
 msgid "Number searche<em>r</em>s:"
-msgstr ""
+msgstr "Antal sök<em>are</em>:"
 
 #: search/templates/statistics_uniqueness.html:25
 msgid "Number searchers doing one search only:"
-msgstr ""
+msgstr "Antal sökare som gör en sökning:"
 
 #: search/templates/statistics_uniqueness.html:28
 msgid "Average number of searches per searcher:"
-msgstr ""
+msgstr "Medel antal sökningar per sökare:"
 
 #: search/templates/statistics_uniqueness.html:31
 msgid "Median number of searches per searcher:"
-msgstr ""
+msgstr "Median antal sökningar per sökare:"
 
 #: search/templates/statistics_uniqueness.html:36
-#, fuzzy
 msgid "Statistics updated once a day."
 msgstr "Statistik"
 
 #: search/templates/word-whomp.html:6
 msgid "Word Whomp solver and tips"
-msgstr ""
+msgstr "Word Whomp lösare och tips"
 
 #: search/templates/word-whomp.html:64
 msgid "helps you win at Word Whomp"
-msgstr ""
+msgstr "hjälper dig vinna på Word Whomp"
 
 #: search/templates/word-whomp.html:74
-#, fuzzy
 msgid "6 known letters"
-msgstr "Antal bokstäver"
+msgstr "6 säkra bokstäver"
 
 #: search/templates/word-whomp.html:83
 msgid "List again"
-msgstr ""
+msgstr "Lista igen"
 
 #: search/templates/word-whomp.html:85
 msgid "List"
-msgstr ""
+msgstr "Lista"
 
 #: search/templates/word_definition_lookup.html:7
 msgid "Word definition lookup"
-msgstr ""
+msgstr "Ord förklaring sökning"
 
 #: search/templates/word_definition_lookup.html:10
 msgid "Sorry word could not be found"
-msgstr ""
+msgstr "Ledsen, ordet kunde inte hittas"
 
 #: search/templates/word_definition_lookup.html:21
 msgid "Word:"
-msgstr ""
+msgstr "Ord:"
 
 #: search/templates/word_definition_lookup.html:23
 msgid "Lookup!"
-msgstr ""
+msgstr "Slå upp!"
 
 #: search/templates/word_definition_lookup.html:23
 msgid "Please wait..."
-msgstr ""
+msgstr "Var god vänta..."
 
 #~ msgid "Length"
 #~ msgstr "Antal bokstäver"
