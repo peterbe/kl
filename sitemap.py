@@ -96,6 +96,9 @@ class CustomSitemap(Sitemap):
                      ),
                 Page("/word-whomp/",
                      changefreq="weekly",
+                     ),
+                Page("/crossing-the-world/",
+                     changefreq="daily",
                      ),                
                 ]
         
