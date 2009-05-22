@@ -50,7 +50,7 @@ class Search(models.Model):
         
     search_word = models.CharField(max_length=40)
     add_date = models.DateTimeField('date added', default=datetime.datetime.now,
-                                    index=True)
+                                    db_index=True)
     user_agent =  models.CharField(max_length=200, default=u'')
     ip_address =  models.CharField(max_length=15, default=u'')
     language = models.CharField(max_length=5, default=u'')
