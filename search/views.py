@@ -825,7 +825,7 @@ def upload_wordlist(request):
         language = request.POST.get('language')
         assert language, "no language :("
         count = 0
-        for line in file_.xreadlines():
+        for line in file_.readlines():
             if line.startswith('#') or not line.strip():
                 continue
             if skip_ownership_s and line.strip().endswith("'s"):
