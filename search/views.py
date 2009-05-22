@@ -31,6 +31,7 @@ from forms import WordWhompForm, AddWordForm
 from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, print_sql
 from morph_en import variations as morph_variations
 from data import add_word_definition, ip_to_coordinates, save_ip_lookup
+from data import get_searches_rate
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -1681,6 +1682,8 @@ def crossing_the_world_json(request):
                                              how_many=int(how_many)))
     
     data = dict(items=items, count=len(items))
+    data['search_rate'] = round(get_searches_rate(past_hours=0.5), 2)
+    
     return _render_json(data)
     
     
@@ -1727,7 +1730,6 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
                     if search.found_word.definition:
                         item = dict(item, found_word_definition=search.found_word.definition)
                 _set_text_html(item)
-                    
                     
                 yield item
                         

@@ -9,9 +9,10 @@ from cStringIO import StringIO
 
 # django
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 # app
-from models import Word, IPLookup
+from models import Word, IPLookup, Search
 from utils import cache as cache_function
 
 def add_word_definition(word, definition, language=None, 
@@ -343,6 +344,34 @@ def save_ip_lookup(ip, location_data):
     lookup.latitude = str(round(latitude, 10))
     
     lookup.save()
+    
+    
+    
+@cache_function(60) # 60 seconds = 1 min
+def get_searches_rate(languages=None, past_hours=1, formatted=False):
+    """return how many searches are done per minute.
+    
+    If 'formatted', return it as a string with the unit.
+    """
+    since = datetime.datetime.now() - datetime.timedelta(hours=past_hours)
+    qs = Search.objects.filter(add_date__gte=since)
+    if languages:
+        if isinstance(languages, basestring):
+            languages = [languages]
+        qs = qs.filter(language__in=list(languages))
+        
+    no_searches = qs.count()
+    minutes = past_hours * 60
+    
+    rate = float(no_searches) / minutes # searches per minute
+    
+    if formatted:
+        return "%.2f " % rate + _(u"searches/minute")
+    else:
+        return rate
+    
+
+
     
     
     

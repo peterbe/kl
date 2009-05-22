@@ -29,6 +29,10 @@ $(function() {
                                                        item.text_html);
                }
             });
+            if (res.search_rate) {
+               $('#searches_rate_wrapper:hidden').show();
+               $('#id_searches_rate').text(res.search_rate);
+            }
          });
       }
       
