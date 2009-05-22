@@ -2,31 +2,31 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-21 19:35+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2009-05-22 16:47\n"
+"Last-Translator: Bruno  <bruno@fry-it.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.4.2.svn\n"
 
 #: settings.py:116
 msgid "Swedish"
-msgstr ""
+msgstr "Suédois"
 
 #: settings.py:117
 msgid "British English"
-msgstr ""
+msgstr "Anglais britannique"
 
 #: settings.py:118
 msgid "American English"
-msgstr ""
+msgstr "Anglais américain"
 
 #: search/forms.py:81
 msgid "Can not contain numbers"
@@ -34,33 +34,33 @@ msgstr ""
 
 #: search/forms.py:84
 msgid "Can only contain alphabetical characters"
-msgstr ""
+msgstr "Uniquement des caractères alphabétiques"
 
 #: search/forms.py:87
 msgid "Must pass at least 1 character"
-msgstr ""
+msgstr "Au moins un caractère"
 
 #: search/forms.py:98
 msgid "Must be exactly 6 characters"
-msgstr ""
+msgstr "Exactement 6 caractères"
 
 #: search/views.py:166 search/views.py:1295 search/views.py:1570
 msgid "1 match found"
-msgstr ""
+msgstr "Une correspondance trouvée"
 
 #: search/views.py:169 search/views.py:1298 search/views.py:1573
 #, python-format
 msgid "%(count)s matches found but only showing first 100"
-msgstr ""
+msgstr "%(count)s correspondances trouvées, affichage des 100 premières"
 
 #: search/views.py:172 search/views.py:1301 search/views.py:1576
 #, python-format
 msgid "%(count)s matches found"
-msgstr ""
+msgstr "%(count)s correspondances trouvées"
 
 #: search/views.py:175 search/views.py:1304 search/views.py:1579
 msgid "No matches found unfortunately :("
-msgstr ""
+msgstr "Aucun correspondance, malheureusement :("
 
 #: search/views.py:966
 msgid "Feedback on Crosstips"
@@ -68,7 +68,7 @@ msgstr ""
 
 #: search/templates/404.html:5
 msgid "Page not found :("
-msgstr ""
+msgstr "Page introuvable :("
 
 #: search/templates/500.html:5
 msgid "Page trouble :("
@@ -76,12 +76,12 @@ msgstr ""
 
 #: search/templates/500.html:7
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
-msgstr ""
+msgstr "Une erreur est malheureusement survenue. Nous espérons que le problème sera bientôt résolu."
 
 #: search/templates/base.html:14 search/templates/base.html.py:71
 #: search/templates/mobile_base.html:8
 msgid "helps you solve your crossword puzzles"
-msgstr ""
+msgstr "vous aide à résoudre vos mots croisés"
 
 #: search/templates/base.html:15
 msgid "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: search/templates/base.html:17
 msgid "crossword solver, fast and simple"
-msgstr ""
+msgstr "Solveur de mots croisés, simple et rapide"
 
 #: search/templates/base.html:54 search/templates/base.html.py:55
 #: search/templates/base.html:57 search/templates/crossing-the-world.html:9
@@ -248,15 +248,12 @@ msgstr ""
 #: search/templates/word-whomp.html:119
 msgid ""
 "\n"
-"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your "
-"<strong>crossword puzzles</strong>. \n"
+"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. \n"
 "Enter the length of the word and fill in the known letters.\n"
 msgstr ""
 
 #: search/templates/solve.html:48
-msgid ""
-"If you use a mobile device try the <a href=\"/simple/\">simple interface</a> "
-"instead."
+msgid "If you use a mobile device try the <a href=\"/simple/\">simple interface</a> instead."
 msgstr ""
 
 #: search/templates/solve.html:54
