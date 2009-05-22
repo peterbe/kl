@@ -69,6 +69,7 @@ ALL_LANGUAGE_OPTIONS = (
          'title':"American English"},
         {'code':'en-GB', 'label':'English (GB)', 'domain':'en-us.crosstips.org',
          'title':"British English"},
+        {'code':'fr', 'label':u'Fran\xe7aise', 'domain':'fr.crosstips.org'},
 )        
 
 
