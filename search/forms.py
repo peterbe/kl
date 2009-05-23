@@ -16,8 +16,6 @@ class WordlistUploadForm(forms.Form):
     skip_ownership_s = forms.BooleanField(required=False, initial=True)
     encoding = forms.CharField(max_length=10)
     
-
-    
 class FeedbackForm(forms.Form):
     text = forms.CharField()
     name = forms.CharField(max_length=100, required=False)
