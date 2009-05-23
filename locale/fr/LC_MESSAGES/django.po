@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-21 19:35+0100\n"
-"PO-Revision-Date: 2009-05-22 16:47\n"
+"PO-Revision-Date: 2009-05-22 17:44\n"
 "Last-Translator: Bruno  <bruno@fry-it.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Anglais américain"
 
 #: search/forms.py:81
 msgid "Can not contain numbers"
-msgstr ""
+msgstr "Ne peut pas contenir de chiffres"
 
 #: search/forms.py:84
 msgid "Can only contain alphabetical characters"
@@ -64,7 +64,7 @@ msgstr "Aucun correspondance, malheureusement :("
 
 #: search/views.py:966
 msgid "Feedback on Crosstips"
-msgstr ""
+msgstr "Vos impressions sur Crosstips"
 
 #: search/templates/404.html:5
 msgid "Page not found :("
@@ -104,11 +104,11 @@ msgstr "Solveur de mots croisés, simple et rapide"
 #: search/templates/base.html:54 search/templates/base.html.py:55
 #: search/templates/base.html:57 search/templates/crossing-the-world.html:9
 msgid "Crosstips searches across the globe"
-msgstr ""
+msgstr "recherches sur Crosstips à travers le monde"
 
 #: search/templates/base.html:56
 msgid "New fun feature!"
-msgstr ""
+msgstr "Nouvelle fonctionnalité !"
 
 #: search/templates/base.html:58
 msgid "Crossing the world "
@@ -116,76 +116,76 @@ msgstr ""
 
 #: search/templates/base.html:83
 msgid "Statistics"
-msgstr ""
+msgstr "Statistiques"
 
 #: search/templates/base.html:85
 msgid "Searches today"
-msgstr ""
+msgstr "Recherches aujourd'hui"
 
 #: search/templates/base.html:86
 msgid "Searches yesterday"
-msgstr ""
+msgstr "Recherches hier"
 
 #: search/templates/base.html:87
 msgid "Searches this week"
-msgstr ""
+msgstr "Recherches cette semaine"
 
 #: search/templates/base.html:88 search/templates/base.html.py:95
 #: search/templates/base.html:96
 msgid "Searches this month"
-msgstr ""
+msgstr "Recherches ce mois-ci"
 
 #: search/templates/base.html:89
 msgid "Searches this year"
-msgstr ""
+msgstr "Recherches cette année"
 
 #: search/templates/base.html:90
 msgid "Total number of words"
-msgstr ""
+msgstr "Nombre de mots total"
 
 #: search/templates/base.html:114
 msgid "Send suggestions, feedback or tips"
-msgstr ""
+msgstr "Envoyez vos suggestions, astuces et expériences"
 
 #: search/templates/base.html:121
 msgid "Your name:"
-msgstr ""
+msgstr "Votre nom :"
 
 #: search/templates/base.html:121 search/templates/base.html.py:125
 msgid "optional"
-msgstr ""
+msgstr "facultatif"
 
 #: search/templates/base.html:125
 msgid "Your email:"
-msgstr ""
+msgstr "Votre email :"
 
 #: search/templates/base.html:134
 msgid "Send feedback"
-msgstr ""
+msgstr "Envoyer"
 
 #: search/templates/base.html:135
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: search/templates/base.html:153
 msgid "Calendar"
-msgstr ""
+msgstr "Calendrier"
 
 #: search/templates/base.html:154
 msgid "Graph"
-msgstr ""
+msgstr "Graphique"
 
 #: search/templates/base.html:155
 msgid "Uniqueness"
-msgstr ""
+msgstr "Unicité"
 
 #: search/templates/base.html:157
 msgid "Searches summary"
-msgstr ""
+msgstr "Récapitulatif des recherches"
 
 #: search/templates/change_language.html:5
 msgid "Change language"
-msgstr ""
+msgstr "Changer de langue"
 
 #: search/templates/crossing-the-world.html:6
 #: search/templates/crossing-the-world.html:8
@@ -194,15 +194,15 @@ msgstr ""
 
 #: search/templates/feedback_sent.html:5
 msgid "Thank you!"
-msgstr ""
+msgstr "Merci !"
 
 #: search/templates/feedback_sent.html:8
 msgid "Feedback sent. Thank you very much!"
-msgstr ""
+msgstr "Message envoyé. Merci !"
 
 #: search/templates/feedback_sent.html:12
 msgid "Go back to the Crosstips"
-msgstr ""
+msgstr "Retour à Crosstips"
 
 #: search/templates/searches_summary.html:6
 #: search/templates/searches_summary.html:15
@@ -212,11 +212,11 @@ msgstr ""
 
 #: search/templates/searches_summary.html:51
 msgid "Previous month"
-msgstr ""
+msgstr "Mois précédent"
 
 #: search/templates/searches_summary.html:55
 msgid "Next month"
-msgstr ""
+msgstr "Mois suivant"
 
 #: search/templates/searches_summary.html:59
 #: search/templates/statistics_calendar.html:36
@@ -224,25 +224,25 @@ msgstr ""
 #: search/templates/statistics_uniqueness.html:41
 #: search/templates/flatpages/default.html:13
 msgid "Go back to home page"
-msgstr ""
+msgstr "Retour à la page d'accueil"
 
 #: search/templates/simple.html:60
 msgid "Known letters (with spaces for letters you don't know)"
-msgstr ""
+msgstr "Lettres connues (espaces pour celles que vous ne connaissez pas)"
 
 #: search/templates/simple.html:69
 msgid "Search again"
-msgstr ""
+msgstr "Rechercher à nouveau"
 
 #: search/templates/simple.html:71 search/templates/solve.html:69
 msgid "Search"
-msgstr ""
+msgstr "Rechercher"
 
 #: search/templates/simple.html:77 search/templates/simple.html.py:87
 #: search/templates/solve.html:71 search/templates/word-whomp.html:91
 #: search/templates/word-whomp.html:101
 msgid "clear search"
-msgstr ""
+msgstr "réinitialiser"
 
 #: search/templates/simple.html:101 search/templates/solve.html:89
 #: search/templates/word-whomp.html:119
@@ -251,42 +251,45 @@ msgid ""
 "Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. \n"
 "Enter the length of the word and fill in the known letters.\n"
 msgstr ""
+"\n"
+"Dubitatif ? Crosstips vous <strong>aide</strong> à <strong>résoudre</strong> vos <strong>mots croisés</strong>.\n"
+"Entrez la longeur du mot et remplissez les lettres connues.\n"
 
 #: search/templates/solve.html:48
 msgid "If you use a mobile device try the <a href=\"/simple/\">simple interface</a> instead."
-msgstr ""
+msgstr "Depuis votre téléphone, utilisez l'<a href=\"/simple/\">interface simplifiée</a>"
 
 #: search/templates/solve.html:54
 msgid "Number of letters"
-msgstr ""
+msgstr "Nombre de lettres"
 
 #: search/templates/solve.html:57
 msgid "Slots"
-msgstr ""
+msgstr "Cases"
 
 #: search/templates/solve.html:64
 msgid "Clue(s):"
-msgstr ""
+msgstr "Indices"
 
 #: search/templates/solve.html:70
 msgid "Loading"
-msgstr ""
+msgstr "Chargement"
 
 #: search/templates/solve.html:76
 msgid "No letters all?"
-msgstr ""
+msgstr "Vraiment, aucune lettre ?"
 
 #: search/templates/solve.html:79
 msgid "Sorry. Unable to do a search right now. Please try again a bit later."
-msgstr ""
+msgstr "Désolé, impossible d'effectuer la recherche. Veuillez réessayer ultérieurement."
 
 #: search/templates/solve.html:106
 msgid "Try the <a href=\"/simple/\">simple inferface</a>"
-msgstr ""
+msgstr "Essayez l'<a href=\"/simple/\">interface simplifiée</a>"
 
 #: search/templates/solve.html:109
 msgid "New!"
-msgstr ""
+msgstr "Nouveau !"
 
 #: search/templates/solve.html:110 search/templates/word-whomp.html:65
 #: search/templates/word-whomp.html:72
@@ -298,27 +301,27 @@ msgstr ""
 #: search/templates/statistics_graph.html:46
 #: search/templates/statistics_uniqueness.html:39
 msgid "Statistics Calendar"
-msgstr ""
+msgstr "Statistiques horaires"
 
 #: search/templates/statistics_calendar.html:23
 #: search/templates/statistics_graph.html:33
 msgid "Language(s):"
-msgstr ""
+msgstr "Langue(s) :"
 
 #: search/templates/statistics_calendar.html:35
 #: search/templates/statistics_graph.html:5
 #: search/templates/statistics_graph.html:13
 #: search/templates/statistics_uniqueness.html:40
 msgid "Statistics Graph"
-msgstr ""
+msgstr "Graphique des statistiques"
 
 #: search/templates/statistics_graph.html:19
 msgid "Searches per day"
-msgstr ""
+msgstr "Recherches par jour"
 
 #: search/templates/statistics_graph.html:30
 msgid "Redraw"
-msgstr ""
+msgstr "Redessiner"
 
 #: search/templates/statistics_uniqueness.html:5
 #: search/templates/statistics_uniqueness.html:7
@@ -329,43 +332,43 @@ msgstr ""
 #: search/templates/statistics_uniqueness.html:7
 #: search/templates/statistics_uniqueness.html:16
 msgid "Since"
-msgstr ""
+msgstr "Depuis"
 
 #: search/templates/statistics_uniqueness.html:8
 msgid "searches"
-msgstr ""
+msgstr "recherches"
 
 #: search/templates/statistics_uniqueness.html:8
 msgid "searchers"
-msgstr ""
+msgstr "chercheurs"
 
 #: search/templates/statistics_uniqueness.html:8
 msgid "average"
-msgstr ""
+msgstr "moyenne"
 
 #: search/templates/statistics_uniqueness.html:19
 msgid "Number searches:"
-msgstr ""
+msgstr "Nombre de recherches"
 
 #: search/templates/statistics_uniqueness.html:22
 msgid "Number searche<em>r</em>s:"
-msgstr ""
+msgstr "Nombre de chercheurs"
 
 #: search/templates/statistics_uniqueness.html:25
 msgid "Number searchers doing one search only:"
-msgstr ""
+msgstr "Nombre de checheurs ne faisant qu'une recherche"
 
 #: search/templates/statistics_uniqueness.html:28
 msgid "Average number of searches per searcher:"
-msgstr ""
+msgstr "Nombre de moyen de recherches par chercheur"
 
 #: search/templates/statistics_uniqueness.html:31
 msgid "Median number of searches per searcher:"
-msgstr ""
+msgstr "Nombre médian de recherches par chercheur"
 
 #: search/templates/statistics_uniqueness.html:36
 msgid "Statistics updated once a day."
-msgstr ""
+msgstr "Les statistiques sont mises à jour quotidiennement."
 
 #: search/templates/word-whomp.html:6
 msgid "Word Whomp solver and tips"
@@ -377,32 +380,32 @@ msgstr ""
 
 #: search/templates/word-whomp.html:74
 msgid "6 known letters"
-msgstr ""
+msgstr "6 lettres connues"
 
 #: search/templates/word-whomp.html:83
 msgid "List again"
-msgstr ""
+msgstr "Liste"
 
 #: search/templates/word-whomp.html:85
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 #: search/templates/word_definition_lookup.html:7
 msgid "Word definition lookup"
-msgstr ""
+msgstr "Recherche le la définition d'un mot"
 
 #: search/templates/word_definition_lookup.html:10
 msgid "Sorry word could not be found"
-msgstr ""
+msgstr "Désolé, le mot n'a pas été trouvé"
 
 #: search/templates/word_definition_lookup.html:21
 msgid "Word:"
-msgstr ""
+msgstr "Mot :"
 
 #: search/templates/word_definition_lookup.html:23
 msgid "Lookup!"
-msgstr ""
+msgstr "Chercher !"
 
 #: search/templates/word_definition_lookup.html:23
 msgid "Please wait..."
-msgstr ""
+msgstr "Veuillez patienter..."

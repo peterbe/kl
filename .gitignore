@@ -1,3 +1,5 @@
+*.pyc
+*~
 .venv
 tags
 .secret
@@ -5,3 +7,6 @@ settings_local.py
 dev_eng_words
 media/admin
 event.log
+crosstips.org_googlemaps_api.key
+*.log
+*.pid
