@@ -14,6 +14,7 @@ class WordlistUploadForm(forms.Form):
     language = forms.CharField(max_length=10)
     titled_is_name = forms.BooleanField(required=False, initial=True)
     skip_ownership_s = forms.BooleanField(required=False, initial=True)
+    encoding = forms.CharField(max_length=10)
     
 
     

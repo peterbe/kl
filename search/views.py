@@ -825,16 +825,25 @@ def upload_wordlist(request):
         skip_ownership_s = bool(request.POST.get('skip_ownership_s'))
         titled_is_name = bool(request.POST.get('titled_is_name'))
         language = request.POST.get('language')
+        encoding = request.POST.get('encoding', 'utf8')
         assert language, "no language :("
         count = 0
-        for line in file_.readlines():
+        
+        # save the file to /tmp then reopen it with codecs.open
+        # so we can use xreadlines on it
+        from tempfile import mkdtemp
+        temp_file_path = mkdtemp()+'.txt'
+        open(temp_file_path,'w').write(file_.read())
+        import codecs
+        for line in codecs.open(temp_file_path, 'r', encoding).xreadlines():
+            line = unicode(line, encoding).strip()
+            print repr(line)
             if line.startswith('#') or not line.strip():
                 continue
             if skip_ownership_s and line.strip().endswith("'s"):
                 continue
             
-            
-            line = unicode(line, 'iso-8859-1').strip()
+            #line = unicode(line, 'iso-8859-1').strip()
             
             if len(line) == 1:
                 continue
