@@ -1,19 +1,19 @@
 
 var since = new Date().getTime() - 10*1000; // start 10 seconds ago
-var min_interval = 2;
+var min_interval = 4;
 var interval = min_interval;
 $(function() {
    if (GBrowserIsCompatible()) {
       var map = new GMap2(document.getElementById("map_canvas"));
-      // map, satelite, hybrid
-      //var mapControl = new GMapTypeControl();
-      //map.addControl(mapControl);
       map.addControl(new GLargeMapControl3D());
       
-      if ($('#id_start_place').val()=='uk')
+      var start_place = $('#id_start_place').val();
+      if (start_place=='uk')
           map.setCenter(new GLatLng(53.014783, -1.977539), 4); // uk
-      else if ($('#id_start_place').val()=='us')
+      else if (start_place=='us')
           map.setCenter(new GLatLng(41.804078, -97.954102), 4); // middle of us
+      else if (start_place=='fr')
+          map.setCenter(new GLatLng(47.047669, 2.329102), 4); // middle of france
       else
         map.setCenter(new GLatLng(28.921631, -17.226562), 4); // altantic ocean
       
