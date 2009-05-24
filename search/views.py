@@ -1721,13 +1721,13 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
     if since:
         qs = qs.filter(add_date__gt=since)
        
+    yield_count = 0
     for search in qs.order_by('-add_date'):
         if search.user_agent.count('Googlebot'):
             continue
         
         location = ip_to_coordinates(search.ip_address)
         if location:
-            print "location", location
             if location.get('country_code') == 'XX':
                 continue
             if location.get('coordinates'):
@@ -1740,6 +1740,12 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
                     if search.found_word.definition:
                         item = dict(item, found_word_definition=search.found_word.definition)
                 _set_text_html(item)
-                    
+                
+                yield_count += 1
+                if yield_count >= how_many:
+                    break
+                
                 yield item
+                
+                
                         
