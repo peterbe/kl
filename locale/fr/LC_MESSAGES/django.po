@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-21 19:35+0100\n"
-"PO-Revision-Date: 2009-05-22 17:44\n"
+"PO-Revision-Date: 2009-05-24 15:10\n"
 "Last-Translator: Bruno  <bruno@fry-it.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -72,7 +72,7 @@ msgstr "Page introuvable :("
 
 #: search/templates/500.html:5
 msgid "Page trouble :("
-msgstr ""
+msgstr "Erreur sur la page :("
 
 #: search/templates/500.html:7
 msgid "Unfortunately an error happened. Hopefully it will be fixed shortly."
