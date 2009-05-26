@@ -1683,7 +1683,7 @@ def crossing_the_world(request):
 
 def crossing_the_world_json(request):
     how_many = request.GET.get('how_many', 10)
-    since = int(request.GET.get('since'))
+    since = int(request.GET.get('since', time()*1000))
     since = datetime.datetime.fromtimestamp(float(since)/1000)
     languages = request.GET.getlist('languages')
     
