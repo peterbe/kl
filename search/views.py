@@ -727,6 +727,9 @@ def _get_variations_wordnet(word, greedy=False,
             continue
         
         all.append(each)
+        if not greedy:
+            continue
+        
         for synset in wordnet.synsets(each):
             for synonym_synset in synset.hypernyms():
                 synonym = synonym_synset.name.split('.')[0]
@@ -744,12 +747,12 @@ def _get_variations_wordnet(word, greedy=False,
                         continue
                     
                     all.append(synonym_variation)
-                    
+                 
                     synonym_variation_plural = plural(synonym_variation)
                     if synonym_variation_plural and synonym_variation_plural != synonym_variation:
                         if wordnet.morphy(synonym_variation_plural) and ok_word(synonym_variation_plural):
                             all.append(synonym_variation_plural)
-                                          
+                                        
     return all
     
 
@@ -1721,10 +1724,15 @@ def _set_text_html(item):
     text += "Searched for %s letter word:<br/>" % len(item['search_word'])
     text += "'<code>%s</code>'" % item['search_word'].upper().replace(' ','_')
     if item.get('found_word'):
-        text += "<br/>and found '<code>%s</code>'!" % item['found_word'].upper()
+        text += "<br/>and found '<a href=\"/word/%s/%s/\" target=\"_blank\"><code>%s</code></a>'!" % \
+          (item['found_word'], item['language'], item['found_word'].upper())
         if item.get('found_word_definition'):
-            text += '<br/>which means: <small><em>%s</em></small>' % \
-              item.get('found_word_definition')
+            def_html = item.get('found_word_definition')
+            if len(def_html) > 50:
+                def_html = def_html[:50] + \
+                  u'<a href="/word/%s/" target="_blank">...</a>' % item['found_word']
+            text += '<br/>which means: <small><em>%s</em></small>' % def_html
+              
     item['text_html'] = text
     
 def _set_title_text(item, location):
@@ -1737,7 +1745,6 @@ def _set_title_text(item, location):
                              country_name=location['country_name'],
                              length=len(item['search_word']),
                              search_word=item['search_word'].upper().replace(' ','_'))
-    print location
     
     
     
@@ -1789,3 +1796,34 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
                 
                 
                         
+def word(request, word_string, language=None):
+    word_string = word_string.strip()
+    if len(word_string) < 2:
+        raise Http404("word too short")
+    
+    if not language:
+        language = request.LANGUAGE_CODE
+    try:
+        word = Word.objects.get(language=language.lower(),
+                                word=word_string,
+                                length=len(word_string))
+    except Word.DoesNotExist:
+        return _render('word.html', locals(), request)
+    
+    statistics = {}
+    no_found_word = Search.objects.filter(language=language.lower(),
+                                          found_word=word).count()
+    statistics['no_found_word'] = no_found_word
+    if word.definition:
+        definition_splitted = word.definition.splitlines()
+    
+    if language.lower() in ('en','en-us','en-gb'):
+        synonyms = [x for x in _get_variations_synonym_dot_com(word_string, request=request)
+                    if not x.count('(')]
+        synonyms.sort()
+        synonyms = [dict(word=x, url=u'/word/%s/%s/' % (x, language.lower()))
+                    for x in synonyms]
+        
+    
+    return _render('word.html', locals(), request)
+    

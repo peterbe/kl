@@ -1,0 +1,71 @@
+{% extends base_template %}
+{% load i18n %}
+{% load language %}
+
+{% block title %}&ldquo;{{ word_string }}&rdquo;{% endblock %}
+
+
+{% block extracss %}
+<style type="text/css">
+blockquote { font-style:italic; }
+div.content ul li { margin-bottom:2px; }
+</style>
+{% endblock %}
+
+
+{% block main %}
+<br/>
+<br/>
+<h2 align="center">&ldquo;{{ word_string }}&rdquo;</h2>
+<br/>
+<br/>
+
+{% if word %}
+  <p>{% trans "In" %} {{ word.language|show_language_verbose }}<br/>
+  {% if word.part_of_speech %}
+    {% trans "Part of speech" %}: {{ word.part_of_speech }}<br/>
+  {% endif %}
+  </p>
+  
+  {% if word.definition %}
+    <p><strong>{% trans "Definition:" %}</strong></p>
+    
+    {% for definition in definition_splitted %}
+    <blockquote>
+     {{ definition }}
+    </blockquote>
+    {% endfor %}
+    <br/>
+  {% endif %}
+  
+  {% if statistics %}
+    <p><strong>{% trans "Statistics for this word:" %}</strong><br/>
+    {% trans "Number of times this word was the only one found:" %}
+    {{ statistics.no_found_word }}<br/>
+    </p>
+  
+  {% endif %}
+  
+  {% if synonyms %}
+    <p><strong>{% trans "Possible synonyms:" %}</strong></p>
+    <ul>
+      {% for each in synonyms %}
+        <li><a href="{{ each.url }}">{{ each.word }}</a></li>
+      {% endfor %}
+    </ul>
+    
+    
+  {% endif %}
+  
+  
+
+{% else %}
+
+<p style="color:red"><strong>{% trans "Sorry. That word is not in the word list." %}</strong></p>
+
+{% endif %}
+
+
+
+
+{% endblock %}

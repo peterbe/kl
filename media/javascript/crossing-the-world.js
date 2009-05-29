@@ -5,11 +5,11 @@ var interval = min_interval;
 var orig_title = document.title;
 function __reset_document_title() {
    document.title = document.title.substring(1, document.title.length);
-   if (document.title.length) 
-     setTimeout(__reset_document_title, 0.09 * 1000);
+   if (document.title.length) {
+      setTimeout(__reset_document_title, 0.09 * 1000);
+   }
    else
      document.title = orig_title;
-
 }
 
 $(function() {
