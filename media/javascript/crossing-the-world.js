@@ -2,6 +2,16 @@
 var since = new Date().getTime() - 10*1000; // start 10 seconds ago
 var min_interval = 4;
 var interval = min_interval;
+var orig_title = document.title;
+function __reset_document_title() {
+   document.title = document.title.substring(1, document.title.length);
+   if (document.title.length) 
+     setTimeout(__reset_document_title, 0.09 * 1000);
+   else
+     document.title = orig_title;
+
+}
+
 $(function() {
    if (GBrowserIsCompatible()) {
       var map = new GMap2(document.getElementById("map_canvas"));
@@ -24,6 +34,12 @@ $(function() {
             else interval += 0.2;
             $.each(res.items, function(i, item) {
                if (item.coordinates) {
+                  if (item.title) {
+                     document.title = item.title;
+                     setTimeout(function() {
+                        __reset_document_title();
+                     }, interval * 1000);
+                  }
                   map.panTo(new GLatLng(item.coordinates[1], item.coordinates[0]));
                   info_window = map.openInfoWindowHtml(new GLatLng(item.coordinates[1], item.coordinates[0]),
                                                        item.text_html);

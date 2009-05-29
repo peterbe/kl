@@ -7,7 +7,7 @@ from pprint import pprint
 from cStringIO import StringIO
 import logging
 from time import time, mktime, sleep
-from random import randint
+from random import randint, shuffle
 try:
     import simplejson
 except ImportError:
@@ -70,7 +70,11 @@ ALL_LANGUAGE_OPTIONS = (
         {'code':'en-GB', 'label':'English (GB)', 'domain':'en-us.crosstips.org',
          'title':"British English"},
         {'code':'fr', 'label':u'Fran\xe7ais', 'domain':'fr.crosstips.org'},
-)        
+)
+
+SEARCH_SUMMARY_SKIPS = \
+('crossword','korsord','fuck','peter','motherfucker',
+ )
 
 
 class SearchResult(object):
@@ -222,6 +226,16 @@ def _record_search(search_word, user_agent=u'', ip_address=u'',
         import warnings
         warnings.warn("ip_address too long (%r)" % ip_address)
         ip_address = u''
+    elif ip_address == '127.0.0.1':
+        if settings.DEBUG:
+            # because 127.0.0.1 can't be looked up, use a random other one
+            examples = '125.239.15.42,114.199.97.224,68.190.165.25,208.75.100.212,'\
+                       '61.29.84.154,72.49.16.234,66.57.228.64,196.25.255.250,'\
+                       '141.117.6.97,85.68.18.183,90.157.186.202'.split(',')
+            shuffle(examples)
+            ip_address = examples[0]
+            
+        
         
     Search.objects.create(search_word=search_word,
                           user_agent=user_agent.strip(),
@@ -1262,7 +1276,7 @@ def solve_simple(request, record_search=True):
             if re.findall('\s', cache_key):
                 raise ValueError("invalid cache_key search=%r, language=%r" % (search, language))
             
-            alternatives = cache.get(cache_key) #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx
+            alternatives = cache.get(cache_key)
             if alternatives is None:
                 alternatives = _find_alternatives(slots[:length], language)
                 cache.set(cache_key, alternatives, ONE_DAY)
@@ -1437,7 +1451,7 @@ def searches_summary(request, year, month, atleast_count=2,
     
     found_searches = base_searches.exclude(found_word=None)\
                                   .select_related('found_word')\
-                                  .exclude(found_word__word__in=['crossword','korsord','fuck','peter'])
+                                  .exclude(found_word__word__in=list(SEARCH_SUMMARY_SKIPS))
     
     found_words = defaultdict(list)
     definitions = {}
@@ -1713,6 +1727,19 @@ def _set_text_html(item):
               item.get('found_word_definition')
     item['text_html'] = text
     
+def _set_title_text(item, location):
+    """set a key called title which can be put in the <title> tag temporarily
+    like when Gmail chat updates the title"""
+    if location.get('country_name') and location.get('place_name'):
+        item['title'] = _(u"In %(place_name)s, %(country_name)s someone searched "\
+                          u"for a %(length)s letter word: '%(search_word)s'") % \
+                        dict(place_name=location['place_name'],
+                             country_name=location['country_name'],
+                             length=len(item['search_word']),
+                             search_word=item['search_word'].upper().replace(' ','_'))
+    print location
+    
+    
     
 def _get_recent_located_searches(languages=None, how_many=10, since=None):
     qs = Search.objects.all()
@@ -1725,6 +1752,8 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
     for search in qs.order_by('-add_date'):
         if search.user_agent.count('Googlebot'):
             continue
+        else:
+            print search.user_agent
         
         location = ip_to_coordinates(search.ip_address)
         if location:
@@ -1739,7 +1768,18 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
                     item = dict(item, found_word=search.found_word.word)
                     if search.found_word.definition:
                         item = dict(item, found_word_definition=search.found_word.definition)
+                    else:
+                        definition = _get_word_definition(search.found_word.word, 
+                                                          language=search.found_word.language)
+                        if not definition:
+                            definition = _get_word_definition_google(search.found_word.word, 
+                                                                     language=search.found_word.language)
+                        if definition:
+                            add_word_definition(search.found_word.word, definition,
+                                                search.found_word.language)
+                            item = dict(item, found_word_definition=definition)
                 _set_text_html(item)
+                _set_title_text(item, location)
                 
                 yield_count += 1
                 if yield_count >= how_many:

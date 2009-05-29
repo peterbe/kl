@@ -36,7 +36,11 @@ def add_word_definition(word, definition, language=None,
             filter_['language'] = 'en-gb'
         else:
             filter_['language'] = 'en-us'
-        w = Word.objects.get(**filter_)
+        try:
+            w = Word.objects.get(**filter_)
+        except Word.DoesNotExist:
+            # it simply doesn't exist in the other language
+            return
         w.definition = definition.strip()
         w.save()
 
@@ -198,11 +202,8 @@ def ip_to_coordinates(ip_address):
     
     info = __geoip_ip_to_coordinates(ip_address)
     if info and 'coordinates' in info:
-        #_log("GeoIP!\n")
-        print "INFO"
         save_ip_lookup(ip_address, info)
         return info
-    #_log("neither :(\n")
     return {}
 
 def __hostip_ip_to_coordinates(ip_address):
