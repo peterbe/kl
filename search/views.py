@@ -221,7 +221,7 @@ def _get_recent_search_word(request):
     _today = datetime.datetime.today()
     _since = datetime.datetime(_today.year, _today.month, 1)
     
-    _extra_exclude = dict()
+    _extra_exclude = dict(found_word__word__in=list(SEARCH_SUMMARY_SKIPS))
     if request.META.get('HTTP_USER_AGENT'):
         _extra_exclude['user_agent'] = request.META.get('HTTP_USER_AGENT')
     if request.META.get('REMOTE_ADDR'):
@@ -1467,7 +1467,7 @@ def searches_summary_lookup_definitions(request, year, month, atleast_count=1):
     return searches_summary(request, year, month, atleast_count=atleast_count,
                             lookup_definitions=True)
 
-#@cache_page(60 * 60 * 24) # 24 hours
+@cache_page(60 * 60 * 1) # 1 hours
 def searches_summary(request, year, month, atleast_count=2,
                      lookup_definitions=False):
     
