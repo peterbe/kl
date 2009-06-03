@@ -1232,11 +1232,11 @@ daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
     
+    date1 = date2 = None
     extra_filter = {}
     if request.GET.get('daterange'):
         
         daterange = request.GET.get('daterange')
-        date1 = date2 = None
         match = None
         
         if daterange_iso_regex.findall(daterange):
