@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-03 11:47+0100\n"
-"PO-Revision-Date: 2009-05-21 22:52\n"
+"PO-Revision-Date: 2009-06-03 11:52\n"
 "Last-Translator: <mail@peterbe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "Svenska"
 
 #: settings.py:117
 msgid "French"
-msgstr ""
+msgstr "Franska"
 
 #: settings.py:118
 msgid "British English"
@@ -33,7 +33,6 @@ msgid "American English"
 msgstr "Amerikansk engelska"
 
 #: search/data.py:370 search/templates/crossing-the-world.html:43
-#, fuzzy
 msgid "searches/minute"
 msgstr "Sök"
 
@@ -78,24 +77,22 @@ msgstr "Feedback på Krysstips"
 #: search/views.py:1292
 #, python-format
 msgid "Statistics graph between %(date1)s and %(date2)s"
-msgstr ""
+msgstr "Statistikgraf mellan %(date1)s och %(date2)s"
 
 #: search/views.py:1295
-#, fuzzy, python-format
+#, python-format
 msgid "Statistics graph since %(date1)s"
-msgstr "Statistik"
+msgstr "Statistikgraf sedan %(date1)s"
 
 #: search/views.py:1298
 #, python-format
 msgid "Statistics graph up until %(date2)s"
-msgstr ""
+msgstr "Statistikgraf fram till %(date2)s"
 
 #: search/views.py:1801
 #, python-format
-msgid ""
-"In %(place_name)s, %(country_name)s someone searched for a %(length)s letter "
-"word: '%(search_word)s'"
-msgstr ""
+msgid "In %(place_name)s, %(country_name)s someone searched for a %(length)s letter word: '%(search_word)s'"
+msgstr "I %(place_name)s, %(country_name)s någon sökte efter ett %(length)s bokstäver långt ord: '%(search_word)s'"
 
 #: search/templates/404.html:5
 msgid "Page not found :("
@@ -225,7 +222,7 @@ msgstr "Kryssningar runt världen"
 
 #: search/templates/crossing-the-world.html:42
 msgid "Current rate:"
-msgstr ""
+msgstr "Nuvarande hastighet"
 
 #: search/templates/feedback_sent.html:5
 msgid "Thank you!"
@@ -263,7 +260,7 @@ msgstr "Gå tillbaka till hemsidan"
 
 #: search/templates/simple.html:6
 msgid "Simple interface"
-msgstr ""
+msgstr "Enkla gränssnittet"
 
 #: search/templates/simple.html:62
 msgid "Known letters (with spaces for letters you don't know)"
@@ -287,21 +284,15 @@ msgstr "ta bort sökningen"
 #: search/templates/word-whomp.html:119
 msgid ""
 "\n"
-"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your "
-"<strong>crossword puzzles</strong>. \n"
+"Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. \n"
 "Enter the length of the word and fill in the known letters.\n"
 msgstr ""
 "\n"
-"Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara "
-"in antal bokstäver och de bokstäver du vet redan.\n"
+"Förvirrad? Krysstips <strong>hjälper dig lösa korsord</strong>. Skriva bara in antal bokstäver och de bokstäver du vet redan.\n"
 
 #: search/templates/solve.html:49
-msgid ""
-"If you use a mobile device try the <a href=\"/simple/\">simple interface</a> "
-"instead."
-msgstr ""
-"Om du använder en mobil telefon pröva <a href=\"/simple/\">det enkla "
-"gränssnittet</a> istället."
+msgid "If you use a mobile device try the <a href=\"/simple/\">simple interface</a> instead."
+msgstr "Om du använder en mobil telefon pröva <a href=\"/simple/\">det enkla gränssnittet</a> istället."
 
 #: search/templates/solve.html:55
 msgid "Number of letters"
@@ -342,15 +333,15 @@ msgstr "Word Whomp"
 
 #: search/templates/solve.html:118
 msgid "By the way..."
-msgstr ""
+msgstr "Förresten..."
 
 #: search/templates/solve.html:119
 msgid "Crosstips recently helped someone find the word:"
-msgstr ""
+msgstr "Krysstips hjälpte nyss någon att hitta ordet:"
 
 #: search/templates/solve.html:122
 msgid "which means"
-msgstr ""
+msgstr "vilket betyder"
 
 #: search/templates/statistics_calendar.html:4
 #: search/templates/statistics_calendar.html:16
@@ -448,32 +439,31 @@ msgstr "Lista"
 
 #: search/templates/word.html:24
 msgid "In"
-msgstr ""
+msgstr "I"
 
 #: search/templates/word.html:26
 msgid "Part of speech"
-msgstr ""
+msgstr "Ordform"
 
 #: search/templates/word.html:31
 msgid "Definition:"
-msgstr ""
+msgstr "Definition:"
 
 #: search/templates/word.html:42
-#, fuzzy
 msgid "Statistics for this word:"
-msgstr "Statistik"
+msgstr "Statistik för detta ordet:"
 
 #: search/templates/word.html:43
 msgid "Number of times this word was the only one found:"
-msgstr ""
+msgstr "Antal gånger detta ordet var det enda som hittades:"
 
 #: search/templates/word.html:50
 msgid "Possible synonyms:"
-msgstr ""
+msgstr "Potentiella synonymer:"
 
 #: search/templates/word.html:64
 msgid "Sorry. That word is not in the word list."
-msgstr ""
+msgstr "Sorry. Det ordet finns inte i denna ordlisten."
 
 #: search/templates/word_definition_lookup.html:7
 msgid "Word definition lookup"
