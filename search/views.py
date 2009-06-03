@@ -242,7 +242,7 @@ def _find_recent_search_word(language, since=None, random=False, extra_exclude={
         searches = searches.filter(add_date__gte=since)
     searches = searches.exclude(**extra_exclude)
         
-    #print_sql(searches)
+    print_sql(searches)
     if random:
         found_words = [x.found_word for x in searches]
         shuffle(found_words)
