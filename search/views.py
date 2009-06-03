@@ -244,6 +244,9 @@ def _find_recent_search_word(language, since=None, random=False, extra_exclude={
         
     print_sql(searches)
     if random:
+        print "[x.found_word for x in searches]"
+        print [x.found_word for x in searches]
+        print
         found_words = [x.found_word for x in searches]
         shuffle(found_words)
         try:
