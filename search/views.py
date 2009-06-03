@@ -233,21 +233,22 @@ def _get_recent_search_word(request):
                                     extra_exclude=_extra_exclude)
     
 
-
 def _find_recent_search_word(language, since=None, random=False, extra_exclude={}, **extra_filter):
     searches = Search.objects.filter(language=language, found_word__isnull=False, 
-                                     **extra_filter)
-    
+                                     **extra_filter).select_related('found_word')
+
     if since:
         searches = searches.filter(add_date__gte=since)
     searches = searches.exclude(**extra_exclude)
         
-    print_sql(searches)
+    #print_sql(searches)
     if random:
-        print "[x.found_word for x in searches]"
-        print [x.found_word for x in searches]
-        print
-        found_words = [x.found_word for x in searches]
+        # For some bizzare reason it seems that even if the exclude above
+        # has found_word__word__in=SEARCH_SUMMARY_SKIPS it still returns
+        # words from that list!!!!
+        # Hence this list comprehension.
+        found_words = [x.found_word for x in searches
+                       if x.found_word.word not in SEARCH_SUMMARY_SKIPS]
         shuffle(found_words)
         try:
             return found_words[0]
