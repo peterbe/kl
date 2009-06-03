@@ -227,10 +227,16 @@ def _get_recent_search_word(request):
     if request.META.get('REMOTE_ADDR'):
         _extra_exclude['ip_address'] = request.META.get('REMOTE_ADDR')
         
+    _extra_filter = dict()
+    # Special hack! Since the search summary has a cache of 1 hour,
+    # don't include things that are too recent
+    _extra_filter['add_date__lt'] = _today - datetime.timedelta(hours=1)
+        
     return _find_recent_search_word(request.LANGUAGE_CODE,
                                     since=_since,
                                     random=True,
-                                    extra_exclude=_extra_exclude)
+                                    extra_exclude=_extra_exclude,
+                                    **_extra_filter)
     
 
 def _find_recent_search_word(language, since=None, random=False, extra_exclude={}, **extra_filter):
