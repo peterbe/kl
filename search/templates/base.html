@@ -92,8 +92,11 @@
   <br/><br/>
   <br/><br/>
   <br/>
+  {% if sparklines_href and sparklines_url %}
   <a style="padding-left:4px" href="{{ sparklines_href }}" title="{% trans "Searches this month" %}"
   ><img src="{{ sparklines_url }}" alt="{% trans "Searches this month" %}" border="0"/></a>
+  {% endif %}
+  
   {% endblock %}
 
 

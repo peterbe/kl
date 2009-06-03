@@ -33,6 +33,7 @@ div.error {
 em.definition { font-size:80%; padding-left:10px; color:#666666; }
 a.clear-search { font-size:80%;}
 input#id_length, #allslots input { font-weight:bold; font-size:120% }
+p.recently-found { font-size:80%; }
 {% endslimcontent %}
 </style>
 {% endblock %}
@@ -109,5 +110,18 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 <strong>{% trans "New!" %}</strong>
 <a href="/word-whomp/">{% trans "Word Whomp" %}</a>
 </p>
+
+
+{% if most_recent_search_word %}
+  <p>&nbsp;</p>
+  <p class="recently-found">
+  <strong>{% trans "By the way..." %}</strong><br/>
+  {% trans "Crosstips recently helped someone find the word:" %}
+  <a href="{{ searches_summary_link }}#{{ most_recent_search_word.word }}">{{ most_recent_search_word.word }}</a>
+  {% if most_recent_search_word.definition %}
+  <br/>({% trans "which means" %} <em>{{ most_recent_search_word.definition }}</em>)
+  {% endif %}
+  </p>
+{% endif %}
 
 {% endblock %}

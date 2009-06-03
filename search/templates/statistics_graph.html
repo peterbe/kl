@@ -2,7 +2,11 @@
 {% load i18n %}
 {% load django_slimmer %}
 
-{% block title %}{% trans "Statistics Graph" %} - {% trans "Crosstips" %}{% endblock %}
+{% block title %}{% if html_title %}{{ html_title }}{% else %}{% trans "Statistics Graph" %}{% endif %} - {% trans "Crosstips" %}{% endblock %}
+
+{% if html_title %}
+{% block meta_content %}{{ html_title }}{% endblock %}
+{% endif %}
 
 {% block extracss %}
 <link rel="stylesheet" href="{{ MEDIA_URL }}{% staticfile "/css/ui.daterangepicker.css" %}" type="text/css" />
@@ -10,7 +14,13 @@
 {% endblock %}
 
 {% block main %}
+
+{% if html_title %}
+<h3>{{ html_title }}</h3>
+{% else %}
 <h3>{% trans "Statistics Graph" %}</h3>
+{% endif %}
+
 
 
 <div id="placeholder" style="width:550px;height:300px;"></div>

@@ -3,6 +3,8 @@
 {% load highlighter %}
 {% load django_slimmer %}
 
+{% block title %}{% trans "Simple interface" %} {{ block.super }}{% endblock %}
+
 {% block extracss %}
 <style type="text/css">
 input#id_slots { font-family:Courier, "Courier New", Mono; font-size:120%; letter-spacing:4px;}

@@ -137,6 +137,8 @@ CANONICAL_DOMAINS = {
 
 GOOGLEMAPS_API_KEY = open('default_googlemaps_api.key').read()
 
+DO_THIS_MONTH_SPARKLINES = True
+
 import logging
 LOGGING_LOG_FILENAME = 'event.log'
 LOGGING_LEVEL = DEBUG and logging.DEBUG or logging.ERROR

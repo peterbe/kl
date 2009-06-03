@@ -5,8 +5,39 @@
 
 {% block title %}{% trans "Searches summary in" %} {{ month }} {{ year }} - {% trans "Crosstips" %}{% endblock %}
 
+{% block extrajs %}
+<script type="text/javascript">
+
+function __focus_li(li) {
+     li.fadeOut(200, function() {
+        li.addClass('focused');
+        li.fadeIn("slow");
+      });
+}
+
+$(function() {
+  if (document.location.hash) {
+    var a = $('a[name="' +document.location.hash.substring(1, document.location.hash.length) +'"]');
+    if (a.size()) {
+      __focus_li(a.parent('li'));
+    }
+  }
+  $('li', 'ul.words').click(function() {
+    $('li.focused').removeClass('focused');
+    if ($('a', this).attr('name') == document.location.hash.substring(1, document.location.hash.length)) {
+      //document.location.hash = '';
+    } else {
+      __focus_li($(this));
+      document.location.hash = $('a', this).attr('name');
+    }
+  });
+});
+</script>
+{% endblock %}
+
 {% block extracss %}
 <style type="text/css">
+li.focused { background-color:#efefef; }
 ul.words em { padding-left:10px; font-size:70%; color:#666666; line-height:1px;}
 ul.words a { padding-left:10px; font-size:70%; }
 </style>
@@ -25,6 +56,7 @@ ul.words a { padding-left:10px; font-size:70%; }
     <ul class="words">
     {% for word in words %}
       <li class="{{ language }} {% if not word.definitions %}definitionless{% endif %}">{{ word.word }}
+      <a name="{{ word.word }}"></a>
         
         {% if word.definitions %}
         <br/>

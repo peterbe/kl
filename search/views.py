@@ -207,14 +207,55 @@ def solve(request, json=False, record_search=True):
         length = '' # default
         
     show_example_search = not bool(request.session.get('has_searched'))
-    
+    if not show_example_search:
+        most_recent_search_word = _get_recent_search_word(request)
+
     accept_clues = wordnet is not None and \
       request.LANGUAGE_CODE.lower() in ('en', 'en-gb', 'en-us')
-    #accept_clues=False# disabled for the time being
 
     data = locals()
 
     return _render('solve.html', data, request)
+
+def _get_recent_search_word(request):
+    _today = datetime.datetime.today()
+    _since = datetime.datetime(_today.year, _today.month, 1)
+    
+    _extra_exclude = dict()
+    if request.META.get('HTTP_USER_AGENT'):
+        _extra_exclude['user_agent'] = request.META.get('HTTP_USER_AGENT')
+    if request.META.get('REMOTE_ADDR'):
+        _extra_exclude['ip_address'] = request.META.get('REMOTE_ADDR')
+        
+    return _find_recent_search_word(request.LANGUAGE_CODE,
+                                    since=_since,
+                                    random=True,
+                                    extra_exclude=_extra_exclude)
+    
+
+
+def _find_recent_search_word(language, since=None, random=False, extra_exclude={}, **extra_filter):
+    searches = Search.objects.filter(language=language, found_word__isnull=False, 
+                                     **extra_filter)
+    
+    if since:
+        searches = searches.filter(add_date__gte=since)
+    searches = searches.exclude(**extra_exclude)
+        
+    print_sql(searches)
+    if random:
+        found_words = [x.found_word for x in searches]
+        shuffle(found_words)
+        try:
+            return found_words[0]
+        except IndexError:
+            return None
+    else:
+        searches = searches.order_by('-add_date')
+        return searches[0].found_word
+    return None
+    
+    
 
 def _record_search(search_word, user_agent=u'', ip_address=u'',
                    found_word=None,
@@ -1238,6 +1279,24 @@ def statistics_graph(request):
     language_options = get_language_options(request, be_clever=False)
     for each in language_options:
         each['checked'] = each['code'].lower() in [x.lower() for x in languages]
+        
+    if date1 and date2:
+        fmt1 = '%d %b'
+        fmt2 = '%d %b %Y'
+        if date1.strftime('%Y') == date2.strftime('%Y'):
+            if date1.strftime('%b') == date2.strftime('%b'):
+                fmt1 = '%d'
+        else:
+            fmt1 = '%d %b %Y'
+            
+        html_title = _(u"Statistics graph between %(date1)s and %(date2)s") %\
+                      dict(date1=date1.strftime(fmt1), date2=date2.strftime(fmt2))
+    elif date1:
+        html_title = _(u"Statistics graph since %(date1)s") % \
+                      dict(date1=date1.strftime('%d %b %Y'))
+    elif date2:
+        html_title = _(u"Statistics graph up until %(date2)s") % \
+                      dict(date2=date2.strftime('%d %b %Y'))
     
     return _render('statistics_graph.html', locals(), request)
 
@@ -1408,7 +1467,7 @@ def searches_summary_lookup_definitions(request, year, month, atleast_count=1):
     return searches_summary(request, year, month, atleast_count=atleast_count,
                             lookup_definitions=True)
 
-@cache_page(60 * 60 * 24) # 24 hours
+#@cache_page(60 * 60 * 24) # 24 hours
 def searches_summary(request, year, month, atleast_count=2,
                      lookup_definitions=False):
     

@@ -49,15 +49,15 @@ def context(request):
     # for the link the Searches summary of the latest month
     data['searches_summary_link'] = datetime.datetime.today().strftime('/searches/%Y/%B/')
     
-    
-    data['sparklines_url'] = get_sparklines(150, 100)
-    today = datetime.datetime.today()
-    first_date = datetime.datetime(today.year, today.month, 1)
-    data['sparklines_href'] = '/statistics/graph/?daterange='+\
-                              quote(first_date.strftime('%Y/%m/%d')) +\
-                              quote(' - ') +\
-                              quote(today.strftime('%Y/%m/%d'))
-    
+    if settings.DO_THIS_MONTH_SPARKLINES:
+        data['sparklines_url'] = get_sparklines(150, 100)
+        today = datetime.datetime.today()
+        first_date = datetime.datetime(today.year, today.month, 1)
+        data['sparklines_href'] = '/statistics/graph/?daterange='+\
+                                quote(first_date.strftime('%Y/%m/%d')) +\
+                                quote(' - ') +\
+                                quote(today.strftime('%Y/%m/%d'))
+        
     
     current_url = request.build_absolute_uri()
     
