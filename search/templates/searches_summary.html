@@ -24,7 +24,7 @@ $(function() {
   }
   $('li', 'ul.words').click(function() {
     $('li.focused').removeClass('focused');
-    if ($('a', this).attr('name') == document.location.hash.substring(1, document.location.hash.length)) {
+    if ($('a', this).attr('name').toLowerCase() == document.location.hash.substring(1, document.location.hash.length).toLowerCase()) {
       //document.location.hash = '';
     } else {
       __focus_li($(this));
