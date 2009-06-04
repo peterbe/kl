@@ -104,6 +104,10 @@ def solve(request, json=False, record_search=True):
         if not len(slots) >= length:
             return HttpResponseRedirect('/los/?error=slots&error=length')
         
+        if not [x for x in slots if x.strip()]:
+            # all blank
+            return HttpResponseRedirect('/los/?error=slots')
+        
         clues = request.GET.get('clues', u'')
         if clues and ' ' in clues and ',' not in clues:
             clues = clues.replace(' ',', ')
