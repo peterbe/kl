@@ -12,6 +12,10 @@ try:
     import simplejson
 except ImportError:
     from django.utils import simplejson
+    
+from lxml.html import parse
+from lxml import etree
+from lxml.cssselect import CSSSelector    
 
 # Create your views here.
 from django.shortcuts import render_to_response, get_object_or_404
@@ -576,7 +580,7 @@ def word_definition_lookup(request):
                 definition = _get_word_definition(word_object.word, 
                                                   language=word_object.language)
                 if not definition:
-                    definition = _get_word_definition_google(word_object.word,
+                    definition = _get_word_definition_scrape(word_object.word,
                                                              language=word_object.language)
                 
                 if definition:
@@ -593,38 +597,53 @@ def _get_word_definition(word, language=None):
             if synset.name.split('.')[0] == word:
                 return synset.definition
             
-def _get_word_definition_google(word, language=None):
-    if language.lower() not in ('en-us','en-gb'):
+def _get_word_definition_scrape(word, language=None):
+    if language.lower() not in ('en-us','en-gb','fr'):
         return 
     
-    url = "http://www.google.com/search"#?hl=en&client=firefox-a&rls=com.ubuntu%3Aen-GB%3Aunofficial&q=define%3Abanyans&btnG=Search&meta=
-    if language.lower() == 'en-gb':
-        url = url.replace('.com', '.co.uk')
-    query = {'hl': language.lower().split('-')[0],
-             'q': 'define:%s' % word.encode('utf-8'),
-             'ie': 'utf-8',
-             'oe': 'utf-8'
-             }
-    url += '?%s' % urlencode(query)
-    
+    if language == 'fr':
+        url = "http://www.le-dictionnaire.com/definition.php"
+        query = {'mot':word.encode('utf-8'),
+                }
+        url += '?%s' % urlencode(query)
+        
+        cache_key = 'ledictionnaire_download_%s' % url.replace('http://','')
+        
+        extractor = _extract_definitions_le_dictionnaire
+        
+    else:
+        url = "http://www.google.com/search"#?hl=en&client=firefox-a&rls=com.ubuntu%3Aen-GB%3Aunofficial&q=define%3Abanyans&btnG=Search&meta=
+        if language.lower() == 'en-gb':
+            url = url.replace('.com', '.co.uk')
+        query = {'hl': language.lower().split('-')[0],
+                'q': 'define:%s' % word.encode('utf-8'),
+                'ie': 'utf-8',
+                'oe': 'utf-8'
+                }
+        url += '?%s' % urlencode(query)
+        
+        cache_key = 'google_define_download_%s' % url.replace('http://','')
+        
+        extractor = _extract_definitions_google
+        
+        
     # take a random search from Searches to
     request_meta = {}
     request_meta['HTTP_USER_AGENT'] = _get_random_used_user_agent()
-    
-    cache_key = 'google_define_download_%s' % url.replace('http://','')
     html = cache.get(cache_key)
     if html is None:
         print "URL", url
         html = _download_url(url, request_meta)
-        sleep(2) # to not piss off Google
+        sleep(2) # to not piss off Google/le-dictionnaire.com
         print "Downloaded", len(html), "bytes"
         print
         cache.set(cache_key, html)
-    
+
+    # happens on Google
     if "No definitions of" in html and "were found in English" in html:
         return 
     
-    definitions = _extract_definitions(html)
+    definitions = extractor(html)
     if definitions:
         # perhaps combined it becomes larger than 245 characters
         # (actually 250 but worried about line breaks)
@@ -636,14 +655,46 @@ def _get_word_definition_google(word, language=None):
             
         return '\n'.join([x.strip() for x in definitions if x.strip()])
     
-
-def _extract_definitions(html, max_definitions=3):
+    
+def _extract_definitions_le_dictionnaire(html, max_definitions=3):
+    if isinstance(html, unicode):
+        html = html.encode('utf8')
+    parser = etree.HTMLParser()
+    tree = etree.parse(StringIO(html), parser)
+    page = tree.getroot()
+    assert page is not None, "root is None!"
+    sel = CSSSelector('td.arial-12-gris')
+    sel2 = CSSSelector('span')
+    
     definitions = []
     
-    from lxml.html import parse
-    from lxml import etree
+    #tables = list(CSSSelector('table')(page))
+    #for i, table in enumerate(tables):
+     #   #print dir(table)
+     #   print i
+     #   print repr(etree.tostring(table))
+     #   print "\n"
+    
+    tables = list(CSSSelector('table')(page))[4:8]
+    #print etree.tostring(table)
+    for table in tables:
+        for td in sel(table):
+            definition = []
+            for span in sel2(td):
+                s = span.attrib.get('style')
+                if s in ('color: #ABABAB;', 'cursor: pointer;'):
+                    definition.append(span.text)
+                
+            definitions.append(' '.join(definition))
+        if len(definitions) == max_definitions:
+            break
+            
+    return definitions
+        
+    #raise ValueError
 
-    from lxml.cssselect import CSSSelector
+def _extract_definitions_google(html, max_definitions=3):
+    definitions = []
     
     if isinstance(html, unicode):
         html = html.encode('utf8')
@@ -1570,7 +1621,7 @@ def searches_summary(request, year, month, atleast_count=2,
                         definition = None
                         
                     if not definition:
-                        definition = _get_word_definition_google(word, language=lang)
+                        definition = _get_word_definition_scrape(word, language=lang)
                     if definition:
                         add_word_definition(word, definition, language=lang)
 
@@ -1852,7 +1903,7 @@ def _get_recent_located_searches(languages=None, how_many=10, since=None):
                         definition = _get_word_definition(search.found_word.word, 
                                                           language=search.found_word.language)
                         if not definition:
-                            definition = _get_word_definition_google(search.found_word.word, 
+                            definition = _get_word_definition_scrape(search.found_word.word, 
                                                                      language=search.found_word.language)
                         if definition:
                             add_word_definition(search.found_word.word, definition,
