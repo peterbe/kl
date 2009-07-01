@@ -52,7 +52,7 @@ p.recently-found { font-size:80%; }
 {% else %}
   {% if iphone_version %}
     <p>
-    <img src="{{ MEDIA_URL }}{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" />
+    <a href="/iphone/"><img src="{{ MEDIA_URL }}{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" border="0" /></a>
     <br/><br/>
     <strong>{% trans "For iPhone users:"%}</strong><br/>
     <a href="/iphone/">{% trans "Use the iPhone interface to search" %}</a>
