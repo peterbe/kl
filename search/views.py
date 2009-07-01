@@ -1367,7 +1367,10 @@ def statistics_graph(request):
     return _render('statistics_graph.html', locals(), request)
 
 
-def solve_simple(request, record_search=True):
+def solve_simple(request, record_search=True,
+                 template='simple.html',
+                 json=False,
+                 search_type="simple"):
     if request.GET.get('slots'):
         
         # By default we are set to record the search in our stats
@@ -1474,10 +1477,12 @@ def solve_simple(request, record_search=True):
                             ip_address=request.META.get('REMOTE_ADDR',''),
                             found_word=found_word,
                             language=language,
-                            search_type="simple")
+                            search_type=search_type)
                 
             request.session['has_searched'] = True
-    
+            
+            if json:
+                return _render_json(result)
         
     else:
         language = request.LANGUAGE_CODE
@@ -1485,7 +1490,7 @@ def solve_simple(request, record_search=True):
         
         show_example_search = not bool(request.session.get('has_searched'))
         
-    return _render('simple.html', locals(), request)
+    return _render(template, locals(), request)
     
     
 
@@ -1952,3 +1957,11 @@ def word(request, word_string, language=None):
     
     return _render('word.html', locals(), request)
     
+    
+def solve_iphone(request, record_search=True):
+    # almost a wrapper on solve_simple()
+    
+    return solve_simple(request,
+                        record_search=record_search,
+                        template='iphone.html',
+                        search_type="iphone")

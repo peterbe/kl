@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load i18n %}
+{% load django_slimmer %}
+	 
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{% block title %}{% trans "Crosstips" %} - {% trans "helps you solve your crossword puzzles" %}{% endblock %}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+	 <!--<link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>-->
+
+	<style type="text/css" media="screen">@import "{{ MEDIA_URL }}{% staticfile "/css/iphonenav.css" %}";</style>
+	<style type="text/css" media="screen">@import "{{ MEDIA_URL }}{% staticfile "/css/samples.css" %}";</style>
+        {% block extracss %}
+        {% endblock %}
+	
+</head> 
+
+<body onorientationchange="updateOrientation()">
+{# <body>#}
+    <h1 id="pageTitle"></h1>
+    <a id="homeButton" class="button" href="..">Exit</a>
+    <!-- <a class="button" href="#searchForm">Search</a> -->
+    
+    {% block main %}
+    
+    {% endblock %}
+
+        {# Can I put this at the bottom? #}
+        {% if DEBUG %}<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery-1.3.1.min.js" %}"></script>
+        {% else %}
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+        {% endif %}
+	<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}{% slimfile "/javascript/iphonenav.js" %}"></script>
+	{# <script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/samples.js" %}"></script> #}
+	{# <script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/canvasProgress.js" %}"></script> #}
+        {% block extrajs %}
+        {% endblock %}
+
+{% if use_google_analytics %}
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try{
+var pageTracker = _gat._getTracker("UA-94373-9");
+pageTracker._trackPageview();
+}catch(err){}</script>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,142 @@
+.roundTD
+{
+	-webkit-border-radius:8px;
+	border:solid 2px silver;
+}
+.btnTable
+{
+	text-align: center;
+}
+
+.togButton
+{
+	display: block;
+	width: 94px; 
+	height: 27px; 
+	margin:8px;
+}
+
+/*
+.togButtonOn
+{
+	background-image:url('/images/on.png');
+}
+.togButtonOff
+{
+	background-image:url('/images/off.png');
+}
+*/
+
+.borderImageBtn
+{
+	margin: 0;
+	height: 30px;
+	width:110px;
+	text-align: center;
+	font: bold 12px/30px Helvetica, sans-serif;
+	text-decoration: none;
+	display: block;
+}
+.blueButton
+{
+	border-left: 12px;
+	border-right: 12px;
+	color: white;
+	text-shadow: #000 0px 1px 1px;
+	-webkit-border-image:url("/images/blueButton.png") 0 14 0 14;
+}
+.whiteButton
+{
+	border-left: 12px;
+	border-right: 12px;
+	color: black;
+	text-shadow: #fff 0px 1px 1px;
+	-webkit-border-image:url("/images/whiteButton.png") 0 14 0 14;
+}
+.blackButton
+{
+	border-left: 12px;
+	border-right: 12px;
+	color: white;
+	text-shadow: #000 0px 1px 1px;
+	-webkit-border-image:url("/images/grayButton.png") 0 14 0 14;
+}
+.blackLeftButton
+{
+	border-left: 12px;
+	border-right: 5px;
+	color: white;
+	text-shadow: #000 0px 1px 1px;
+	-webkit-border-image: url("/images/left.png") 0 5 0 12;
+}
+.blackRightButton
+{
+	border-left: 5px;
+	border-right: 12px;
+	color: white;
+	text-shadow: #000 0px 1px 1px;
+	-webkit-border-image: url("/images/right.png") 0 12 0 5;
+}
+.glossyButton
+{
+	height: 24px;
+	width: 43px;
+	border: 0px;
+	font: bold 18px/24px Helvetica, sans-serif;
+	background-color: green;
+	background-image: url("/images/glossy.png");
+	background-repeat: no-repeat;
+	text-decoration: none;
+	color: white;
+	display: block;
+	padding: 6px;
+	text-align: center;
+	text-shadow: #000 -2px -2px 1px;
+	vertical-align: bottom;
+	white-space: nowrap;
+	-webkit-border-radius: 9px;
+}
+.noHighlight
+{
+	-webkit-tap-highlight-color:rgba(0,0,0,0.0);
+}
+.moreListItem
+{
+    background: none;
+}
+.rrh1
+{
+	margin-top: 0px;
+	font-family: Helvetica;
+	font-size: 17px;
+	color: rgb(76,86,108);
+	margin-left: 10px;
+}
+
+li a 
+{
+	-webkit-tap-highlight-color: cornflowerblue;
+}
+
+body > div > ul 
+{
+	padding: 0px;
+	width: 298px;
+	margin: 0px 0px;
+	margin-right: 10px;
+	background-color: white;
+	-webkit-border-radius: 8px;
+	border: 1px solid rgb(217,217,217); 
+}
+
+
+body > div > ul > li 
+{
+	/* line-height: 17px;*/
+	list-style-type: none;
+	color:black;
+	border-bottom: 1px rgb(217,217,217) solid;
+	padding: 10px 10px 17px 10px;
+	-webkit-tap-highlight-color: cornflowerblue;
+}
+

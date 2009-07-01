@@ -1,0 +1,85 @@
+{% extends "iphone_base.html" %}
+{% load i18n %}
+{% load highlighter %}
+{% load django_slimmer %}
+
+{% block title %}{% trans "iPhone interface" %} {{ block.super }}{% endblock %}
+
+{% block extracss %}
+<style type="text/css">
+input#id_slots { font-family:Courier, "Courier New", Mono; font-size:120%; letter-spacing:4px; width:300px;}
+#results span {
+  font-family:"courier new",courier; font-size:120%; letter-spacing:1px;
+}
+span.match { font-weight:bold; background-color:#ccc;}
+input.error { border:1px solid red;}
+span.word { padding:8px 32px 8px 8px; display:block; }
+body > ul > li.nolink { background: transparent; }
+</style>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery.form.js" %}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/iphone.js" %}"></script>
+{% endblock %}
+
+
+{% block main %}
+
+<div id="Search" title="Search" selected="true">
+<form action="." id="simple">
+
+<h3>{% trans "Known letters (with spaces for letters you don't know)" %}:</h3>
+{{ form.slots.errors }}
+{{ form.slots }} 
+{% comment %} <input id="id_slots" maxlength="30" type="text" name="slots" style="width:200px"
+  {% if slots %}value="{{ slots|join:""|upper }}"{% endif %}/>
+{% endcomment %}  
+
+
+
+{{ form.language }}
+
+  <a class="borderImageBtn whiteButton" href="#" onclick="return ajaxSearch()"
+   >{% if result %}{% trans "Search again" %}{% else %}{% trans "Search" %}{% endif %}</a>
+
+  <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15"/>
+  
+  <p id="matches" style="display:none"></p>
+
+</form>
+</div>
+
+{% if not result and form.errors %}
+<br/>
+<a href="." id="clear-search">{% trans "clear search" %}</a>
+{% endif %}
+
+
+{% if show_example_search %}
+  <div id="for-example">
+  <br/>
+  <p>{% blocktrans %}
+  Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. 
+  Enter the length of the word and fill in the known letters.
+  {% endblocktrans %}</p>
+
+  {% ifequal request.LANGUAGE_CODE "sv" %}
+  <p>Till exempel, <a href="/simple/?slots=KO__O_D" rel="nofollow">vilket ord b&ouml;rjar p&auml; KO, femte bokstaven O och slutar p&auml; bokstaven D?</a>
+  {% else %}
+  <p>For example, <a href="/simple/?slots=C_O____RD" rel="nofollow">what's
+  a 9 letter word that starts with C, third letter O and ends with RD?</a>
+  {% endifequal %}
+ </div>
+{% endif %}
+
+
+<ul id="Results" title="Results" parentName="Search">
+        <li><a href="#">Item 1</a></li>
+        <li>Item 2</li>
+</ul>
+
+
+
+
+{% endblock %}

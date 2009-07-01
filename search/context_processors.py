@@ -29,13 +29,18 @@ def context(request):
     #    data['ADMIN_MEDIA_PREFIX'] = '/'
     #else:
     #    data['ADMIN_MEDIA_PREFIX'] = settings.ADMIN_MEDIA_PREFIX
-            
+         
+    http_user_agent = request.META.get('HTTP_USER_AGENT', None)
+    
     if request.GET.get('MOBILE_TEMPLATE') or \
-      request.META.get('HTTP_USER_AGENT', None) and \
+      http_user_agent and \
       parseUserAgent(request.META.get('HTTP_USER_AGENT')):
         data['mobile_user_agent'] = True
         data['base_template'] = "mobile_base.html"
         data['mobile_version'] = True
+    elif http_user_agent and http_user_agent.count('iPhone') and \
+      http_user_agent.count('AppleWebKit'): # XXX needs work (e.g. iPhoney fails)
+        data['iphone_version'] = True
 
     language = request.LANGUAGE_CODE
     data.update(get_search_stats(language))
@@ -73,7 +78,8 @@ def context(request):
                 data['amazon_advert'] = get_amazon_advert(data['geo'])
     
         
-    data['use_google_analytics'] = True
+    data['use_google_analytics'] = data.get('use_google_analytics', 
+                                            not settings.DEBUG)
 
     data['show_crossing_the_world_link'] = '/crossing-the-world' not in current_url
     

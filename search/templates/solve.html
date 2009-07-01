@@ -39,6 +39,7 @@ p.recently-found { font-size:80%; }
 {% endblock %}
 
 {% block extrajs %}
+<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery.form.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}{% slimfile "/javascript/solve.js" %}"></script>
 {% endblock %}
 
@@ -48,6 +49,17 @@ p.recently-found { font-size:80%; }
 <p>
 {% blocktrans %}If you use a mobile device try the <a href="/simple/">simple interface</a> instead.{% endblocktrans %}
 </p>
+{% else %}
+  {% if iphone_version %}
+    <p>
+    <img src="{{ MEDIA_URL }}{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" />
+    <br/><br/>
+    <strong>{% trans "For iPhone users:"%}</strong><br/>
+    <a href="/iphone/">{% trans "Use the iPhone interface to search" %}</a>
+    <br style="clear:left"/>
+    </p>
+    
+  {% endif %}
 {% endif %}
 
 <form action="./" id="solutions">
@@ -108,6 +120,8 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 <br/>
 
 <strong>{% trans "New!" %}</strong>
+<a href="/iphone/">{% trans "iPhone interface" %}</a>
+<br/>
 <a href="/word-whomp/">{% trans "Word Whomp" %}</a>
 </p>
 
