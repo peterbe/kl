@@ -36,6 +36,7 @@ from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, prin
 from morph_en import variations as morph_variations
 from data import add_word_definition, ip_to_coordinates, save_ip_lookup
 from data import get_searches_rate
+from googlecharts import get_search_types_pie, get_languages_pie, get_lengths_bar
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -1363,7 +1364,42 @@ def statistics_graph(request):
     elif date2:
         html_title = _(u"Statistics graph up until %(date2)s") % \
                       dict(date2=date2.strftime('%d %b %Y'))
+        
+    qs = Search.objects.filter(**extra_filter)
     
+    # don't do this on the example searches
+    qs = qs.exclude(search_word__in=('c o    rd', 'p t r', 'ko  o d'))
+    
+    PIE_WIDTH = 400; PIE_HEIGHT = 170
+    BAR_WIDTH = 400; BAR_HEIGHT = 170
+    
+    # figure out what the different types of search_type there are
+    #print_sql(qs.values('search_type').distinct('search_type'))
+    search_types = [x['search_type'] for x 
+                    in qs\
+                      .values('search_type').distinct('search_type')]
+
+    if len(search_types) > 1:
+        search_types_pie = get_search_types_pie(qs, search_types, 
+                                                PIE_WIDTH, PIE_HEIGHT)
+        
+    # figure out what languages people use to search
+    languages = [x['language'] for x 
+                    in qs\
+                      .values('language').distinct('language')]
+    if len(languages) > 1:
+        search_languages_pie = get_languages_pie(qs, languages, 
+                                                 PIE_WIDTH, PIE_HEIGHT)
+
+       
+    #lengths = [x for x in 
+    lengths = [x['L'] for x in
+               qs.extra(select={'L':'length(search_word)'})\
+                 .distinct('L').values('L')][1:-1]
+    if len(lengths) > 1:
+        search_lengths_bar = get_lengths_bar(qs, lengths, 
+                                             BAR_WIDTH, BAR_HEIGHT)
+
     return _render('statistics_graph.html', locals(), request)
 
 
