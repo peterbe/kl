@@ -120,7 +120,9 @@ def _get_bar_chart(width, height, data, background_color=None, colour=None):
     #print dir(chart)
     chart.set_axis_labels(pygooglechart.Axis.BOTTOM, [x[0] for x in data])
     interval = (max_ - min_) / 10
-    if interval > 50:
+    if interval > 100:
+        interval = 500
+    elif interval > 50:
         interval = 100
     else:
         interval = 50
