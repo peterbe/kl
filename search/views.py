@@ -1055,11 +1055,15 @@ def send_feedback(request):
     if feedbackform.is_valid():
         name = feedbackform.cleaned_data.get('name')
         email = feedbackform.cleaned_data.get('email')
+        render_form_ts = feedbackform.cleaned_data.get('render_form_ts')
+        render_now_ts = int(time())
         geo = request.META.get('GEO')
 
         _send_feedback(feedbackform.cleaned_data.get('text'),
                        name=name,
                        email=email,
+                       render_form_ts=int(render_form_ts),
+                       render_now_ts=render_now_ts,
                        geo=geo)
         
         response = _render('feedback_sent.html', locals(), request)
@@ -1076,7 +1080,7 @@ def send_feedback(request):
     return _render('solve.html', locals(), request)
         
 def _send_feedback(text, name=u'', email=u'', fail_silently=False,
-                   geo=None):
+                   geo=None, render_form_ts=None, render_now_ts=None):
     
     recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
     
@@ -1095,6 +1099,10 @@ def _send_feedback(text, name=u'', email=u'', fail_silently=False,
         message += "Email: %s\n" % email
     if geo:
         message += "GEO: %s\n" % geo
+    if render_form_ts and render_now_ts:
+        message += "render_form_ts:%s  render_now_ts:%s  diff:%s\n" % \
+          (render_form_ts, render_now_ts, render_now_ts-render_form_ts)
+                                                                     
     message += "\n" + text
     message += '\n\n\n--\nkl'
     

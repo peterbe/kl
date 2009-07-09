@@ -43,6 +43,7 @@ p.recently-found { font-size:80%; }
 <script type="text/javascript" src="{{ MEDIA_URL }}{% slimfile "/javascript/solve.js" %}"></script>
 {% endblock %}
 
+
 {% block main %}
 
 {% if mobile_user_agent %}
@@ -52,11 +53,11 @@ p.recently-found { font-size:80%; }
 {% else %}
   {% if iphone_version %}
     <p>
-    <a href="/iphone/"><img src="{{ MEDIA_URL }}{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" border="0" /></a>
-    <br/><br/>
-    <strong>{% trans "For iPhone users:"%}</strong><br/>
+    <a href="/iphone/"><img src="{{ MEDIA_URL }}{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" border="0"></a>
+    <br><br>
+    <strong>{% trans "For iPhone users:"%}</strong><br>
     <a href="/iphone/">{% trans "Use the iPhone interface to search" %}</a>
-    <br style="clear:left"/>
+    <br style="clear:left">
     </p>
     
   {% endif %}
@@ -65,22 +66,22 @@ p.recently-found { font-size:80%; }
 <form action="./" id="solutions">
 <p>
   <label for="id_length">{% trans "Number of letters" %}:</label>
-  <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"/><br/>
+  <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"><br>
   
   <label>{% trans "Slots" %}:</label>
   <span id="allslots">
-  {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1"/>{% endfor %}
+  {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1">{% endfor %}
   </span>
-  <br/>
+  <br>
   {% if accept_clues %}
     <span id="clues" style="display:none">
     <label>{% trans "Clue(s):" %}</label>
-    <input name="clues" value="" size="12" />
+    <input name="clues" value="" size="12">
       <small>(word clues separated by a comma)</small>
-    </span><br/>
+    </span><br>
   {% endif %}
-  <input type="submit" value="{% trans "Search" %}"/>
-  <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15"/>
+  <input type="submit" value="{% trans "Search" %}">
+  <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15">
   <a href="./" id="clear-search" style="display:none">{% trans "clear search" %}</a>
 </p>
 </form>
@@ -89,7 +90,7 @@ p.recently-found { font-size:80%; }
 {% trans "No letters all?" %}
 </div>
 <div id="error__ajax" class="error" style="display:none">
-{% trans "Sorry. Unable to do a search right now. Please try again a bit later." %}<br/>
+{% trans "Sorry. Unable to do a search right now. Please try again a bit later." %}<br>
 <code class="response"></code>
 </div>
 
@@ -117,11 +118,11 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 <p>&nbsp;</p>
 <p>
 {% blocktrans %}Try the <a href="/simple/">simple inferface</a>{% endblocktrans %}
-<br/>
+<br>
 
 <strong>{% trans "New!" %}</strong>
 <a href="/iphone/">{% trans "iPhone interface" %}</a>
-<br/>
+<br>
 <a href="/word-whomp/">{% trans "Word Whomp" %}</a>
 </p>
 
@@ -129,11 +130,11 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 {% if most_recent_search_word %}
   <p>&nbsp;</p>
   <p class="recently-found">
-  <strong>{% trans "By the way..." %}</strong><br/>
+  <strong>{% trans "By the way..." %}</strong><br>
   {% trans "Crosstips recently helped someone find the word:" %}
   <a href="{{ searches_summary_link }}#{{ most_recent_search_word.word }}">{{ most_recent_search_word.word }}</a>
   {% if most_recent_search_word.definition %}
-  <br/>({% trans "which means" %} <em>{{ most_recent_search_word.definition }}</em>)
+  <br>({% trans "which means" %} <em>{{ most_recent_search_word.definition }}</em>)
   {% endif %}
   </p>
 {% endif %}

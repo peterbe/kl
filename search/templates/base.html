@@ -3,13 +3,13 @@
 {% load i18n %}
 {% load django_slimmer %}
 <head>
-<meta name="verify-v1" content="H1U75AyrrJ7CkwpR5XiaDfCGwIm+5rCHCb8sACKqG7A=" />
-<meta name="y_key" content="d03147e0eaab79e1"/>
+<meta name="verify-v1" content="H1U75AyrrJ7CkwpR5XiaDfCGwIm+5rCHCb8sACKqG7A=">
+<meta name="y_key" content="d03147e0eaab79e1">
 
-  <meta http-equiv="Content-Language" content="{{ request.LANGUAGE_CODE }}"/>
+  <meta http-equiv="Content-Language" content="{{ request.LANGUAGE_CODE }}">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   {% if canonical_url %}
-  <link rel="canonical" href="{{ canonical_url }}" />
+  <link rel="canonical" href="{{ canonical_url }}">
   {% endif %}
   <meta name="description" content="{% block meta_content %}{% trans "helps you solve your crossword puzzles" %}{% endblock %}">
   <meta name="keywords" content="{% block meta_keywords %}{% trans "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles" %}{% endblock %}">
@@ -30,8 +30,9 @@
     <div id="body">
       
         
-          
+          {% block reader_sidebar_outer %}
           <div class="sidebar reader_sidebar">
+	  {% block reader_sidebar %}
           <form action="/i18n/setlang/" method="post">
 
             <ul>
@@ -48,18 +49,20 @@
 	   {{ amazon_advert|safe }}
 	  {% endif %}
 	  
-          <br/>
-          <br/>
+
 	  {% if show_crossing_the_world_link %}
+          <br>
+          <br>
 	  <a href="/crossing-the-world/" title="{% trans "Crosstips searches across the globe" %}"
-	  ><img src="{{ MEDIA_URL }}{% staticfile "/images/ctw-screenshot.png" %}" border="0" alt="{% trans "Crosstips searches across the globe" %}" /></a><br/>
-          <strong>{% trans "New fun feature!" %}</strong><br/>
+	  ><img src="{{ MEDIA_URL }}{% staticfile "/images/ctw-screenshot.png" %}" width="142" height="123" border="0" alt="{% trans "Crosstips searches across the globe" %}"></a><br>
+          <strong>{% trans "New fun feature!" %}</strong><br>
           <a href="/crossing-the-world/" title="{% trans "Crosstips searches across the globe" %}"
           >{% trans "Crossing the world " %}</a>
 	  {% endif %}
 
-	  
+          {% endblock %} {# reader_sidebar #}	  
           </div>
+	  {% endblock %} {# reader_sidebar_outer #}
         
 
         <div class="content_wrapper">
@@ -89,16 +92,15 @@
     <li><a>{% trans "Searches this year" %} <em>{{ no_searches_this_year }}</em></a></li>
     <li><a>{% trans "Total number of words" %} <em>{{ no_total_words }}</em></a></li>
   </ul>
-  <br/><br/>
-  <br/><br/>
-  <br/>
+  <br><br>
+  <br><br>
+  <br>
   {% if sparklines_href and sparklines_url %}
   <a style="padding-left:4px" href="{{ sparklines_href }}" title="{% trans "Searches this month" %}"
   ><img src="{{ sparklines_url }}" alt="{% trans "Searches this month" %}" border="0"/></a>
   {% endif %}
   
   {% endblock %}
-
 
           </div>
   {% endblock %}

@@ -5,7 +5,6 @@ from django.utils.translation import ugettext as _
 
 
 class DSSOUploadForm(forms.Form):
-    
     file = forms.FileField()
 
 class WordlistUploadForm(forms.Form):
@@ -21,6 +20,7 @@ class FeedbackForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     email = forms.CharField(max_length=100, required=False)
     url = forms.CharField(max_length=1, required=False)
+    
     your_website_url = forms.CharField(max_length=1, required=False)
     render_form_ts = forms.CharField(max_length=20, required=True)
     
