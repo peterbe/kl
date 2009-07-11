@@ -3,6 +3,14 @@ import time
 from django import forms
 from django.utils.translation import ugettext as _
 
+QUIZZES = {
+           '1 + 10': '11',
+           '2 + 3': '5',
+           '8 - 1': '7',
+           '4 + 2': '6',
+           '1 + 2': '3',
+}           
+           
 
 class DSSOUploadForm(forms.Form):
     file = forms.FileField()
@@ -20,6 +28,7 @@ class FeedbackForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     email = forms.CharField(max_length=100, required=False)
     url = forms.CharField(max_length=1, required=False)
+    quiz_answer = forms.CharField(max_length=100, required=True)
     
     your_website_url = forms.CharField(max_length=1, required=False)
     render_form_ts = forms.CharField(max_length=20, required=True)
@@ -29,6 +38,14 @@ class FeedbackForm(forms.Form):
         if cleaned_data.get('url'):
             raise forms.ValidationError("Not empty :(")
         return cleaned_data
+    
+    def clean_quiz_answer(self):
+        v = self.cleaned_data['quiz_answer']
+        if isinstance(v, basestring):
+            v = v.lower()
+        if v not in [isinstance(x, basestring) and x.lower() or x for x in QUIZZES.values()]:
+            raise forms.ValidationError("Wrong answer")
+        return v
     
     def clean_render_form_ts(self):
         v = self.cleaned_data['render_form_ts']

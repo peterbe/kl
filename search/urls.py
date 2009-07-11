@@ -29,5 +29,6 @@ urlpatterns = patterns('',
     url(r'^crossing-the-world.json$', crossing_the_world_json),
     url(r'^word/(?P<word_string>\w+)/$', word),
     url(r'^word/(?P<word_string>\w+)/(?P<language>\w+[-\w]+)/$', word),
+    url(r'^quiz_answer.json$', quiz_answer),
     
 )

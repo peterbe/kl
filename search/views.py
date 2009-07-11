@@ -30,7 +30,7 @@ from django.views.decorators.cache import cache_page, never_cache
 from django.conf import settings
 
 from models import Word, Search
-from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm
+from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm, QUIZZES
 from forms import WordWhompForm, AddWordForm
 from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, print_sql
 from morph_en import variations as morph_variations
@@ -1076,6 +1076,8 @@ def send_feedback(request):
                 email = email.encode('utf8')
             set_cookie(response, 'kl__email', email)
         return response
+    else:
+        print feedbackform.errors
     
     return _render('solve.html', locals(), request)
         
@@ -2009,3 +2011,16 @@ def solve_iphone(request, record_search=True):
                         record_search=record_search,
                         template='iphone.html',
                         search_type="iphone")
+
+
+def quiz_answer(request):
+    data = {}
+    question = request.POST.get('question', request.GET.get('question'))
+    if question:
+        question = question.split('=')[0].strip()
+        answer = QUIZZES.get(question)
+        if answer:
+            data['answer'] = answer
+    
+    return _render_json(data)
+    

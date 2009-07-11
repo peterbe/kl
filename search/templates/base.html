@@ -130,6 +130,10 @@
             <td><label>{% trans "Your email:" %}</label> <sup>({% trans "optional" %})</sup></td>
             <td><input name="email" size="20" value="{{ cookie__email }}" /></td>
           </tr>
+          <tr id="quiz">
+            <td><span style="float:right"><span id="quiz_question">{{ quiz_question }}</span> = </span><label>Math quiz: </label></td>
+            <td><input name="quiz_answer" size="3" value=""/></td>
+          </tr>          
           <tr class="h">
             <td><label>Your URL: <sup>(leave empty)</sup></label></td>
             <td><input name="url" size="30" value="" /></td>

@@ -1,3 +1,4 @@
+import random
 import datetime
 from urllib import quote
 import time
@@ -12,6 +13,7 @@ from views import get_search_stats, get_saved_cookies, get_language_options
 from views import get_canonical_url
 from data import get_amazon_advert
 from googlecharts import get_sparklines
+from forms import QUIZZES
 
 def context(request):
             
@@ -24,6 +26,8 @@ def context(request):
             'mobile_user_agent': False,
             'GOOGLE_ANALYTICS': settings.GOOGLE_ANALYTICS,
             }
+    
+    data['quiz_question'] = random.choice(QUIZZES.keys())
     
     #if settings.DEBUG:
     #    data['ADMIN_MEDIA_PREFIX'] = '/'

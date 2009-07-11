@@ -22,6 +22,7 @@ function feedback_init() {
       textarea.height(100).val('');
       submit.show();
       table.show();
+      __answer_quiz();
     }
   });
   
@@ -39,7 +40,16 @@ function feedback_init() {
    });
 }
 
-
+function __answer_quiz() {
+   var question = $('#quiz_question').text();
+   $.getJSON('/quiz_answer.json', {question:question}, function(res) {
+      if (res && res.answer) {
+         $('input[name="quiz_answer"]').val(res.answer);
+         $('tr#quiz').hide();
+         
+      }
+   });
+}
 
 /* INIT
 ---------------------------------------------------------------------- */
