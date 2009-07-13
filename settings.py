@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.sitemaps',
     'rosetta',
+    'django_static',
                   
 )
 
