@@ -41,7 +41,7 @@ form table tr.submit { border: none; }
 
 
 
-/* BUTTONS */
+/* BUTTONS
 a.button { padding: 4px 10px 5px 10px; width: 100px; background: #fff url(/images/button_bg.gif) left bottom repeat-x; border: 1px solid #ccc; font-size: 13px; line-height: 14px; font-weight: bold; color: #777; text-align: center; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
 button { margin-right: 10px; padding: 4px 10px 5px 10px; width: auto; background: #fff url(/images/button_bg.gif) left bottom repeat-x; border: 1px solid #ccc; font-size: 13px; line-height: 14px; font-weight: bold; color: #777; text-align: center; cursor: pointer; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
 a.button:hover, button:hover { background-image: url(/images/button_hover_bg.gif); background-color: #eee; border-color: #aaa; text-decoration: none; }
@@ -51,6 +51,7 @@ a.alt_button { font-size: 13px; line-height: 25px; font-weight: bold; color: #aa
 a.alt_button:hover { color: #2598db; text-decoration: none; }
 button.alt_button, input.alt_button { padding: 0; background: none; border: none; font: bold 13px/25px 'Helvetica Neue', arial, sans-serif; color: #ccc; text-align: center; cursor: pointer; }
 button.alt_button:hover, input.alt_button:hover { color: #2598db; text-decoration: none; }
+ */
 
 /* PROFILE BACKGROUNDS */
 body#profile_1 { background: #f2f6a2 url(/images/backgrounds/green.gif) repeat-x; }
@@ -68,6 +69,7 @@ body#profile_6 { background: #EAEADD url(/images/backgrounds/body-bg.png) repeat
 #header .wrapper h1 a { display: block; height: 59px; background: url(/images/kl.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
 #header .wrapper h1 a:hover { background-position: 0 -60px; }
 
+/*
 #header .settings { float: left; margin: 0 230px 0 255px; width: 35px; }
 #header .settings a { display: block; margin-top: 13px; width: 35px; height: 35px; background: url(/images/icons/toolbar_cog.gif) no-repeat; overflow: hidden; text-indent: -1000px; }
 #header .settings a:hover { background-position: 0 -35px; }
@@ -79,6 +81,7 @@ body#profile_6 { background: #EAEADD url(/images/backgrounds/body-bg.png) repeat
 #header .messages a:hover { background-position: 0 -30px; }
 #header .messages small { position: absolute; bottom: 0; right: -7px; display: block; padding: 0px 4px; background: #ff0000; border: 1px solid #b80000; font-size: 12px; font-weight: bold; line-height: 15px; color: #fff; -webkit-border-radius: 8px; }
 
+*/
 
 /* BODY */
 #body { position: relative; margin: 30px auto 0 auto; width: 980px; }
