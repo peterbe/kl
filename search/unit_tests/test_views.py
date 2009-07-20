@@ -10,7 +10,7 @@ from django.test.client import Client
 from django.test import TestCase
 
 # project
-from search.views import get_search_stats, _get_variations
+from search.views import get_search_stats, _get_variations, _find_alternatives
 from search.models import Word, Search
 
 class ViewTestCase(TestCase):
@@ -187,7 +187,21 @@ class ViewTestCase(TestCase):
         self.assertTrue('2 matches found' in response.content)
 
         
+    def test__find_alternatives(self):
+        """return the right alternatives"""
+        slots = [u' ', u' ', u' ', u'T', u'A', u'M', u' ', u' ', u'T']
+        language = 'fr'
         
+        # add a word we expect to find
+        t1 = Word.objects.create(word=u'testament', language='fr')
+        func = _find_alternatives
+        
+        self.assertEqual(func(slots, language), [t1])
+        
+        
+
+
+
         
         
 

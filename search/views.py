@@ -870,7 +870,6 @@ def _find_alternatives(slots, language):
     if length == 1:
         return Word.objects.filter(length=1, word=slots[0], language=language)
     
-    
     filter_ = dict(length=length, language=language)
     slots = [x and x.lower() or ' ' for x in slots]
     search = ''.join(slots)
@@ -935,6 +934,14 @@ def _find_alternatives(slots, language):
                 search_base = search_base.filter(word__icontains=each)
                 
             limit = search_base.filter(**filter_).order_by('word').count()
+    elif (start and len(start) <= 2) or (end and len(end) <= 2):
+        # If you search for somethin like "___TAM__T"
+        # We so far only know it's 9 characters long (french as 21k 9 characters long 
+        # words).
+        # We also have one tiny little 't' at the end but there's still
+        # 4086 options
+        for lump in re.findall(r'\s(\w+)\s', search):
+            filter_['word__icontains'] = lump
             
     all_matches = [x for x in search_base.filter(**filter_).order_by('word')[:limit]
                    if filter_match(x)]

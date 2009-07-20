@@ -77,7 +77,7 @@ def context(request):
     if request.META.get('GEO'):
         data['geo'] = request.META.get('GEO')
         
-        if 1 or not settings.DEBUG:
+        if not settings.DEBUG:
             if request.session.get('has_searched'):
                 data['amazon_advert'] = get_amazon_advert(data['geo'])
     
