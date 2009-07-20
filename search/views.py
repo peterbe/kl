@@ -949,7 +949,6 @@ def _find_alternatives(slots, language):
                    lambda x: x.word.lower())
 
 
-
 @login_required
 def upload_wordlist(request):
     if request.method == "POST":
@@ -2030,4 +2029,6 @@ def quiz_answer(request):
             data['answer'] = answer
     
     return _render_json(data)
+    
+    
     
