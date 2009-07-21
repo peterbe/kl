@@ -1460,6 +1460,7 @@ def solve_simple(request, record_search=True,
             if re.findall('\s', cache_key):
                 raise ValueError("invalid cache_key search=%r, language=%r" % (search, language))
             
+            logging.info("alterantives cache_key=%r" % cache_key)
             alternatives = cache.get(cache_key)
             if alternatives is None:
                 alternatives = _find_alternatives(slots[:length], language)
