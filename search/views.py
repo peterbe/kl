@@ -1462,6 +1462,7 @@ def solve_simple(request, record_search=True,
             
             logging.info("alterantives cache_key=%r" % cache_key)
             alternatives = cache.get(cache_key)
+            logging.info("alternatives is None: %s" % (alternatives is None))
             if alternatives is None:
                 alternatives = _find_alternatives(slots[:length], language)
                 cache.set(cache_key, alternatives, ONE_DAY)
