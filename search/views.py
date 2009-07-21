@@ -1706,6 +1706,7 @@ def searches_summary(request, year, month, atleast_count=2,
 def get_canonical_url(url):
     
     scheme, netloc, path, params, query, fragment = urlparse(url)
+    logging.info("netloc=%r\nCANONICAL_DOMAINS=%r"%(netloc, settings.CANONICAL_DOMAINS))
     if netloc in settings.CANONICAL_DOMAINS:
         return url.replace(netloc, 
                            settings.CANONICAL_DOMAINS[netloc])
