@@ -632,6 +632,7 @@ def _get_word_definition_scrape(word, language=None):
     # take a random search from Searches to
     request_meta = {}
     request_meta['HTTP_USER_AGENT'] = _get_random_used_user_agent()
+    logging.info("cache_key=%r" % cache_key)
     html = cache.get(cache_key)
     if html is None:
         print "URL", url

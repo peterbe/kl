@@ -12,7 +12,7 @@ function __reset_document_title() {
      document.title = orig_title;
 }
 
-$(function() {
+google.setOnLoadCallback(function() {
    if (GBrowserIsCompatible()) {
       var map = new GMap2(document.getElementById("map_canvas"));
       map.addControl(new GLargeMapControl3D());
