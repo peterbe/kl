@@ -1,3 +1,4 @@
+google.load('maps', '2',{'other_params':'sensor=false'});
 
 var since = new Date().getTime() - 10*1000; // start 10 seconds ago
 var min_interval = 4;
@@ -13,8 +14,7 @@ function __reset_document_title() {
 }
 
 google.setOnLoadCallback(function() {
-   if (GBrowserIsCompatible()) {
-      var map = new GMap2(document.getElementById("map_canvas"));
+   var map = new GMap2(document.getElementById("map_canvas"));
       map.addControl(new GLargeMapControl3D());
       
       var start_place = $('#id_start_place').val();
@@ -59,5 +59,4 @@ google.setOnLoadCallback(function() {
       }
       
       setTimeout(__start_plotting,  5*1000);
-   }
 });
