@@ -4,19 +4,19 @@ from urllib import quote
 import time
 
 # django
+from django.conf import settings
 
 # project
-from kl import settings
 
-from MobileUserAgent import parseUserAgent
-from views import get_search_stats, get_saved_cookies, get_language_options
-from views import get_canonical_url
-from data import get_amazon_advert
-from googlecharts import get_sparklines
-from forms import QUIZZES
+from search.MobileUserAgent import parseUserAgent
+from search.views import get_search_stats, get_saved_cookies, get_language_options
+from search.views import get_canonical_url
+from search.data import get_amazon_advert
+from search.googlecharts import get_sparklines_cached
+from search.forms import QUIZZES
 
 def context(request):
-            
+    
     data = {'TEMPLATE_DEBUG': settings.TEMPLATE_DEBUG,
             'DEBUG': settings.DEBUG,
             'HOME': settings.HOME,
@@ -57,9 +57,9 @@ def context(request):
     
     # for the link the Searches summary of the latest month
     data['searches_summary_link'] = datetime.datetime.today().strftime('/searches/%Y/%B/')
-    
+
     if settings.DO_THIS_MONTH_SPARKLINES:
-        data['sparklines_url'] = get_sparklines(150, 100)
+        data['sparklines_url'] = get_sparklines_cached(150, 100)
         today = datetime.datetime.today()
         first_date = datetime.datetime(today.year, today.month, 1)
         data['sparklines_href'] = '/statistics/graph/?daterange='+\
@@ -86,5 +86,6 @@ def context(request):
                                             not settings.DEBUG)
 
     data['show_crossing_the_world_link'] = '/crossing-the-world' not in current_url
+    
     
     return data

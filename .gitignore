@@ -10,3 +10,5 @@ event.log
 crosstips.org_googlemaps_api.key
 *.log
 *.pid
+media/sparklines
+fcgi_settings.py

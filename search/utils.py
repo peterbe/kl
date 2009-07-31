@@ -1,6 +1,12 @@
 import re
 import itertools
 
+
+ONE_HOUR = 60 * 60
+ONE_DAY = ONE_HOUR * 24
+ONE_WEEK = ONE_DAY * 7
+ONE_MONTH = ONE_WEEK * 4
+
 def print_sql(qs):
     q = qs.query.as_sql()
     statement = q[0] % q[1]
@@ -85,7 +91,7 @@ def stats(r):
 
 from hashlib import sha1
 from django.core.cache import cache as _djcache
-def cache(seconds = 900):
+def cache(seconds=900, cache_key=None):
     """
         Cache the result of a function call for the specified number of seconds, 
         using Django's caching mechanism.
@@ -102,11 +108,14 @@ def cache(seconds = 900):
     """
     def doCache(f):
         def x(*args, **kwargs):
+            if cache_key is None:
                 key = sha1(str(f.__module__) + str(f.__name__) + str(args) + str(kwargs)).hexdigest()
-                result = _djcache.get(key)
-                if result is None:
-                    result = f(*args, **kwargs)
-                    _djcache.set(key, result, seconds)
-                return result
+            else:
+                key = cache_key
+            result = _djcache.get(key)
+            if result is None:
+                result = f(*args, **kwargs)
+                _djcache.set(key, result, seconds)
+            return result
         return x
     return doCache

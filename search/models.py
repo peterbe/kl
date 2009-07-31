@@ -1,6 +1,8 @@
 import datetime
 
+from django.db.models.signals import post_save
 from django.db import models
+from django.core.cache import cache
 
 # Create your models here.
 
@@ -38,7 +40,16 @@ class Word(models.Model):
             else:
                 kwargs['length'] = len(kwargs['word'])
         super(Word, self).__init__(*args, **kwargs)
-    
+
+
+def reset_word_count(sender, instance, created, **__):
+    if created:
+        cache_key = 'no_total_words_%s' % instance.language
+        print "cache_key", cache_key
+        print "was cached?", cache.get(cache_key) is not None
+        cache.delete(cache_key)
+post_save.connect(reset_word_count, sender=Word,
+                  dispatch_uid="reset_word_count")
 
 class Search(models.Model):
     """ A search is a record of someone doing a search. 
@@ -60,6 +71,22 @@ class Search(models.Model):
     
     def __unicode__(self):
         return self.search_word
+    
+    
+def reset_search_stats(sender, instance, created, **__):
+    if created:
+        cache_key = 'no_searches_today_%s' % instance.language
+        #print "cache_key", cache_key
+        #print "was cached?", cache.get(cache_key) is not None
+        cache.delete(cache_key)
+
+        cache_key = 'no_searches_this_week_%s' % instance.language
+        #print "cache_key", cache_key
+        #print "was cached?", cache.get(cache_key) is not None
+        cache.delete(cache_key)
+        
+post_save.connect(reset_search_stats, sender=Search,
+                  dispatch_uid="reset_search_stats")    
     
     
 class IPLookup(models.Model):

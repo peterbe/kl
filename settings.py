@@ -1,9 +1,10 @@
 # Django settings for kl project.
-
+import os
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-HOME = '/home/peterbe/kl'
+HOME = os.path.normpath(os.path.dirname(__file__))
+
 
 #TEST_RUNNER = 'kl.testrunner.run_tests'
 
@@ -52,7 +53,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = open('.secret').read()
+SECRET_KEY = open(os.path.join(HOME, '.secret')).read()
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -106,7 +107,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
-    'kl.search.context_processors.context',
+    'kl.context_processors.context',
 )
 
 CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
@@ -136,12 +137,12 @@ CANONICAL_DOMAINS = {
     'en-us.crosstips.org':'crosstips.org',
     }
 
-GOOGLEMAPS_API_KEY = open('default_googlemaps_api.key').read()
+GOOGLEMAPS_API_KEY = open(os.path.join(HOME, 'default_googlemaps_api.key')).read()
 
 DO_THIS_MONTH_SPARKLINES = True
 
 import logging
-LOGGING_LOG_FILENAME = 'event.log'
+LOGGING_LOG_FILENAME = '/tmp/event.log'
 LOGGING_LEVEL = DEBUG and logging.DEBUG or logging.ERROR
 
 # must be last

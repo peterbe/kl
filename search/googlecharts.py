@@ -1,4 +1,6 @@
 # python
+import os
+from time import time
 import datetime
 from collections import defaultdict
 from pygooglechart import SimpleLineChart
@@ -10,14 +12,26 @@ import pygooglechart
 
 # django
 from django.utils.translation import ugettext as _
+from django.core.cache import cache
+from django.conf import settings
 
 # app
 from models import Search
-from utils import print_sql
+from utils import print_sql, ONE_HOUR
+
+def get_sparklines_cached(width, height, background_color='efefef'):
+    cache_key = 'sparklines_%s_%s_%s' % (width, height, background_color)
+    result = cache.get(cache_key)
+    if result is None:
+        result = get_sparklines(width, height, background_color=background_color)
+        cache.set(cache_key, result, ONE_HOUR)
+    return result
 
 def get_sparklines(width, height, background_color='efefef'):
     """wrap _get_sparklines() but first work out the data"""
     data = defaultdict(int)
+                  
+    print "GENERATE SPARKLINES!"
     
     today = datetime.datetime.today()
     today_date = datetime.datetime(today.year, today.month, today.day)
@@ -35,6 +49,19 @@ def get_sparklines(width, height, background_color='efefef'):
     return _get_sparklines(width, height, data,
                            background_color=background_color)
     
+def _get_sparklines_save_filepath(filename):
+    """ filename should be something like 'sparklines.png'
+    and then we return 
+    /path/to/mediaroot/sparklines/sparklines.123456789.png
+    """
+    dir_ = os.path.join(settings.MEDIA_ROOT, 'sparklines')
+    if not os.path.isdir(dir_):
+        os.mkdir(dir_)
+    
+    filename = list(os.path.splitext(filename))
+    filename.insert(-1, '.%s' % int(time()))
+    filename = ''.join(filename)
+    return os.path.join(dir_, filename)
     
 def _get_sparklines(width, height, data, background_color=None):
     chart = SparkLineChart(width, height)
@@ -42,7 +69,10 @@ def _get_sparklines(width, height, data, background_color=None):
     if background_color:
         chart.fill_solid(chart.BACKGROUND, background_color)
     chart.set_colours(['777777'])
-    return chart.get_url()
+    fileurl = _get_sparklines_save_filepath('sparklines.png')
+    chart.download(fileurl)
+    return fileurl.replace(settings.MEDIA_ROOT, '')
+    #return chart.get_url()
 
 
 def get_search_types_pie(queryset, search_types, width, height, background_color='ffffff'):

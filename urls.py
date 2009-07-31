@@ -4,8 +4,7 @@ import django.views.static
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-
-from settings import MEDIA_ROOT
+from django.conf import settings
 
 #from sitemap import FlatPageSitemap, OtherSitemap, sitemap
 from sitemap import FlatPageSitemap, sitemap, CustomSitemap
@@ -33,21 +32,25 @@ urlpatterns = patterns('',
                        
     # Uncomment the next line to enable the admin:
     (r'^admin/(.*)', admin.site.root),
+
+    # CSS, Javascript and IMages
+    (r'^sparklines/(?P<path>.*)$', django.views.static.serve,
+     {'document_root': settings.MEDIA_ROOT + '/sparklines',
+       'show_indexes': settings.DEBUG}),
                        
     # CSS, Javascript and IMages
     (r'^images/(?P<path>.*)$', django.views.static.serve,
-     {'document_root': MEDIA_ROOT + '/images',
-       'show_indexes': True}),                       
+     {'document_root': settings.MEDIA_ROOT + '/images',
+       'show_indexes': settings.DEBUG}),                       
     (r'^css/(?P<path>.*)$', django.views.static.serve,
-      {'document_root': MEDIA_ROOT + '/css',
-       'show_indexes': True}),
+      {'document_root': settings.MEDIA_ROOT + '/css',
+       'show_indexes': settings.DEBUG}),
     (r'^javascript/(?P<path>.*)$', django.views.static.serve,
-      {'document_root': MEDIA_ROOT + '/javascript',
-       'show_indexes': True}),    
+      {'document_root': settings.MEDIA_ROOT + '/javascript',
+       'show_indexes': settings.DEBUG}),    
 )
 
 
-from django.conf import settings
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += patterns('',
         url(r'^rosetta/', include('rosetta.urls')),
