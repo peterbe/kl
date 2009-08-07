@@ -108,6 +108,10 @@ def solve(request, json=False, record_search=True):
         slots = request.GET.getlist('s')
         if not type(slots) is list:
             return HttpResponseRedirect('/los/?error=slots')
+        
+        notletters = request.GET.get('notletters').upper()
+        notletters = [x.strip() for x in notletters.split(',') 
+                      if len(x.strip()) == 1 and not x.strip().isdigit()]
 
         if not len(slots) >= length:
             return HttpResponseRedirect('/los/?error=slots&error=length')
@@ -128,19 +132,22 @@ def solve(request, json=False, record_search=True):
 
         for clue in clues:
             alternatives = _find_alternative_synonyms(clue, slots[:length], language,
+                                                      notletters=notletters,
                                                       request=request)
             search_results.extend([SearchResult(x, by_clue=clue) for x in alternatives])
 
         # find some alternatives
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
         cache_key = '_find_alternatives_%s_%s' % (search, language)
+        if notletters:
+            cache_key += '__not' + u''.join(notletters)
         cache_key = cache_key.replace(' ','_')
         if re.findall('\s', cache_key):
             raise ValueError("invalid cache_key search=%r, language=%r" % (search, language))
 
         alternatives = cache.get(cache_key)
         if alternatives is None:
-            alternatives = _find_alternatives(slots[:length], language)
+            alternatives = _find_alternatives(slots[:length], language, notletters=notletters)
             cache.set(cache_key, alternatives, ONE_DAY)
 
         alternatives_count = len(alternatives)
@@ -508,7 +515,7 @@ def XXX_find_alternative_synonyms(word, slots, language):
     return matched_words
 
 
-def _find_alternative_synonyms(word, slots, language, request=None):
+def _find_alternative_synonyms(word, slots, language, notletters=[], request=None):
     length = len(slots)
 
     slots = [x and x.lower() or ' ' for x in slots]
@@ -549,6 +556,10 @@ def _find_alternative_synonyms(word, slots, language, request=None):
 
     def test(word):
         if len(word) == length:
+            if not notletters:
+                for letter in word:
+                    if letter.upper() in notletters:
+                        return False
             return filter_match(word)
 
     for variation in _get_variations(word, greedy=True, request=request):
@@ -879,7 +890,7 @@ def _get_variations_wordnet(word, greedy=False,
     return all
 
 
-def _find_alternatives(slots, language):
+def _find_alternatives(slots, language, notletters=[]):
     length = len(slots)
 
     if length == 1:
@@ -901,6 +912,7 @@ def _find_alternatives(slots, language):
         filter_['word__iendswith'] = end
     except IndexError:
         pass
+    
 
     def filter_match(match):
         if end:
@@ -910,7 +922,9 @@ def _find_alternatives(slots, language):
             matchable_string = search[len(start):]
             found_string = match.word[len(start):]
 
-        assert len(matchable_string) == len(found_string)
+        assert len(matchable_string) == len(found_string), \
+        "matchable_string=%r, found_string=%r" % (matchable_string, found_string)
+        
         for i, each in enumerate(matchable_string):
             if each != u' ' and each != found_string[i]:
                 # can't be match
@@ -958,7 +972,10 @@ def _find_alternatives(slots, language):
         for lump in re.findall(r'\s(\w+)\s', search):
             filter_['word__icontains'] = lump
 
-    all_matches = [x for x in search_base.filter(**filter_).order_by('word')[:limit]
+    search_qs = search_base.filter(**filter_)
+    for notletter in notletters:
+        search_qs = search_qs.exclude(word__icontains=notletter)
+    all_matches = [x for x in search_qs.order_by('word')[:limit]
                    if filter_match(x)]
     return uniqify(all_matches,
                    lambda x: x.word.lower())

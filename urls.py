@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
                        
     # Uncomment the next line to enable the admin:
-    (r'^admin/(.*)', admin.site.root),
+    (r'^admin/(.*)', include(admin.site.urls)),
 
     # CSS, Javascript and IMages
     (r'^sparklines/(?P<path>.*)$', django.views.static.serve,

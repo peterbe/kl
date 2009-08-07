@@ -80,6 +80,13 @@ p.recently-found { font-size:80%; }
       <small>(word clues separated by a comma)</small>
     </span><br>
   {% endif %}
+  {% if accept_clues %}
+    <span id="notletters" style="display:none">
+    <label>{% trans "Letters it is <em>not</em>:" %}</label>
+    <input name="notletters" value="" size="12">
+      <small>(useful when playing hangman)</small>
+    </span><br>
+  {% endif %}  
   <input type="submit" value="{% trans "Search" %}">
   <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15">
   <a href="./" id="clear-search" style="display:none">{% trans "clear search" %}</a>

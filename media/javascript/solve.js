@@ -163,10 +163,10 @@ function __process_submission(res) {
    __update_document_title(res.match_text);
    if (res.word_count>=1)
      $('#matches').text(res.match_text);
-   
-   if (res.alternatives_truncated)
-     $('#clues').show();
-   else {
+   if (res.alternatives_truncated) {
+      $('#clues').show();
+      $('#notletters').show();
+   } else {
       $('input', '#clues').val('');
       $('#clues').hide();
    }
@@ -221,6 +221,34 @@ function run_example(l, w) {
    
 }
 
+
+
+function __check_notletters(s) {
+   function uniqify(array) {
+      var seen=new Array();
+      $.each(array, function(i,a) {
+         if ($.inArray(a, seen) == -1) seen.push(a);
+      });
+      return seen;
+   }
+   s = s.toUpperCase();
+   s = s.replace(/[\d\W]+/g, '');
+   
+   var x = uniqify(s.match(/\w/g));
+   
+   $('#allslots input').each(function() {
+      var v = $(this).val();
+      if (v && $.inArray(v, x) > -1)
+        x = $.grep(x, function(a) {
+           return a != v;
+        });
+   });
+   
+   if (x.length)
+     return x.join(', ') + ', ';
+   return '';
+}
+
 var submit_options = {
    url: '/los/json/',
      type: 'GET',
@@ -249,8 +277,13 @@ $(function() {
          $(this).attr('size', parseInt($(this).attr('size')) * 2);
          $(this).unbind('keyup');
       }
-      
    });
+   
+   $('input[name="notletters"]', '#notletters').bind('keyup', function(event) {
+      //console.log(event.keyCode);
+      if (event.keyCode > 15)
+        $(this).val(__check_notletters($(this).val()));
+   });   
    
    
 });

@@ -58,7 +58,7 @@ def context(request):
     # for the link the Searches summary of the latest month
     data['searches_summary_link'] = datetime.datetime.today().strftime('/searches/%Y/%B/')
 
-    if settings.DO_THIS_MONTH_SPARKLINES:
+    if settings.DO_THIS_MONTH_SPARKLINES and not settings.DEBUG:
         data['sparklines_url'] = get_sparklines_cached(150, 100)
         today = datetime.datetime.today()
         first_date = datetime.datetime(today.year, today.month, 1)
