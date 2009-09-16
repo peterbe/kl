@@ -266,7 +266,6 @@ def _find_recent_search_word(language, since=None, random=False, extra_exclude={
         searches = searches.filter(add_date__gte=since)
     searches = searches.exclude(**extra_exclude)
 
-    #print_sql(searches)
     if random:
         # For some bizzare reason it seems that even if the exclude above
         # has found_word__word__in=SEARCH_SUMMARY_SKIPS it still returns
@@ -1139,9 +1138,9 @@ def _send_feedback(text, name=u'', email=u'', fail_silently=False,
         message += "Email: %s\n" % email
     if geo:
         message += "GEO: %s\n" % geo
-    if render_form_ts and render_now_ts:
-        message += "render_form_ts:%s  render_now_ts:%s  diff:%s\n" % \
-          (render_form_ts, render_now_ts, render_now_ts-render_form_ts)
+    #if render_form_ts and render_now_ts:
+    #    message += "render_form_ts:%s  render_now_ts:%s  diff:%s\n" % \
+    #      (render_form_ts, render_now_ts, render_now_ts-render_form_ts)
 
     message += "\n" + text
     message += '\n\n\n--\nkl'
