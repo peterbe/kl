@@ -139,7 +139,6 @@ def solve(request, json=False, record_search=True):
         # find some alternatives
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
         cache_key = '_find_alternatives_%s_%s' % (search, language)
-        print "CACHE_KEY", repr(cache_key)
         if notletters:
             cache_key += '__not' + u''.join(notletters)
         cache_key = cache_key.replace(' ','_')
@@ -325,7 +324,6 @@ def _get_search_stats(language):
     no_total_words = cache.get(cache_key)
     if no_total_words is None:
         no_total_words = Word.objects.filter(language=language).count()
-        #print "GENERATE", cache_key
         cache.set(cache_key, no_total_words, ONE_MONTH)
         
 
@@ -339,7 +337,6 @@ def _get_search_stats(language):
     if no_searches_today is None:
         no_searches_today = Search.objects.filter(language=language,
                                                   add_date__gte=today_midnight).count()
-        #print "GENERATE", cache_key
         cache.set(cache_key, no_searches_today, ONE_DAY)
         
 
@@ -350,7 +347,6 @@ def _get_search_stats(language):
         yesterday_midnight = today_midnight - datetime.timedelta(days=1)
         no_searches_yesterday = Search.objects.filter(language=language,
                 add_date__range=(yesterday_midnight, today_midnight)).count()
-        #print "GENERATE", cache_key
         cache.set(cache_key, no_searches_yesterday, ONE_DAY)
         
     # Searches this week
@@ -365,7 +361,6 @@ def _get_search_stats(language):
         no_searches_this_week = Search.objects.filter(
                                             language=language,
                                             add_date__gt=monday_midnight).count()
-        #print "GENERATE", cache_key
         cache.set(cache_key, no_searches_this_week, ONE_DAY)
 
     # Searches this month
@@ -375,7 +370,6 @@ def _get_search_stats(language):
         first_day_month = datetime.datetime(today.year, today.month, 1, 0, 0, 0)
         no_searches_this_month = Search.objects.filter(language=language,
                                                        add_date__gte=first_day_month).count()
-        #print "GENERATE", cache_key
         cache.set(cache_key, no_searches_this_month, ONE_HOUR)
 
     # Searches this year
@@ -385,7 +379,6 @@ def _get_search_stats(language):
         first_day_year = datetime.datetime(today.year, 1, 1, 0, 0, 0)
         no_searches_this_year = Search.objects.filter(language=language,
                                            add_date__gte=first_day_year).count()
-        #print "GENERATE", cache_key
         cache.set(cache_key, no_searches_this_year, ONE_HOUR)
     
     del cache_key
@@ -479,7 +472,6 @@ def XXX_find_alternative_synonyms(word, slots, language):
                 add_word_definition(s_word, synset.definition, language=language)
             except Word.DoesNotExist:
                 pass
-        print "s", repr(s_word)
         if s_word not in tested_words and not s_word.count('_'):
             tested_words.append(s_word)
             if test(s_word, synset.pos):
@@ -491,7 +483,6 @@ def XXX_find_alternative_synonyms(word, slots, language):
                     test(variation, None)
 
         for sub_synset in wordnet.synset(synset.name).hypernyms():
-            print "\ts", repr(s_word)
             s_word = sub_synset.name.split('.')[0]
             if sub_synset.definition:
                 try:
@@ -1618,7 +1609,6 @@ def searches_summary_lookup_definitions(request, year, month, atleast_count=1):
     """wrapper on searches_summary(lookup_definitions=True)"""
     from django.utils.cache import get_cache_key
     cache_key = get_cache_key(request)
-    print "cache_key", repr(cache_key)
     return searches_summary(request, year, month, atleast_count=atleast_count,
                             lookup_definitions=True)
 
