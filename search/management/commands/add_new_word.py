@@ -27,18 +27,22 @@ class Command(NoArgsCommand):
         # insert them finally!
         from search.models import Word
         
+        definition = ''
+        
         for lang in langs:
             word_object = Word.objects.create(word=word, language=lang, length=length)
             cache_key = '_find_alternatives_%s_%s' % (word, lang)
             cache.delete(cache_key)
             
-            try:
-                definition = _get_word_definition(word, language=lang)
-            except AttributeError:
-                # sometimes you get a weird AttributeError in nltk
-                definition = ''
             if not definition:
-                _get_word_definition_scrape(word, language=lang)
+                try:
+                    definition = _get_word_definition(word, language=lang)
+                except AttributeError:
+                    # sometimes you get a weird AttributeError in nltk
+                    pass
+                
+                if not definition:
+                    _get_word_definition_scrape(word, language=lang)
                 
             if definition:
                 add_word_definition(word, definition, language=lang)
