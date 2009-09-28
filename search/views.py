@@ -109,7 +109,7 @@ def solve(request, json=False, record_search=True):
         if not type(slots) is list:
             return HttpResponseRedirect('/los/?error=slots')
         
-        notletters = request.GET.get('notletters').upper()
+        notletters = request.GET.get('notletters', u'').upper()
         notletters = [x.strip() for x in notletters.split(',') 
                       if len(x.strip()) == 1 and not x.strip().isdigit()]
 
