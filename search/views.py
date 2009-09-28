@@ -139,6 +139,7 @@ def solve(request, json=False, record_search=True):
         # find some alternatives
         search = ''.join([x and x.lower() or ' ' for x in slots[:length]])
         cache_key = '_find_alternatives_%s_%s' % (search, language)
+        print "CACHE_KEY", repr(cache_key)
         if notletters:
             cache_key += '__not' + u''.join(notletters)
         cache_key = cache_key.replace(' ','_')

@@ -1,6 +1,7 @@
 import os
 import glob
 from django.conf import settings
+from django.core.cache import cache
 from django.db import connection, transaction
 from django.core.management.base import NoArgsCommand
 
@@ -28,6 +29,9 @@ class Command(NoArgsCommand):
         
         for lang in langs:
             word = Word.objects.create(word=word, language=lang, length=length)
+            cache_key = '_find_alternatives_%s_%s' % (word, lang)
+            cache.delete(cache_key)
+            
             try:
                 definition = _get_word_definition(word, language=lang)
             except AttributeError:
