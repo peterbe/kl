@@ -28,7 +28,7 @@ class Command(NoArgsCommand):
         from search.models import Word
         
         for lang in langs:
-            word = Word.objects.create(word=word, language=lang, length=length)
+            word_object = Word.objects.create(word=word, language=lang, length=length)
             cache_key = '_find_alternatives_%s_%s' % (word, lang)
             cache.delete(cache_key)
             
