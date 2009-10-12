@@ -95,11 +95,19 @@ $(function() {
 </form>
 
 {% if result %}
+
+
 <p>
   <strong id="match_text">{{ result.match_text }}</strong>
   &nbsp;
   <a href="." id="clear-search">{% trans "clear search" %}</a>
 </p>
+
+<div style="float:right">
+<iframe src="http://rcm.amazon.com/e/cm?t=crosstips-20&o=1&p=49&l=ur1&category=kindle&banner=0060WRQ43VKVG9GMQNR2&f=ifr" width="300" height="600" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+</div>
+
+
   <p id="results">
   {% for L, words in result.groups %}
     <strong>{{ L }}</strong><br/>
