@@ -25,6 +25,7 @@ def context(request):
             'mobile_version': False,
             'mobile_user_agent': False,
             'GOOGLE_ANALYTICS': settings.GOOGLE_ANALYTICS,
+            'GIT_REVISION_DATE': settings.GIT_REVISION_DATE,
             }
     
     data['quiz_question'] = random.choice(QUIZZES.keys())

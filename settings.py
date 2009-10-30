@@ -155,6 +155,16 @@ except ImportError:
 HOME, SECRET_KEY, LANGUAGE_DOMAINS
 
 
+import subprocess
+_proc = subprocess.Popen('git log --no-color -n 1 --date=iso',
+                         shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+try:
+    GIT_REVISION_DATE = [x.split('Date:')[1].split('+')[0].strip() for x in
+                         _proc.communicate()[0].splitlines() if x.startswith('Date:')][0]
+except IndexError:
+    GIT_REVISION_DATE = 'unknown'
+
+
 logging.basicConfig(filename=LOGGING_LOG_FILENAME,
                     level=LOGGING_LEVEL,
                    )
