@@ -39,8 +39,8 @@ p.recently-found { font-size:80%; }
 {% endblock %}
 
 {% block extrajs %}
-<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery.form.js" %}"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}{% slimfile "/javascript/solve.js" %}"></script>
+<script type="text/javascript" src="{% staticfile "/javascript/jquery.form.js" %}"></script>
+<script type="text/javascript" src="{% slimfile "/javascript/solve.js" %}"></script>
 {% endblock %}
 
 
@@ -53,7 +53,7 @@ p.recently-found { font-size:80%; }
 {% else %}
   {% if iphone_version %}
     <p>
-    <a href="/iphone/"><img src="{{ MEDIA_URL }}{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" border="0"></a>
+    <a href="/iphone/"><img src="{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" border="0"></a>
     <br><br>
     <strong>{% trans "For iPhone users:"%}</strong><br>
     <a href="/iphone/">{% trans "Use the iPhone interface to search" %}</a>

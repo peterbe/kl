@@ -19,8 +19,8 @@ body > ul > li.nolink { background: transparent; }
 {% endblock %}
 
 {% block extrajs %}
-<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery.form.js" %}"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/iphone.js" %}"></script>
+<script type="text/javascript" src="{% staticfile "/javascript/jquery.form.js" %}"></script>
+<script type="text/javascript" src="{% staticfile "/javascript/iphone.js" %}"></script>
 {% endblock %}
 
 

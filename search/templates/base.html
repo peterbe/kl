@@ -15,10 +15,18 @@
   <meta name="keywords" content="{% block meta_keywords %}{% trans "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles" %}{% endblock %}">
   {#<title>{% block title %}{% trans "Crosstips" %} - {% trans "helps you solve your crossword puzzles" %}{% endblock %}</title>#}
   <title>{% block title %}{% trans "Crosstips" %} - {% trans "crossword solver, fast and simple" %}{% endblock %}</title>
-  <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
-  <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/core.css" %}" type="text/css" media="screen" charset="utf-8">
   
-  {% comment %}<!--[if IE 7]><link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/ie7.css" %}" type="text/css" media="screen" charset="utf-8"><![endif]-->{% endcomment %}
+  {% slimall %}
+  <link rel="stylesheet" href="/css/boilerplate.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="/css/core.css" type="text/css" media="screen" charset="utf-8">
+  {% endslimall %}
+  
+  {% comment %}
+  <link rel="stylesheet" href="{% slimfile "/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="{% slimfile "/css/core.css" %}" type="text/css" media="screen" charset="utf-8">
+  {% endcomment %}
+  
+  {% comment %}<!--[if IE 7]><link rel="stylesheet" href="{% slimfile "/css/ie7.css" %}" type="text/css" media="screen" charset="utf-8"><![endif]-->{% endcomment %}
 
 {% block extracss %}
 {% endblock %}
@@ -54,7 +62,7 @@
           <br>
           <br>
 	  <a href="/crossing-the-world/" title="{% trans "Crosstips searches across the globe" %}"
-	  ><img src="{{ MEDIA_URL }}{% staticfile "/images/ctw-screenshot.png" %}" width="142" height="123" border="0" alt="{% trans "Crosstips searches across the globe" %}"></a><br>
+	  ><img src="{% staticfile "/images/ctw-screenshot.png" %}" width="142" height="123" border="0" alt="{% trans "Crosstips searches across the globe" %}"></a><br>
           <strong>{% trans "New fun feature!" %}</strong><br>
           <a href="/crossing-the-world/" title="{% trans "Crosstips searches across the globe" %}"
           >{% trans "Crossing the world " %}</a>
@@ -172,11 +180,11 @@
   
   </div>
 
-{% if DEBUG %}<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery-1.3.2.min.js" %}"></script>
+{% if DEBUG %}<script type="text/javascript" src="{% staticfile "/javascript/jquery-1.3.2.min.js" %}"></script>
 {% else %}
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 {% endif %}
-<script type="text/javascript" src="{{ MEDIA_URL }}{% slimfile "/javascript/jquery.site.js" %}"></script>
+<script type="text/javascript" src="{% slimfile "/javascript/jquery.site.js" %}"></script>
 {% block extrajs %}{% endblock %}
 {% if GOOGLE_ANALYTICS %}
 <script type="text/javascript">

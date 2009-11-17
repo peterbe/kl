@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>{% block title %}{% trans "Crosstips" %} - {% trans "helps you solve your crossword puzzles" %}{% endblock %}</title>
-  <link rel="stylesheet" href="{{ MEDIA_URL }}{% slimfile "/css/mobile.css" %}" type="text/css" media="screen" charset="utf-8"/>
+  <link rel="stylesheet" href="{% slimfile "/css/mobile.css" %}" type="text/css" media="screen" charset="utf-8"/>
 {% block extracss %}
 {% endblock %}
 </head>
@@ -29,7 +29,7 @@
         </small>
       </p>
 
-{% if DEBUG %}<script type="text/javascript" src="{{ MEDIA_URL }}{% staticfile "/javascript/jquery-1.3.1.min.js" %}"></script>
+{% if DEBUG %}<script type="text/javascript" src="{% staticfile "/javascript/jquery-1.3.1.min.js" %}"></script>
 {% else %}
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
 {% endif %}
