@@ -199,7 +199,6 @@ function __process_submission(res) {
    
    $('#clear-search').show();
    __done_search = true;
-   
 }
 
 function __error_ajaxSubmit(request, response_text) {
@@ -220,8 +219,6 @@ function run_example(l, w) {
    }, 500);
    
 }
-
-
 
 function __check_notletters(s) {
    function uniqify(array) {
@@ -284,6 +281,4 @@ $(function() {
       if (event.keyCode > 15)
         $(this).val(__check_notletters($(this).val()));
    });   
-   
-   
 });
