@@ -83,7 +83,7 @@ def context(request):
                 data['amazon_advert'] = get_amazon_advert(data['geo'])
     
         
-    data['use_google_analytics'] = data.get('use_google_analytics', 
+    data['use_google_analytics'] = data.get('use_google_analytics',
                                             not settings.DEBUG)
 
     data['show_crossing_the_world_link'] = '/crossing-the-world' not in current_url
