@@ -30,7 +30,6 @@
 
 {% block extracss %}
 {% endblock %}
-{% if GOOGLE_ANALYTICS %}
 
 {% if GOOGLE_ANALYTICS %}
 <script type="text/javascript">
@@ -204,6 +203,7 @@
 {% endif %}
 <script type="text/javascript" src="{% slimfile "/javascript/jquery.site.js" %}"></script>
 {% block extrajs %}{% endblock %}
+
 {% comment %}
 {% if GOOGLE_ANALYTICS %}
 <script type="text/javascript">
