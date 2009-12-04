@@ -126,12 +126,9 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 
 <p>&nbsp;</p>
 <p>
-{% blocktrans %}Try the <a href="/simple/">simple inferface</a>{% endblocktrans %}
-<br>
-
-<strong>{% trans "New!" %}</strong>
-<a href="/iphone/">{% trans "iPhone interface" %}</a>
-<br>
+<strong>{% trans "See also:" %}</strong>
+<a href="/simple/">{% trans "simple inferface" %}</a>,
+<a href="/iphone/">{% trans "iPhone interface" %}</a>,
 <a href="/word-whomp/">{% trans "Word Whomp" %}</a>
 </p>
 
@@ -149,12 +146,10 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 {% endif %}
 
 
-{% if not show_example_search %}
 
 <p style="font-size:80%;">Do you speak/write Spanish? Wanna <strong>help me translate the Spanish version</strong>?
 <br>If so, contact me using the form below.</p>
 
-{% endif %}
 
 
 {% endblock %}
