@@ -108,9 +108,9 @@ def solve(request, json=False, record_search=True):
         slots = request.GET.getlist('s')
         if not type(slots) is list:
             return HttpResponseRedirect('/los/?error=slots')
-        
+
         notletters = request.GET.get('notletters', u'').upper()
-        notletters = [x.strip() for x in notletters.split(',') 
+        notletters = [x.strip() for x in notletters.split(',')
                       if len(x.strip()) == 1 and not x.strip().isdigit()]
 
         if not len(slots) >= length:
@@ -319,13 +319,14 @@ def get_search_stats(language):
 
 
 def _get_search_stats(language):
-    # Total no words in our database
+    # Tot
+    al no words in our database
     cache_key = 'no_total_words_%s' % language
     no_total_words = cache.get(cache_key)
     if no_total_words is None:
         no_total_words = Word.objects.filter(language=language).count()
         cache.set(cache_key, no_total_words, ONE_MONTH)
-        
+
 
     today = datetime.datetime.today()
 
@@ -338,7 +339,7 @@ def _get_search_stats(language):
         no_searches_today = Search.objects.filter(language=language,
                                                   add_date__gte=today_midnight).count()
         cache.set(cache_key, no_searches_today, ONE_DAY)
-        
+
 
     # Searches yesterday
     cache_key = 'no_searches_yesterday_%s' % language
@@ -348,7 +349,7 @@ def _get_search_stats(language):
         no_searches_yesterday = Search.objects.filter(language=language,
                 add_date__range=(yesterday_midnight, today_midnight)).count()
         cache.set(cache_key, no_searches_yesterday, ONE_DAY)
-        
+
     # Searches this week
     cache_key = 'no_searches_this_week_%s' % language
     no_searches_this_week = cache.get(cache_key)
@@ -380,9 +381,9 @@ def _get_search_stats(language):
         no_searches_this_year = Search.objects.filter(language=language,
                                            add_date__gte=first_day_year).count()
         cache.set(cache_key, no_searches_this_year, ONE_HOUR)
-    
+
     del cache_key
-    
+
     return locals()
 
 def get_saved_cookies(request):
@@ -903,7 +904,7 @@ def _find_alternatives(slots, language, notletters=[]):
         filter_['word__iendswith'] = end
     except IndexError:
         pass
-    
+
 
     def filter_match(match):
         if end:
@@ -915,7 +916,7 @@ def _find_alternatives(slots, language, notletters=[]):
 
         assert len(matchable_string) == len(found_string), \
         "matchable_string=%r, found_string=%r" % (matchable_string, found_string)
-        
+
         for i, each in enumerate(matchable_string):
             if each != u' ' and each != found_string[i]:
                 # can't be match
