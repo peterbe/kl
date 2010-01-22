@@ -319,8 +319,7 @@ def get_search_stats(language):
 
 
 def _get_search_stats(language):
-    # Tot
-    al no words in our database
+    # Total no words in our database
     cache_key = 'no_total_words_%s' % language
     no_total_words = cache.get(cache_key)
     if no_total_words is None:
