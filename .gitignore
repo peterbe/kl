@@ -12,3 +12,4 @@ crosstips.org_googlemaps_api.key
 *.pid
 media/sparklines
 fcgi_settings.py
+local_settings.py

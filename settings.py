@@ -73,6 +73,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     #'django.middleware.locale.LocaleMiddleware',
     'middleware.locale.LocaleMiddleware',
+    'minidetector.Middleware',
+    'middleware.MobileSecondMiddleware',
                       
 )
 
@@ -141,13 +143,32 @@ GOOGLEMAPS_API_KEY = open(os.path.join(HOME, 'default_googlemaps_api.key')).read
 
 DO_THIS_MONTH_SPARKLINES = True
 
+USE_CACHE_PAGE = True
+
 import logging
 LOGGING_LOG_FILENAME = '/tmp/event-kl.log'
 LOGGING_LEVEL = DEBUG and logging.DEBUG or logging.ERROR
 
-# must be last
+import subprocess
+_proc = subprocess.Popen('git log --no-color -n 1 --date=iso',
+                         shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+_proc_out = _proc.communicate()[0]                         
 try:
+    GIT_REVISION_DATE = [x.split('Date:')[1].split('+')[0].strip() for x in
+                         _proc_out.splitlines() if x.startswith('Date:')][0]
+except IndexError:
+    GIT_REVISION_DATE = 'unknown'
+    logging.info("_proc_out=%r" % _proc_out)
+
+
+try:
+    # this should slowly die
     from settings_local import *
+except ImportError:
+    pass
+
+try:
+    from local_settings import *
 except ImportError:
     pass
 
@@ -160,15 +181,4 @@ logging.basicConfig(filename=LOGGING_LOG_FILENAME,
                     level=LOGGING_LEVEL,
                    )
 
-
-import subprocess
-_proc = subprocess.Popen('git log --no-color -n 1 --date=iso',
-                         shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-_proc_out = _proc.communicate()[0]                         
-try:
-    GIT_REVISION_DATE = [x.split('Date:')[1].split('+')[0].strip() for x in
-                         _proc_out.splitlines() if x.startswith('Date:')][0]
-except IndexError:
-    GIT_REVISION_DATE = 'unknown'
-    logging.info("_proc_out=%r" % _proc_out)
 

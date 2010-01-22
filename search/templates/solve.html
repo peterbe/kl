@@ -47,10 +47,6 @@ p.recently-found { font-size:80%; }
 {% block main %}
 
 {% if mobile_user_agent %}
-<p>
-{% blocktrans %}If you use a mobile device try the <a href="/simple/">simple interface</a> instead.{% endblocktrans %}
-</p>
-{% else %}
   {% if iphone_version %}
     <p>
     <a href="/iphone/"><img src="{% staticfile "/images/iphone-screenshot-small.png" %}" alt="{% trans "Use the iPhone interface to search" %}" style="float:left; margin-right:5px;" border="0"></a>
@@ -59,8 +55,12 @@ p.recently-found { font-size:80%; }
     <a href="/iphone/">{% trans "Use the iPhone interface to search" %}</a>
     <br style="clear:left">
     </p>
-    
+  {% else %}
+    <p>
+    {% blocktrans %}If you use a mobile device try the <a href="/simple/">simple interface</a> instead.{% endblocktrans %}
+    </p>
   {% endif %}
+
 {% endif %}
 
 <form action="./" id="solutions">

@@ -38,6 +38,8 @@ from data import add_word_definition, ip_to_coordinates, save_ip_lookup
 from data import get_searches_rate
 from googlecharts import get_search_types_pie, get_languages_pie, get_lengths_bar
 from utils import ONE_HOUR, ONE_DAY, ONE_WEEK, ONE_MONTH
+from clever_cache import mobile_aware_key_prefix, cache_page_with_prefix
+
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -1233,6 +1235,7 @@ class StatsCalendar(HTMLCalendar):
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
 
+@cache_page_with_prefix(ONE_HOUR, mobile_aware_key_prefix)
 def statistics_calendar(request):
     languages = request.GET.getlist('languages')
 
@@ -1325,6 +1328,8 @@ def _get_searches_stats(month=None, year=None, languages=[],
 
 daterange_iso_regex = re.compile('(?P<yy>\d{4})/(?P<mm>\d{2})/(?P<dd>\d{2}) - (?P<yy2>\d{4})/(?P<mm2>\d{2})/(?P<dd2>\d{2})')
 daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P<mm2>\d{2})/(?P<dd2>\d{2})/(?P<yy2>\d{4})')
+
+@cache_page_with_prefix(ONE_DAY, mobile_aware_key_prefix)
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
 

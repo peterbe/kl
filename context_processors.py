@@ -35,17 +35,18 @@ def context(request):
     #else:
     #    data['ADMIN_MEDIA_PREFIX'] = settings.ADMIN_MEDIA_PREFIX
          
-    http_user_agent = request.META.get('HTTP_USER_AGENT', None)
+    #http_user_agent = request.META.get('HTTP_USER_AGENT', None)
     
-    if request.GET.get('MOBILE_TEMPLATE') or \
-      http_user_agent and \
-      parseUserAgent(request.META.get('HTTP_USER_AGENT')):
+    #request.mobile_version = False
+    #request.iphone_version = False
+    
+    
+    if request.iphone:
+        data['iphone_version'] = True
+    if request.mobile:
         data['mobile_user_agent'] = True
         data['base_template'] = "mobile_base.html"
         data['mobile_version'] = True
-    elif http_user_agent and http_user_agent.count('iPhone') and \
-      http_user_agent.count('AppleWebKit'): # XXX needs work (e.g. iPhoney fails)
-        data['iphone_version'] = True
 
     language = request.LANGUAGE_CODE
     data.update(get_search_stats(language))
