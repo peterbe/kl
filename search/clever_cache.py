@@ -1,3 +1,4 @@
+import re
 from django.conf import settings
 from view_cache_utils import cache_page_with_prefix, expire_page
 
@@ -24,7 +25,8 @@ def loggedin_aware_key_prefix(request):
     return ""
     
     
-
+def _value_to_prefix_value(value):
+    return re.sub('[^\w]', '', str(value))
 
 def mobile_aware_key_prefix(request):
     if not settings.USE_CACHE_PAGE:
@@ -42,7 +44,8 @@ def mobile_aware_key_prefix(request):
     if request.GET:
         for key in ('languages','month','year','page','daterange'):
             if key in request.GET:
-                prefix += '%s-%s' % (key, request.GET[key])
+                prefix += '%s-%s' % \
+                  (key, _value_to_prefix_value(request.GET[key]))
      
     if request.mobile or 'SIMULATE_MOBILE' in request.GET:
         prefix += "mobile"
