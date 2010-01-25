@@ -1,0 +1,4 @@
+* Calculate a trendline for the stats
+
+* Tweet about all searches yielding exactly one match (u: crosstips,
+  p: c0sta r1ca)
