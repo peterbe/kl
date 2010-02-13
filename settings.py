@@ -85,7 +85,6 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     HOME + '/templates',
-    HOME + '/kl/templates',
 )
 
 INSTALLED_APPS = (
@@ -109,7 +108,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
-    'kl.context_processors.context',
+    'context_processors.context',
 )
 
 CACHE_BACKEND = 'memcached://127.0.0.1:11211/'

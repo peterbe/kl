@@ -17,7 +17,7 @@ sitemaps = {
 
 urlpatterns = patterns('',
     # Example:
-    (r'', include('kl.search.urls')),
+    (r'', include('search.urls')),
     (r'^i18n/', include('django.conf.urls.i18n')),
                        
     (r'^sitemap.xml$', sitemap,
