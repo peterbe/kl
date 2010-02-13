@@ -1,6 +1,6 @@
 from django import template
 
-from kl.search.views import ALL_LANGUAGE_OPTIONS
+from search.views import ALL_LANGUAGE_OPTIONS
 register = template.Library()
 
 @register.filter()

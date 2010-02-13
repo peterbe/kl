@@ -13,7 +13,7 @@ from django.template import loader
 from django.http import HttpResponse, Http404
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
-from kl.search.models import Search
+from search.models import Search
 
 def sitemap(request, sitemaps, section=None):
     maps, urls = [], []
