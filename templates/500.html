@@ -1,5 +1,9 @@
-{% extends "base.html" %}
+{% extends "basic_base.html" %}
 
-{% block content %}
-Error
+{% load i18n %}
+
+{% block title %}{% trans "Internal server error" %}{% endblock %}
+{% block main %}
+<h3>{% trans "Damn it! Internal server error." %}</h3>
+<p>{% trans "Hopefully it will be solved soon so just try again a little later." %}</p>
 {% endblock %}

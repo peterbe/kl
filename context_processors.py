@@ -1,3 +1,4 @@
+import os
 import random
 import datetime
 from urllib import quote
@@ -88,6 +89,8 @@ def context(request):
                                             not settings.DEBUG)
 
     data['show_crossing_the_world_link'] = '/crossing-the-world' not in current_url
+    
+    data['this_django_instance'] = os.path.basename(os.path.dirname(__file__))
     
     
     return data
