@@ -1638,7 +1638,7 @@ def searches_summary_lookup_definitions(request, year, month, atleast_count=1):
     return searches_summary(request, year, month, atleast_count=atleast_count,
                             lookup_definitions=True)
 
-@cache_page(60 * 60 * 1) # 1 hours
+@cache_page_with_prefix(ONE_DAY, _sensitive_key_prefixer)
 def searches_summary(request, year, month, atleast_count=2,
                      lookup_definitions=False):
 
