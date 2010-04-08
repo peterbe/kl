@@ -1257,7 +1257,7 @@ class StatsCalendar(HTMLCalendar):
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
 
-@cache_page_with_prefix(ONE_HOUR, mobile_aware_key_prefix)
+@cache_page_with_prefix(ONE_HOUR, _sensitive_key_prefixer)
 def statistics_calendar(request):
     languages = request.GET.getlist('languages')
 
@@ -1350,7 +1350,7 @@ def _get_searches_stats(month=None, year=None, languages=[],
 daterange_iso_regex = re.compile('(?P<yy>\d{4})/(?P<mm>\d{2})/(?P<dd>\d{2}) - (?P<yy2>\d{4})/(?P<mm2>\d{2})/(?P<dd2>\d{2})')
 daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P<mm2>\d{2})/(?P<dd2>\d{2})/(?P<yy2>\d{4})')
 
-@cache_page_with_prefix(ONE_DAY, mobile_aware_key_prefix)
+@cache_page_with_prefix(ONE_DAY, _sensitive_key_prefixer)
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
 
