@@ -38,8 +38,6 @@ from data import add_word_definition, ip_to_coordinates, save_ip_lookup
 from data import get_searches_rate
 from googlecharts import get_search_types_pie, get_languages_pie, get_lengths_bar
 from utils import ONE_HOUR, ONE_DAY, ONE_WEEK, ONE_MONTH
-from clever_cache import mobile_aware_key_prefix, cache_page_with_prefix
-
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -93,8 +91,32 @@ class SearchResult(object):
         self.word = word
         self.definition = definition
         self.by_clue = by_clue
-
-
+        
+        
+from view_cache_utils import cache_page_with_prefix
+def _sensitive_key_prefixer(request):
+    if request.GET.keys():
+        # really worried
+        return None
+    
+    if request.session.get('has_searched'):
+        # if they have done a search they might expect the counter
+        # to go up
+        return None
+    
+    # ultimately get_cache_key() will just contain an md5 hash of the
+    # request.path but we want it to depend on the host used to
+    # e.g. crosstips.org should be different from fr.crosstips.org
+    
+    key = request.get_host().split(':')[0]
+    if request.mobile:
+        key += 'mobile'
+    if request.iphone:
+        key += 'iphone'
+        
+    return key
+    
+@cache_page_with_prefix(ONE_HOUR, _sensitive_key_prefixer)
 def solve(request, json=False, record_search=True):
     # By default we are set to record the search in our stats
     # This can be overwritten by a CGI variable called 'r'
@@ -106,21 +128,21 @@ def solve(request, json=False, record_search=True):
         try:
             length = int(request.GET.get('l'))
         except ValueError:
-            return HttpResponseRedirect('/los/?error=length')
+            return HttpResponseRedirect('/?error=length')
         slots = request.GET.getlist('s')
         if not type(slots) is list:
-            return HttpResponseRedirect('/los/?error=slots')
+            return HttpResponseRedirect('/?error=slots')
 
         notletters = request.GET.get('notletters', u'').upper()
         notletters = [x.strip() for x in notletters.split(',')
                       if len(x.strip()) == 1 and not x.strip().isdigit()]
 
         if not len(slots) >= length:
-            return HttpResponseRedirect('/los/?error=slots&error=length')
+            return HttpResponseRedirect('/?error=slots&error=length')
 
         if not [x for x in slots if x.strip()]:
             # all blank
-            return HttpResponseRedirect('/los/?error=slots')
+            return HttpResponseRedirect('/?error=slots')
 
         clues = request.GET.get('clues', u'')
         if clues and ' ' in clues and ',' not in clues:
@@ -1256,7 +1278,6 @@ def statistics_calendar(request):
                                 languages=languages,
                                 calendar_stats=True)
 
-
     language_options = get_language_options(request, be_clever=False)
     for each in language_options:
         each['checked'] = each['code'].lower() in [x.lower() for x in languages]
@@ -1737,6 +1758,7 @@ def get_canonical_url(url):
 
 
 
+@cache_page_with_prefix(ONE_HOUR, _sensitive_key_prefixer)
 def word_whomp(request, record_search=False):
     if request.GET.get('slots'):
 
@@ -1896,6 +1918,7 @@ def add_word(request):
     return _render('add-word.html', locals(), request)
 
 
+@cache_page_with_prefix(ONE_DAY, _sensitive_key_prefixer)
 def crossing_the_world(request):
     now = datetime.datetime.now()
     # 10 min ago

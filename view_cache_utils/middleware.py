@@ -11,7 +11,8 @@ class UpdateCacheMiddleware(object):
     UpdateCacheMiddleware must be the first piece of middleware in
     MIDDLEWARE_CLASSES so that it'll get called last during the response phase.
     """
-    def __init__(self):
+    def __init__(self, patch_headers=False):
+        self.patch_headers = patch_headers
         self.cache_timeout = settings.CACHE_MIDDLEWARE_SECONDS
         self.key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX
         self.cache_anonymous_only = getattr(settings, 'CACHE_MIDDLEWARE_ANONYMOUS_ONLY', False)
@@ -38,7 +39,9 @@ class UpdateCacheMiddleware(object):
         elif timeout == 0:
             # max-age was set to 0, don't bother caching.
             return response
-        patch_response_headers(response, timeout)
+        
+        if self.patch_headers:
+            patch_response_headers(response, timeout)
         
         if timeout:            
             if callable(self.key_prefix):
@@ -92,6 +95,7 @@ class FetchFromCacheMiddleware(object):
             key_prefix = self.key_prefix
                 
         cache_key = get_cache_key(request, key_prefix)
+        
         if cache_key is None:
             request._cache_update_cache = True
             return None # No cache information available, need to rebuild.
@@ -111,7 +115,11 @@ class CacheMiddleware(UpdateCacheMiddleware, FetchFromCacheMiddleware):
     Also used as the hook point for the cache decorator, which is generated
     using the decorator-from-middleware utility.
     """
-    def __init__(self, cache_timeout=None, key_prefix=None, cache_anonymous_only=None):
+    def __init__(self, cache_timeout=None, key_prefix=None, cache_anonymous_only=None,
+                 patch_headers=False):
+        
+        # peter: not calling super on the inherited classes is stupid. Will fix one day
+        self.patch_headers = patch_headers
         self.cache_timeout = cache_timeout
         if cache_timeout is None:
             self.cache_timeout = settings.CACHE_MIDDLEWARE_SECONDS
