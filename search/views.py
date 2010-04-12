@@ -1,6 +1,6 @@
 import datetime
 from urlparse import urlparse, urljoin
-from urllib import urlencode
+from urllib import urlencode, quote
 import urllib2
 import re
 from pprint import pprint
@@ -38,6 +38,7 @@ from data import add_word_definition, ip_to_coordinates, save_ip_lookup
 from data import get_searches_rate
 from googlecharts import get_search_types_pie, get_languages_pie, get_lengths_bar
 from utils import ONE_HOUR, ONE_DAY, ONE_WEEK, ONE_MONTH
+from search.googlecharts import get_sparklines_cached
 
 def _render_json(data):
     return HttpResponse(simplejson.dumps(data),
@@ -2080,3 +2081,18 @@ def quiz_answer(request):
     return _render_json(data)
 
 
+def get_sparklines_json(request):
+    
+    data = {}
+    
+    today = datetime.datetime.today()
+    first_date = datetime.datetime(today.year, today.month, 1)
+    data['href'] = '/statistics/graph/?daterange='+\
+                            quote(first_date.strftime('%Y/%m/%d')) +\
+                            quote(' - ') +\
+                            quote(today.strftime('%Y/%m/%d'))
+    
+    data['src'] = get_sparklines_cached(150, 100)
+    data['alt'] = _("Searches this month")
+    
+    return _render_json(data)

@@ -1,9 +1,15 @@
-/* SETTINGS
+
+/* SPARKLINES
 ---------------------------------------------------------------------- */
-function settings_init() {
+function sparklines_init() {
+   $.getJSON('/get_sparklines.json', function(res) {
+      console.log(res.href);
+      console.log(res.src);
+     $('#sparklines-outer').append(
+      $('<a></a>').attr('href',res.href).attr('title', res.alt).append(
+         $('<img>').attr('src', res.src).attr('alt', res.alt)));
+   });
 }
-
-
 
 /* FEEDBACK
 ---------------------------------------------------------------------- */
@@ -54,6 +60,8 @@ function __answer_quiz() {
 /* INIT
 ---------------------------------------------------------------------- */
 $(function() {
-  feedback_init();
-  
+   feedback_init();
+   
+   if (typeof SPARKLINES != "undefined")
+     sparklines_init();
 });

@@ -62,14 +62,20 @@ def context(request):
     data['searches_summary_link'] = datetime.datetime.today().strftime('/searches/%Y/%B/')
 
     if settings.DO_THIS_MONTH_SPARKLINES and not settings.DEBUG:
-        data['sparklines_url'] = get_sparklines_cached(150, 100)
-        today = datetime.datetime.today()
-        first_date = datetime.datetime(today.year, today.month, 1)
-        data['sparklines_href'] = '/statistics/graph/?daterange='+\
-                                quote(first_date.strftime('%Y/%m/%d')) +\
-                                quote(' - ') +\
-                                quote(today.strftime('%Y/%m/%d'))
-        
+        sparklines_url = get_sparklines_cached(150, 100, only_if_cached=True)
+        if sparklines_url:
+            data['sparklines_url'] = sparklines_url
+            
+            today = datetime.datetime.today()
+            first_date = datetime.datetime(today.year, today.month, 1)
+            data['sparklines_href'] = '/statistics/graph/?daterange='+\
+                                    quote(first_date.strftime('%Y/%m/%d')) +\
+                                    quote(' - ') +\
+                                    quote(today.strftime('%Y/%m/%d'))
+                
+        else:
+            data['sparklines_script'] = '<script type="text/javascript">'\
+             'var SPARKLINES=true;</script>'
     
     current_url = request.build_absolute_uri()
     

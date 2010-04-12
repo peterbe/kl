@@ -21,10 +21,15 @@ from django.conf import settings
 from models import Search
 from utils import print_sql, ONE_HOUR
 
-def get_sparklines_cached(width, height, background_color='efefef'):
+def get_sparklines_cached(width, height, background_color='efefef',
+                          only_if_cached=False):
     """return a URL or None"""
     cache_key = 'sparklines_%s_%s_%s' % (width, height, background_color)
     result = cache.get(cache_key)
+    
+    if only_if_cached:
+        return result
+    
     if result is None:
         try:
             result = get_sparklines(width, height, background_color=background_color)
@@ -32,7 +37,7 @@ def get_sparklines_cached(width, height, background_color='efefef'):
             logging.error("Got URLError when trying to get a new sparkline",
                           exc_info=True)
             return None
-        cache.set(cache_key, result, ONE_HOUR)
+        cache.set(cache_key, result, ONE_HOUR * 3) # arbitrary no. hours
     return result
 
 def get_sparklines(width, height, background_color='efefef'):
@@ -41,7 +46,8 @@ def get_sparklines(width, height, background_color='efefef'):
                   
     today = datetime.datetime.today()
     today_date = datetime.datetime(today.year, today.month, today.day)
-    first_date = datetime.datetime(today.year, today.month, 1)
+    first_date = datetime.datetime(today.year, today.month-3 # TEMPORARY HACK
+                                   , 1)
     searches = Search.objects
     searches = searches.filter(add_date__gte=first_date,
                                add_date__lt=today_date)

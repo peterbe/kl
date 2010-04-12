@@ -30,5 +30,6 @@ urlpatterns = patterns('',
     url(r'^word/(?P<word_string>\w+)/$', word),
     url(r'^word/(?P<word_string>\w+)/(?P<language>\w+[-\w]+)/$', word),
     url(r'^quiz_answer.json$', quiz_answer),
+    url(r'^get_sparklines.json$', get_sparklines_json),
     
 )
