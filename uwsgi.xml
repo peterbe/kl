@@ -1,0 +1,7 @@
+<uwsgi>
+    <pythonpath>/var/lib/django/kl/</pythonpath>
+    <pythonpath>/var/lib/django/</pythonpath>
+    <app mountpoint="/">
+        <script>django_wsgi</script>
+    </app>
+</uwsgi>
