@@ -46,8 +46,7 @@ def get_sparklines(width, height, background_color='efefef'):
                   
     today = datetime.datetime.today()
     today_date = datetime.datetime(today.year, today.month, today.day)
-    first_date = datetime.datetime(today.year, today.month-3 # TEMPORARY HACK
-                                   , 1)
+    first_date = datetime.datetime(today.year, today.month, 1)
     searches = Search.objects
     searches = searches.filter(add_date__gte=first_date,
                                add_date__lt=today_date)
