@@ -1631,7 +1631,7 @@ for i in range(1, 13):
     d = datetime.date(2009, i, 1)
     MONTH_NAMES.append(d.strftime('%B'))
 
-@login_required
+#@login_required
 def searches_summary_lookup_definitions(request, year, month, atleast_count=1):
     """wrapper on searches_summary(lookup_definitions=True)"""
     from django.utils.cache import get_cache_key
