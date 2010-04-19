@@ -1,3 +1,4 @@
+from random import shuffle
 from pprint import pprint
 import datetime
 from django.core.management.base import BaseCommand
@@ -23,7 +24,9 @@ class Command(BaseCommand):
         #    raise CommandError("USAGE: ./manage.py %s <word> <lang> [save]" % \
         #                       os.path.basename(__file__).split('.')[0])
         
-        max_ = 2
+        max_per_language = 2
+        if args and args[0].isdigit():
+            max_per_language = int(args[0])
         
         today = datetime.date.today()
         today=datetime.date(2009,4,1)#HACK!
@@ -70,27 +73,44 @@ class Command(BaseCommand):
                                                         in counts.items() if v >= atleast_count],
                                                        lambda x,y: cmp(y[1], x[1]))
             #pprint(found_words_repeats)
-            pprint(dict(counts))
-        return 
-        count = 0    
+            #pprint(dict(counts))
+        #return 
+        count_success = count_failure = 0    
         for lang, words in found_words_repeats.items():
+            # since the list of words is sorted by count, shuffle the list.
+            # otherwise those that cause errors get stuck in there
+            shuffle(words)
+            
             for word in words:
-                try:
-                    definitions[lang][word]
-                except KeyError:
-                    if lang in ('en-us','en-gb'):
-                        # wordnet
-                        definition = _get_word_definition(word, language=lang)
-                    else:
-                        definition = None
+                assert word not in definitions[lang]
+                #assert word.definition is None
+                if lang in ('en-us','en-gb'):
+                    # wordnet
+                    definition = _get_word_definition(word, language=lang)
+                else:
+                    definition = None
 
-                    if not definition:
-                        definition = _get_word_definition_scrape(word, language=lang)
-                    if definition:
-                        add_word_definition(word, definition, language=lang)
-                        
-                    count += 1
+                if not definition:
+                    definition = _get_word_definition_scrape(word, language=lang)
                     
-                    if count >= max_:
-                        break
+                if definition:
+                    add_word_definition(word, definition, language=lang)
+                    print "FOUND!", repr(word)
+                    count_success += 1
+                else:
+                    # '' is different from null. It tells us not to try again
+                    add_word_definition(word, '', language=lang)
+                    count_failure += 1
+                    print "Failed :(", repr(word)
+                    
+                if (count_success + count_failure) >= max_per_language:
+                    break
+                
+        print "Looked up definition for %s words with %s failures" % \
+         (count_success, count_failure)
+        print "Stopping",
+        left = sum([len(x) for x in found_words_repeats.values()]) - \
+            count_success - count_failure
+        print "with", left, "words to attempt"
+
                     
