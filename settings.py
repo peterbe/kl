@@ -144,6 +144,8 @@ DO_THIS_MONTH_SPARKLINES = True
 
 USE_CACHE_PAGE = True
 
+MIGRATIONS_ROOT = os.path.join(HOME, 'migrations')
+
 import logging
 LOGGING_LOG_FILENAME = '/tmp/event-kl.log'
 LOGGING_LEVEL = DEBUG and logging.DEBUG or logging.ERROR
