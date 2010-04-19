@@ -13,3 +13,4 @@ crosstips.org_googlemaps_api.key
 media/sparklines
 fcgi_settings.py
 local_settings.py
+*.sql.done
