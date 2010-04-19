@@ -29,7 +29,6 @@ class Command(BaseCommand):
             max_per_language = int(args[0])
         
         today = datetime.date.today()
-        today=datetime.date(2009,4,1)#HACK!
         since = datetime.date(today.year, today.month, 1)
         
         definitions = {}
