@@ -158,10 +158,11 @@ def _get_bar_chart(width, height, data, background_color=None, colour=None):
     chart = GroupedVerticalBarChart(width, height, 
                                     y_range=(min_, max_+30)) # add 30px for some extra space
     chart.add_data([x[1] for x in data])
-    #print dir(chart)
     chart.set_axis_labels(pygooglechart.Axis.BOTTOM, [x[0] for x in data])
     interval = (max_ - min_) / 10
-    if interval > 100:
+    if interval > 500:
+        interval = 1000
+    elif interval > 100:
         interval = 500
     elif interval > 50:
         interval = 100

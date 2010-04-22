@@ -1436,8 +1436,8 @@ def statistics_graph(request):
     # don't do this on the example searches
     qs = qs.exclude(search_word__in=('c o    rd', 'p t r', 'ko  o d'))
 
-    PIE_WIDTH = 400; PIE_HEIGHT = 170
-    BAR_WIDTH = 400; BAR_HEIGHT = 170
+    PIE_WIDTH = 500; PIE_HEIGHT = 170
+    BAR_WIDTH = 500; BAR_HEIGHT = 170
 
     # figure out what the different types of search_type there are
     #print_sql(qs.values('search_type').distinct('search_type'))
@@ -1464,7 +1464,8 @@ def statistics_graph(request):
                  .distinct('L').values('L')][1:-1]
     if len(lengths) > 1:
         search_lengths_bar = get_lengths_bar(qs, lengths,
-                                             BAR_WIDTH, BAR_HEIGHT)
+                                             BAR_WIDTH,
+                                             BAR_HEIGHT)
 
     return _render('statistics_graph.html', locals(), request)
 
