@@ -1,5 +1,6 @@
 from random import shuffle
 from pprint import pprint
+from optparse import make_option
 import datetime
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
@@ -18,11 +19,19 @@ SEARCH_SUMMARY_SKIPS = \
 class Command(BaseCommand):
     help = """Lookup definitions"""
     
+    option_list = BaseCommand.option_list + (
+                        make_option('--atleast-count', dest='atleast_count', type='int', 
+                                    default=2,
+                                    help="Minimum repeated times found (default: 2)"),
+    )
+    args = '[max_per_language]'
     
     def handle(self, *args, **options):
         #if not args:
         #    raise CommandError("USAGE: ./manage.py %s <word> <lang> [save]" % \
         #                       os.path.basename(__file__).split('.')[0])
+        
+        atleast_count = int(options.get('atleast_count', 2))
         
         max_per_language = 2
         if args and args[0].isdigit():
@@ -58,7 +67,6 @@ class Command(BaseCommand):
         #pprint(found_words)
         #return
         
-        atleast_count = 2
         found_words_repeats = {}
         for language, words in found_words.items():
             counts = defaultdict(int)
