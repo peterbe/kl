@@ -3,8 +3,6 @@
 ---------------------------------------------------------------------- */
 function sparklines_init() {
    $.getJSON('/get_sparklines.json', function(res) {
-      console.log(res.href);
-      console.log(res.src);
      $('#sparklines-outer').append(
       $('<a></a>').attr('href',res.href).attr('title', res.alt).append(
          $('<img>').attr('src', res.src).attr('alt', res.alt)));

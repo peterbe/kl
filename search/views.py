@@ -95,16 +95,11 @@ class SearchResult(object):
         
         
 from view_cache_utils import cache_page_with_prefix
-def _sensitive_key_prefixer(request):
+def _base_key_prefixer(request):
     if request.GET.keys():
         # really worried
         return None
-    
-    if request.session.get('has_searched'):
-        # if they have done a search they might expect the counter
-        # to go up
-        return None
-    
+
     # ultimately get_cache_key() will just contain an md5 hash of the
     # request.path but we want it to depend on the host used to
     # e.g. crosstips.org should be different from fr.crosstips.org
@@ -116,6 +111,20 @@ def _sensitive_key_prefixer(request):
         key += 'iphone'
         
     return key
+
+def _sensitive_key_prefixer(request):
+    if request.session.get('has_searched'):
+        # if they have done a search they might expect the counter
+        # to go up
+        return None
+
+    return _base_key_prefixer(request)
+
+def _less_sensitive_key_prefixer(request):
+    # do cache like normal even if you have done a search
+    return _base_key_prefixer(request)
+    
+
     
 @cache_page_with_prefix(ONE_HOUR, _sensitive_key_prefixer)
 def solve(request, json=False, record_search=True):
@@ -1258,7 +1267,7 @@ class StatsCalendar(HTMLCalendar):
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
 
-@cache_page_with_prefix(ONE_HOUR, _sensitive_key_prefixer)
+@cache_page_with_prefix(ONE_HOUR, _less_sensitive_key_prefixer)
 def statistics_calendar(request):
     languages = request.GET.getlist('languages')
 
@@ -1351,7 +1360,7 @@ def _get_searches_stats(month=None, year=None, languages=[],
 daterange_iso_regex = re.compile('(?P<yy>\d{4})/(?P<mm>\d{2})/(?P<dd>\d{2}) - (?P<yy2>\d{4})/(?P<mm2>\d{2})/(?P<dd2>\d{2})')
 daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P<mm2>\d{2})/(?P<dd2>\d{2})/(?P<yy2>\d{4})')
 
-@cache_page_with_prefix(ONE_DAY, _sensitive_key_prefixer)
+@cache_page_with_prefix(ONE_DAY, _less_sensitive_key_prefixer)
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
 
