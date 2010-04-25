@@ -217,7 +217,7 @@ def _get_definitionlookups_bar(datas, width, height,
         
     chart.add_data([x[1][0] for x in datas])
     chart.add_data([x[1][1] for x in datas])
-    labels = reversed([x[0] for x in datas])
+    labels = reversed([x[0].encode('utf8') for x in datas])
     
     chart.set_axis_labels(pygooglechart.Axis.LEFT, labels)
     chart.set_legend(['Looked up','Not looked up'])
