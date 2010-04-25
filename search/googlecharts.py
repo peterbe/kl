@@ -5,7 +5,8 @@ import os
 from time import time
 import datetime
 from collections import defaultdict
-from pygooglechart import SimpleLineChart
+from pygooglechart import SimpleLineChart, StackedHorizontalBarChart
+from pygooglechart import StackedVerticalBarChart
 from pygooglechart import SparkLineChart
 from pygooglechart import PieChart2D
 #from pygooglechart import PieChart3D
@@ -13,13 +14,14 @@ from pygooglechart import GroupedVerticalBarChart
 import pygooglechart
 
 # django
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.core.cache import cache
 from django.conf import settings
 
 # app
-from models import Search
-from utils import print_sql, ONE_HOUR
+from models import Search, Word
+from utils import print_sql, ONE_HOUR, ONE_DAY
 
 def get_sparklines_cached(width, height, background_color='efefef',
                           only_if_cached=False):
@@ -178,3 +180,54 @@ def _get_bar_chart(width, height, data, background_color=None, colour=None):
         chart.set_colours([colour])
     return chart.get_url()
     
+    
+def get_definitionlookups_bar(languages, width, height, background_color=None, colour=None):
+    cache_key = 'getdefinitionlookupsdata' + (''.join([x[0] for x in languages]))
+    datas = cache.get(cache_key)
+    if datas is None:
+        datas = _get_definitionlookups_datas(languages)
+        cache.set(cache_key, datas, ONE_DAY)
+        
+    return _get_definitionlookups_bar(datas, width, height,
+                                      background_color=background_color,
+                                      colour=colour)
+
+def _get_definitionlookups_datas(languages):
+    datas = []
+    for language, lang_keys in languages:
+        q = None
+        for key in lang_keys:
+            if q is None:
+                q = Q(language=key)
+            else:
+                q = q | Q(language=key)
+                
+        qs = Word.objects.filter(q)
+        not_looked_up = qs.filter(definition__isnull=True).count()
+        looked_up = qs.count() - not_looked_up
+        #print "\tlooked up", looked_up
+        #print "\tnot looked up", not_looked_up
+        datas.append((language, [looked_up, not_looked_up]))
+    return datas
+
+def _get_definitionlookups_bar(datas, width, height,
+                               background_color=None, colour=None):
+    max_ = max(max(v[1]) for v in datas)
+    chart = StackedHorizontalBarChart(width, height, x_range=(0, max_ + int(.1*max_)))
+        
+    chart.add_data([x[1][0] for x in datas])
+    chart.add_data([x[1][1] for x in datas])
+    labels = reversed([x[0] for x in datas])
+    
+    chart.set_axis_labels(pygooglechart.Axis.LEFT, labels)
+    chart.set_legend(['Looked up','Not looked up'])
+    chart.set_colours(['ff9900','ffebcc'])
+    chart.add_marker(0, '', 'N*f1*%', '000000', 10)
+    
+    if background_color:
+        chart.fill_solid(chart.BACKGROUND, background_color)
+    if colour:
+        chart.set_colours([colour])
+    return chart.get_url()
+    
+        

@@ -38,7 +38,9 @@ class Command(BaseCommand):
             max_per_language = int(args[0])
         
         today = datetime.date.today()
-        since = datetime.date(today.year, today.month, 1)
+        since = datetime.date(today.year, # HACK
+                              today.month-3, 
+                              1)
         
         definitions = {}
         
@@ -82,7 +84,7 @@ class Command(BaseCommand):
             #pprint(found_words_repeats)
             #pprint(dict(counts))
         #return 
-        count_success = count_failure = 0    
+        count_success = count_failure = 0
         for lang, words in found_words_repeats.items():
             # since the list of words is sorted by count, shuffle the list.
             # otherwise those that cause errors get stuck in there

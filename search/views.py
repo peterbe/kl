@@ -36,7 +36,9 @@ from utils import uniqify, any_true, ValidEmailAddress, stats, niceboolean, prin
 from morph_en import variations as morph_variations
 from data import add_word_definition, ip_to_coordinates, save_ip_lookup
 from data import get_searches_rate
-from googlecharts import get_search_types_pie, get_languages_pie, get_lengths_bar
+from googlecharts import get_search_types_pie, get_languages_pie, get_lengths_bar, \
+  get_definitionlookups_bar
+  
 from utils import ONE_HOUR, ONE_DAY, ONE_WEEK, ONE_MONTH
 from search.googlecharts import get_sparklines_cached
 
@@ -706,7 +708,8 @@ def _get_word_definition_scrape(word, language=None):
                 definitions = [definitions[0][:245]]
                 break
 
-        return '\n'.join([x.strip() for x in definitions if x.strip()])
+        # 250 characters is the max
+        return '\n'.join([x.strip() for x in definitions if x.strip()])[:250]
 
 
 def _extract_definitions_le_dictionnaire(html, max_definitions=3):
@@ -1360,6 +1363,7 @@ def _get_searches_stats(month=None, year=None, languages=[],
 daterange_iso_regex = re.compile('(?P<yy>\d{4})/(?P<mm>\d{2})/(?P<dd>\d{2}) - (?P<yy2>\d{4})/(?P<mm2>\d{2})/(?P<dd2>\d{2})')
 daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P<mm2>\d{2})/(?P<dd2>\d{2})/(?P<yy2>\d{4})')
 
+    
 @cache_page_with_prefix(ONE_DAY, _less_sensitive_key_prefixer)
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
@@ -1476,6 +1480,13 @@ def statistics_graph(request):
                                              BAR_WIDTH,
                                              BAR_HEIGHT)
 
+
+    languages = [(_(u"English"), ('en-us','en-gb')),
+                 (_(u"French"), ('fr',)),
+                 ]
+    definitionlookups_bar = get_definitionlookups_bar(languages, 
+                                                      BAR_WIDTH,
+                                                      100)
     return _render('statistics_graph.html', locals(), request)
 
 
