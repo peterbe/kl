@@ -217,9 +217,12 @@ def _get_definitionlookups_bar(datas, width, height,
         
     chart.add_data([x[1][0] for x in datas])
     chart.add_data([x[1][1] for x in datas])
-    
-    
-    labels = [x[0].encode('utf8') for x in datas][::-1]
+
+
+    # 222
+    labels = [x[0].encode('utf8') for x in datas][::-1] # 223
+    import urllib
+    print [urllib.quote(str(a)) for a in values]
     
     print list(labels)
     chart.set_axis_labels(pygooglechart.Axis.LEFT, labels)
