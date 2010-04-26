@@ -1481,8 +1481,11 @@ def statistics_graph(request):
                                              BAR_HEIGHT)
 
 
-    languages = [(_(u"English"), ('en-us','en-gb')),
-                 (_(u"French"), ('fr',)),
+    #languages = [(_(u"English"), ('en-us','en-gb')),
+    #             (_(u"French"), ('fr',)),
+    #             ]
+    languages = [(u"English", ('en-us','en-gb')),
+                 (u"French", ('fr',)),
                  ]
     definitionlookups_bar = get_definitionlookups_bar(languages, 
                                                       BAR_WIDTH,
