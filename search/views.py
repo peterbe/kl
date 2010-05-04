@@ -692,7 +692,7 @@ def _get_word_definition_scrape(word, language=None):
     try:
         html = cache.get(cache_key)
     except DjangoUnicodeDecodeError:
-        html is None
+        html = None
         
     if html is None:
         print "URL", url
