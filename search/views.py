@@ -713,7 +713,6 @@ def _get_word_definition_scrape(word, language=None):
 
 
 def _extract_definitions_le_dictionnaire(html, max_definitions=3):
-    open('/tmp/inter.html','w').write(html)
     if isinstance(html, unicode):
         html = html.encode('utf8')
     parser = etree.HTMLParser()
@@ -740,7 +739,8 @@ def _extract_definitions_le_dictionnaire(html, max_definitions=3):
             for span in sel2(td):
                 s = span.attrib.get('style')
                 if s in ('color: #ABABAB;', 'cursor: pointer;'):
-                    definition.append(span.text)
+                    if span.text:
+                        definition.append(span.text)
             
             definitions.append(' '.join(definition))
         if len(definitions) >= max_definitions:
