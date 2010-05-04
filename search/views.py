@@ -734,8 +734,8 @@ def _extract_definitions_le_dictionnaire(html, max_definitions=3):
      #   print "\n"
 
     tables = list(CSSSelector('table')(page))[4:8]
-    print etree.tostring(table)
     for table in tables:
+        #print etree.tostring(table)
         for td in sel(table):
             definition = []
             for span in sel2(td):
