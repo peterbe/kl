@@ -14,3 +14,6 @@ media/sparklines
 fcgi_settings.py
 local_settings.py
 *.sql.done
+gunicorn_settings.py
+kill_gunicorn.sh
+run_gunicorn.sh

@@ -46,17 +46,17 @@ class Command(BaseCommand):
         
 
         searches = Search.objects.filter(add_date__gte=since,
-                                              found_word__isnull=False,
-                                              found_word__definition__isnull=True)
+                                         found_word__isnull=False,
+                                         found_word__definition__isnull=True)
 
         searches = searches.exclude(found_word__word__in=list(SEARCH_SUMMARY_SKIPS))
         
         # because I know I have no way to look up Swedish words, no point finding them
         searches = searches.exclude(language='sv')
-    
+        
         found_words = defaultdict(list)
         definitions = {}
-        for each in searches:
+        for each in searches.order_by('?'):
             found_words[each.language].append(each.found_word.word)
     
             if each.language not in definitions:
@@ -86,11 +86,13 @@ class Command(BaseCommand):
         #return 
         count_success = count_failure = 0
         for lang, words in found_words_repeats.items():
+            print lang
             # since the list of words is sorted by count, shuffle the list.
             # otherwise those that cause errors get stuck in there
             shuffle(words)
             
             for word in words:
+                print "\t%r" % word
                 assert word not in definitions[lang]
                 #assert word.definition is None
                 if lang in ('en-us','en-gb'):
