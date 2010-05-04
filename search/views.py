@@ -23,13 +23,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect,  Http404
 from django.template import RequestContext
 from django.core.cache import cache
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.views.decorators.cache import cache_page, never_cache
 from django.conf import settings
-
 from models import Word, Search
 from forms import DSSOUploadForm, FeedbackForm, WordlistUploadForm, SimpleSolveForm, QUIZZES
 from forms import WordWhompForm, AddWordForm
@@ -690,7 +689,11 @@ def _get_word_definition_scrape(word, language=None):
     print "CACHE_KEY"
     print repr(cache_key)
     print "\n\n"
-    html = cache.get(cache_key)
+    try:
+        html = cache.get(cache_key)
+    except DjangoUnicodeDecodeError:
+        html is None
+        
     if html is None:
         print "URL", url
         html = _download_url(url, request_meta)
