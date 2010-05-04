@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect,  Http404
 from django.template import RequestContext
 from django.core.cache import cache
+from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
@@ -661,7 +662,8 @@ def _get_word_definition_scrape(word, language=None):
                 }
         url += '?%s' % urlencode(query)
 
-        cache_key = 'ledictionnaire_download_%s' % url.replace('http://','')
+        cache_key = 'ledictionnaire_download_%s' % \
+          smart_str(url.replace('http://',''))
 
         extractor = _extract_definitions_le_dictionnaire
 

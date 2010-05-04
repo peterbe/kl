@@ -86,13 +86,11 @@ class Command(BaseCommand):
         #return 
         count_success = count_failure = 0
         for lang, words in found_words_repeats.items():
-            print lang
             # since the list of words is sorted by count, shuffle the list.
             # otherwise those that cause errors get stuck in there
             shuffle(words)
             
             for word in words:
-                print "\t%r" % word
                 assert word not in definitions[lang]
                 #assert word.definition is None
                 if lang in ('en-us','en-gb'):
