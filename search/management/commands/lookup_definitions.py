@@ -103,6 +103,8 @@ class Command(BaseCommand):
                     definition = _get_word_definition_scrape(word, language=lang)
                     
                 if definition:
+                    if len(definition) > 250:
+                        definition = definition[:250-3]+'...'
                     add_word_definition(word, definition, language=lang)
                     print "FOUND!", repr(word)
                     count_success += 1
