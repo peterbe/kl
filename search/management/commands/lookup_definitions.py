@@ -38,8 +38,8 @@ class Command(BaseCommand):
             max_per_language = int(args[0])
         
         today = datetime.date.today()
-        since = datetime.date(today.year, # HACK
-                              today.month-3, 
+        since = datetime.date(today.year-1, # HACK
+                              today.month-3,
                               1)
         
         definitions = {}
