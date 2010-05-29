@@ -117,7 +117,14 @@ class Command(BaseCommand):
                     count_success += 1
                 else:
                     # '' is different from null. It tells us not to try again
-                    add_word_definition(word, '', language=lang)
+                    try:
+                        add_word_definition(word, '', language=lang)
+                    except Word.DoesNotExist:
+                        # for example, "centre" in en-us doesn't exist
+                        if lang in ('en-us','en-gb'):
+                            pass
+                        else:
+                            raise
                     count_failure += 1
                     print "Failed :(", repr(word)
                     
