@@ -8,7 +8,7 @@ from django.core.management.base import CommandError
 from collections import defaultdict
 from search.views import _get_word_definition, _get_word_definition_scrape
 from search.data import add_word_definition
-from search.models import Search
+from search.models import Search, Word
 
 SEARCH_SUMMARY_SKIPS = \
 ('crossword','korsord','fuck','peter','motherfucker',
