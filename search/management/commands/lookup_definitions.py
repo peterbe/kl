@@ -105,9 +105,14 @@ class Command(BaseCommand):
                 if definition:
                     if len(definition) > 250:
                         definition = definition[:250-3]+'...'
-                    print "WORD", repr(word)
-                    print "LANG", repr(lang)
-                    add_word_definition(word, definition, language=lang)
+                    try:
+                        add_word_definition(word, definition, language=lang)
+                    except Word.DoesNotExist:
+                        # for example, "centre" in en-us doesn't exist
+                        if lang in ('en-us','en-gb'):
+                            pass
+                        else:
+                            raise
                     print "FOUND!", repr(word)
                     count_success += 1
                 else:

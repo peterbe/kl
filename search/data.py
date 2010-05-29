@@ -23,7 +23,6 @@ def add_word_definition(word, definition, language=None,
         filter_ = dict(filter_, language=language)
 
     try:
-        print "FILTER_", filter_
         w = Word.objects.get(**filter_)
     except Word.DoesNotExist:
         # slower but necessary
