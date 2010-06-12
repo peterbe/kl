@@ -2126,3 +2126,7 @@ def get_sparklines_json(request):
     data['alt'] = _("Searches this month")
     
     return _render_json(data)
+
+
+def dumb_test_page(request):
+    return _render('dumb_test_page.html', locals(), request)

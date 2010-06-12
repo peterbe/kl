@@ -1,0 +1,16 @@
+<html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+  $('#dbg').text($('#image').attr('src'));
+});
+</script>
+</head>
+<body>
+{% load django_static %}
+<h1>Image: <img id="image" src="{% staticfile "/images/ctw-screenshot.png" %}" width="142" height="123" border="0" alt="Alt..."></h1>
+
+<h3 id="dbg"></h3>
+</body>
+</html>

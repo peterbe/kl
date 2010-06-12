@@ -1,0 +1,13 @@
+from settings import *
+
+AWS_ACCESS_KEY = 'AKIAIRKHWFILXYLI3UCQ'
+AWS_ACCESS_SECRET = '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'
+AWS_STORAGE_BUCKET_NAME = 'crosstips'
+AWS_CLOUDFRONT_ORIGIN_NAME = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_CLOUDFRONT_DISTRIBUTION_COMMENT = "Images for crosstips"
+
+DJANGO_STATIC = True
+DJANGO_STATIC_SAVE_PREFIX = '/tmp/infinity_static_files/kl'
+DJANGO_STATIC_NAME_PREFIX = '/cache-forever'
+
+DJANGO_STATIC_FILE_PROXY = 'cloudfront.file_proxy'

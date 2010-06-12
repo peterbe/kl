@@ -32,4 +32,6 @@ urlpatterns = patterns('',
     url(r'^quiz_answer.json$', quiz_answer),
     url(r'^get_sparklines.json$', get_sparklines_json),
     
+    url(r'^dumb_test_page$', dumb_test_page),
+    
 )
