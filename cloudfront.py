@@ -56,14 +56,56 @@ def _upload_to_cloudfront(filepath):
     obj = _cf_distribution.add_object(basename, fp, headers=headers)
     return obj.url()
 
-_conversion_map = {}
+
+from time import time
+
+class SlowMap(object):
+    """
+    >>> slow_map = SlowMap(60)
+    >>> slow_map[key] = value
+    >>> print slow_map.get(key)
+    None
+
+    Then 60 seconds goes past:
+    >>> slow_map.get(key)
+    value
+
+    """
+    def __init__(self, timeout_seconds):
+        self.timeout = timeout_seconds
+
+        self.guard = dict()
+        self.data = dict()
+
+    def get(self, key, default=None):
+        value = self.data.get(key)
+        if value is not None:
+            return value
+
+        value, expires = self.guard.get(key)
+  
+        if expires < time():
+            # good to release
+            self.data[key] = value
+            del self.guard[key]
+            return value
+        else:
+            # held back
+            return default
+
+    def __setitem__(self, key, value):
+        self.guard[key] = (value, time() + self.timeout)
+        
+# The estimated time it takes AWS CloudFront to create the domain name is
+# 1 hour.
+DISTRIBUTION_WAIT_TIME = 60 * 60
+_conversion_map = SlowMap(DISTRIBUTION_WAIT_TIME)
 
 def file_proxy(uri, new=False, filepath=None, changed=False, **kwargs):
     if filepath and (new or changed):
         if filepath.lower().split('.')[-1] in ('jpg','gif','png'):
             #print "UPLOAD TO CLOUDFRONT", filepath
             _conversion_map[uri] = _upload_to_cloudfront(filepath)
-            
     return _conversion_map.get(uri, uri)
 
 if __name__ == '__main__':
