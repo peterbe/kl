@@ -57,6 +57,7 @@ class Command(BaseCommand):
         found_words = defaultdict(list)
         definitions = {}
         for each in searches.order_by('?'):
+            print "Word", repr(each.found_word.word), "def:", repr(each.found_word.definition)
             found_words[each.language].append(each.found_word.word)
     
             if each.language not in definitions:
