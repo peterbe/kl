@@ -53,12 +53,12 @@ class Command(BaseCommand):
         searches = searches.exclude(found_word__word__in=list(SEARCH_SUMMARY_SKIPS))
         
         # because I know I have no way to look up Swedish words, no point finding them
-        searches = searches.exclude(language='sv')
+        searches = searches.exclude(language='sv', found_word__language='sv')
         
         found_words = defaultdict(list)
         definitions = {}
         for each in searches.order_by('?'):
-            print "Word", repr(each.found_word.word), each.found_word.length, "def:", repr(each.found_word.definition)
+            #print "Word", repr(each.found_word.word), each.found_word.length, "def:", repr(each.found_word.definition)
             found_words[each.language].append(each.found_word.word)
     
             if each.language not in definitions:
@@ -68,7 +68,7 @@ class Command(BaseCommand):
             #    = each.found_word.definition.splitlines()
                 
         found_words = dict(found_words)
-        pprint(found_words)
+        #pprint(found_words)
         #return
         
         found_words_repeats = {}
@@ -135,7 +135,7 @@ class Command(BaseCommand):
                     break
                 
         print "Looked up definition for %s words with %s failures" % \
-         (count_success, count_failure)
+        (count_success, count_failure)
         print "Stopping",
         left = sum([len(x) for x in found_words_repeats.values()]) - \
             count_success - count_failure
