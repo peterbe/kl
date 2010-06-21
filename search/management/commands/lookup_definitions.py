@@ -90,8 +90,9 @@ class Command(BaseCommand):
             # add some other ones
             undefined_words = Word.objects.filter(definition__isnull=True, length__gte=2)
             undefined_words = undefined_words.exclude(language='sv')
-            undefined_words = undefined_words.exclude(found_word__word__in=list(SEARCH_SUMMARY_SKIPS))
+            undefined_words = undefined_words.exclude(word__in=list(SEARCH_SUMMARY_SKIPS))
             undefined_words = undefined_words.order_by('?')
+            print "#", undefined_words.count()
             for word in undefined_words[:100]:
                 found_words_repeats[word.language].append(word.word)
                 
