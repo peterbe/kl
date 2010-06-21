@@ -123,8 +123,6 @@ class Command(BaseCommand):
     def _lookup_words(self, words, lang, max_per_language):
         count_success = count_failure = 0
         for word in words:
-            assert word not in definitions[lang]
-            #assert word.definition is None
             if lang in ('en-us','en-gb'):
                 # wordnet
                 definition = _get_word_definition(word, language=lang)
