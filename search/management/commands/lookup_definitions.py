@@ -66,7 +66,7 @@ class Command(BaseCommand):
             #    = each.found_word.definition.splitlines()
                 
         found_words = dict(found_words)
-        #pprint(found_words)
+        pprint(found_words)
         #return
         
         found_words_repeats = {}
@@ -81,8 +81,9 @@ class Command(BaseCommand):
                 found_words_repeats[language] = sorted([k for (k,v)
                                                         in counts.items() if v >= atleast_count],
                                                        lambda x,y: cmp(y[1], x[1]))
-            #pprint(found_words_repeats)
-            #pprint(dict(counts))
+        pprint(found_words_repeats)
+        pprint(dict(counts))
+        
         #return 
         count_success = count_failure = 0
         for lang, words in found_words_repeats.items():
