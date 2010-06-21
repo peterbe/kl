@@ -47,6 +47,7 @@ class Command(BaseCommand):
 
         searches = Search.objects.filter(add_date__gte=since,
                                          found_word__isnull=False,
+                                         found_word__length__gte=2,
                                          found_word__definition__isnull=True)
 
         searches = searches.exclude(found_word__word__in=list(SEARCH_SUMMARY_SKIPS))
