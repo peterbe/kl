@@ -86,53 +86,28 @@ class Command(BaseCommand):
         pprint(found_words_repeats)
         pprint(dict(counts))
         
+        if atleast_count == 1 and len(counts) < 10:
+            # add some other ones
+            undefined_words = Word.objects.filter(definition__isnull=True, length__gte=2)
+            undefined_words = undefined_words.exclude(language='sv')
+            undefined_words = undefined_words.exclude(found_word__word__in=list(SEARCH_SUMMARY_SKIPS))
+            undefined_words = undefined_words.order_by('?')
+            for word in undefined_words[:100]:
+                found_words_repeats[word.language].append(word.word)
+                
+            print "Added some other ones"
+            pprint(found_words_repeats)
+        
         #return 
         count_success = count_failure = 0
         for lang, words in found_words_repeats.items():
             # since the list of words is sorted by count, shuffle the list.
             # otherwise those that cause errors get stuck in there
             shuffle(words)
+            this_count_success, this_count_failure = self._lookup_words(words, lang, max_per_language)
+            count_success += this_count_success
+            count_failure += this_count_failure
             
-            for word in words:
-                assert word not in definitions[lang]
-                #assert word.definition is None
-                if lang in ('en-us','en-gb'):
-                    # wordnet
-                    definition = _get_word_definition(word, language=lang)
-                else:
-                    definition = None
-
-                if not definition:
-                    definition = _get_word_definition_scrape(word, language=lang)
-                    
-                if definition:
-                    if len(definition) > 250:
-                        definition = definition[:250-3]+'...'
-                    try:
-                        add_word_definition(word, definition, language=lang)
-                    except Word.DoesNotExist:
-                        # for example, "centre" in en-us doesn't exist
-                        if lang in ('en-us','en-gb'):
-                            pass
-                        else:
-                            raise
-                    print "FOUND!", repr(word)
-                    count_success += 1
-                else:
-                    # '' is different from null. It tells us not to try again
-                    try:
-                        add_word_definition(word, '', language=lang)
-                    except Word.DoesNotExist:
-                        # for example, "centre" in en-us doesn't exist
-                        if lang in ('en-us','en-gb'):
-                            pass
-                        else:
-                            raise
-                    count_failure += 1
-                    print "Failed :(", repr(word)
-                    
-                if (count_success + count_failure) >= max_per_language:
-                    break
                 
         print "Looked up definition for %s words with %s failures" % \
         (count_success, count_failure)
@@ -142,3 +117,48 @@ class Command(BaseCommand):
         print "with", left, "words to attempt"
 
                     
+    def _lookup_words(self, words, lang, max_per_language):
+        count_success = count_failure = 0
+        for word in words:
+            assert word not in definitions[lang]
+            #assert word.definition is None
+            if lang in ('en-us','en-gb'):
+                # wordnet
+                definition = _get_word_definition(word, language=lang)
+            else:
+                definition = None
+
+            if not definition:
+                definition = _get_word_definition_scrape(word, language=lang)
+                
+            if definition:
+                if len(definition) > 250:
+                    definition = definition[:250-3]+'...'
+                try:
+                    add_word_definition(word, definition, language=lang)
+                except Word.DoesNotExist:
+                    # for example, "centre" in en-us doesn't exist
+                    if lang in ('en-us','en-gb'):
+                        pass
+                    else:
+                        raise
+                print "FOUND!", repr(word)
+                count_success += 1
+            else:
+                # '' is different from null. It tells us not to try again
+                try:
+                    add_word_definition(word, '', language=lang)
+                except Word.DoesNotExist:
+                    # for example, "centre" in en-us doesn't exist
+                    if lang in ('en-us','en-gb'):
+                        pass
+                    else:
+                        raise
+                count_failure += 1
+                print "Failed :(", repr(word)
+
+            if (count_success + count_failure) >= max_per_language:
+                break
+            
+        return count_success, count_failure
+        
