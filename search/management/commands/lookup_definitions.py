@@ -94,6 +94,8 @@ class Command(BaseCommand):
             undefined_words = undefined_words.order_by('?')
             print "#", undefined_words.count()
             for word in undefined_words[:100]:
+                if word.language not in found_words_repeats:
+                    found_words_repeats[word.language] = []
                 found_words_repeats[word.language].append(word.word)
                 
             print "Added some other ones"
