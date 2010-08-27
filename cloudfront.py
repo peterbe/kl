@@ -81,7 +81,10 @@ class SlowMap(object):
         value = self.data.get(key)
         if value is not None:
             return value
-
+        
+        if key not in self.guard:
+            return default
+        
         value, expires = self.guard.get(key)
   
         if expires < time():
