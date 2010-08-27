@@ -92,7 +92,7 @@ class Command(BaseCommand):
             undefined_words = undefined_words.exclude(language='sv')
             undefined_words = undefined_words.exclude(word__in=list(SEARCH_SUMMARY_SKIPS))
             undefined_words = undefined_words.order_by('?')
-            print "#", undefined_words.count()
+            print "#", undefined_words.count(), "left to look up"
             for word in undefined_words[:100]:
                 if word.language not in found_words_repeats:
                     found_words_repeats[word.language] = []

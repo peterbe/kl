@@ -103,6 +103,8 @@ $(function() {
   <a href="." id="clear-search">{% trans "clear search" %}</a>
 </p>
 
+{% comment %}
+  <!-- Commented out to see if it helps peterbe.com -->
 <script type="text/javascript">
 ch_client = "peterbe";
 ch_type = "mpu";
@@ -117,8 +119,9 @@ if ( ch_selected < ch_queries.length ) {
 ch_query = ch_queries[ch_selected];
 }
 </script>
-<script  src="http://scripts.chitika.net/eminimalls/amm.js" type="text/javascript">
-</script>
+<script  src="http://scripts.chitika.net/eminimalls/amm.js" type="text/javascript"></script>
+{% endcomment %}
+
 {% comment %}
 <div style="float:right">
 <iframe src="http://rcm.amazon.com/e/cm?t=crosstips-20&o=1&p=49&l=ur1&category=kindle&banner=0060WRQ43VKVG9GMQNR2&f=ifr" width="300" height="600" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
