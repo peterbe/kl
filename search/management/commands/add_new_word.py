@@ -15,8 +15,7 @@ class Command(NoArgsCommand):
           _get_word_definition_scrape, add_word_definition
         
         words = unicode(raw_input("Word(s): ").strip(), 'utf8')
-        words = re.split(',?\s*|\s', words)
-        
+        words = [x.strip() for x in re.split(',?\s*|\s', words) if x.strip()]
         
         langs = []
         for option in ALL_LANGUAGE_OPTIONS:
