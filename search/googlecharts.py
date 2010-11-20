@@ -162,7 +162,9 @@ def _get_bar_chart(width, height, data, background_color=None, colour=None):
     chart.add_data([x[1] for x in data])
     chart.set_axis_labels(pygooglechart.Axis.BOTTOM, [x[0] for x in data])
     interval = (max_ - min_) / 10
-    if interval > 500:
+    if interval > 1000:
+        interval = 5000
+    elif interval > 500:
         interval = 1000
     elif interval > 100:
         interval = 500
@@ -222,9 +224,9 @@ def _get_definitionlookups_bar(datas, width, height,
     # 222
     labels = [x[0].encode('utf8') for x in datas][::-1] # 223
     import urllib
-    print [urllib.quote(str(a)) for a in labels]
+    #print [urllib.quote(str(a)) for a in labels]
     
-    print list(labels)
+    #print list(labels)
     chart.set_axis_labels(pygooglechart.Axis.LEFT, labels)
     chart.set_legend(['Looked up','Not looked up'])
     chart.set_colours(['ff9900','ffebcc'])
