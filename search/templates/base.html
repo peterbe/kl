@@ -103,6 +103,7 @@
 {% block main %}
 {% endblock %}
 
+{% if show_publishermedia_ad %}
 <script type="text/javascript">
 <!--
 pubmedia_ad_zone = "377";
@@ -111,6 +112,7 @@ pubmedia_ad_height = 250;
 //-->
 </script>
 <script type="text/javascript" src="http://my.publishermedia.com/js/widget/widget.js"></script>
+{% endif %}
 
           </div>
   {% block content_sidebar_outer %}
