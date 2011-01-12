@@ -3,6 +3,7 @@ import random
 import datetime
 from urllib import quote
 import time
+import logging
 
 # django
 from django.conf import settings
