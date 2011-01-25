@@ -99,7 +99,9 @@ def context(request):
 
     data['this_django_instance'] = os.path.basename(os.path.dirname(__file__))
 
-    data['show_publishermedia_ad'] = request.get_host() == 'crosstips.org'
-    logging.info(request.get_host())
+
+    data['show_publishermedia_ad'] = False#request.get_host() == 'crosstips.org'
+    data['show_adbrite_ad'] = request.get_host() == 'crosstips.org'
+    #logging.info(request.get_host())
 
     return data
