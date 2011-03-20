@@ -101,6 +101,6 @@ def context(request):
 
 
     data['show_publishermedia_ad'] = False#request.get_host() == 'crosstips.org'
-    data['show_adbrite_ad'] = request.get_host() == 'crosstips.org'
+    data['show_adbrite_ad'] = False#request.get_host() == 'crosstips.org'
 
     return data
