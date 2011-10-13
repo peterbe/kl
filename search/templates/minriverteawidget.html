@@ -1,3 +1,5 @@
+{% load django_static %}
+
 <style>
 a.minriver {
         background-color: #f1f1f1;
@@ -29,6 +31,6 @@ a.minriver {
 </style>
 
 <a class="minriver" href="http://www.minrivertea.com">
-        <img src="http://westiseast.co.uk/static/images/minriver-logo.png" alt="a link to Chinese tea store Min River Tea Farm" title="We sell amazing Chinese teas, direct from China. Try it yourself to taste the difference.">
+        <img src="{% staticfile "/images/minriver-logo.png" %}" alt="a link to Chinese tea store Min River Tea Farm" title="We sell amazing Chinese teas, direct from China. Try it yourself to taste the difference.">
         Try authentic Chinese tea today &raquo;
 </a>
