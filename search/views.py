@@ -38,7 +38,7 @@ from data import add_word_definition, ip_to_coordinates, save_ip_lookup
 from data import get_searches_rate
 from googlecharts import get_search_types_pie, get_languages_pie, get_lengths_bar, \
   get_definitionlookups_bar
-  
+
 from utils import ONE_HOUR, ONE_DAY, ONE_WEEK, ONE_MONTH
 from search.googlecharts import get_sparklines_cached
 
@@ -94,8 +94,8 @@ class SearchResult(object):
         self.word = word
         self.definition = definition
         self.by_clue = by_clue
-        
-        
+
+
 from view_cache_utils import cache_page_with_prefix
 def _base_key_prefixer(request):
     if request.GET.keys():
@@ -105,13 +105,13 @@ def _base_key_prefixer(request):
     # ultimately get_cache_key() will just contain an md5 hash of the
     # request.path but we want it to depend on the host used to
     # e.g. crosstips.org should be different from fr.crosstips.org
-    
+
     key = request.get_host().split(':')[0]
     if request.mobile:
         key += 'mobile'
     if request.iphone:
         key += 'iphone'
-        
+
     return key
 
 def _sensitive_key_prefixer(request):
@@ -125,9 +125,9 @@ def _sensitive_key_prefixer(request):
 def _less_sensitive_key_prefixer(request):
     # do cache like normal even if you have done a search
     return _base_key_prefixer(request)
-    
 
-    
+
+
 @cache_page_with_prefix(ONE_HOUR, _sensitive_key_prefixer)
 def solve(request, json=False, record_search=True):
     # By default we are set to record the search in our stats
@@ -690,7 +690,7 @@ def _get_word_definition_scrape(word, language=None):
         html = cache.get(cache_key)
     except DjangoUnicodeDecodeError:
         html = None
-        
+
     if html is None:
         print "URL", url
         html = _download_url(url, request_meta)
@@ -746,7 +746,7 @@ def _extract_definitions_le_dictionnaire(html, max_definitions=3):
                 if s in ('color: #ABABAB;', 'cursor: pointer;'):
                     if span.text:
                         definition.append(span.text)
-            
+
             definitions.append(' '.join(definition))
         if len(definitions) >= max_definitions:
             break
@@ -1369,7 +1369,7 @@ def _get_searches_stats(month=None, year=None, languages=[],
 daterange_iso_regex = re.compile('(?P<yy>\d{4})/(?P<mm>\d{2})/(?P<dd>\d{2}) - (?P<yy2>\d{4})/(?P<mm2>\d{2})/(?P<dd2>\d{2})')
 daterange_us_regex = re.compile('(?P<mm>\d{2})/(?P<dd>\d{2})/(?P<yy>\d{4}) - (?P<mm2>\d{2})/(?P<dd2>\d{2})/(?P<yy2>\d{4})')
 
-    
+
 @cache_page_with_prefix(ONE_DAY, _less_sensitive_key_prefixer)
 def statistics_graph(request):
     languages = request.GET.getlist('languages')
@@ -1493,7 +1493,7 @@ def statistics_graph(request):
     languages = [(u"English", ('en-us','en-gb')),
                  (u"French", ('fr',)),
                  ]
-    definitionlookups_bar = get_definitionlookups_bar(languages, 
+    definitionlookups_bar = get_definitionlookups_bar(languages,
                                                       BAR_WIDTH,
                                                       100)
     return _render('statistics_graph.html', locals(), request)
@@ -1621,6 +1621,10 @@ def solve_simple(request, record_search=True,
         form = SimpleSolveForm(initial={'language':language})
 
         show_example_search = not bool(request.session.get('has_searched'))
+
+    #ad_widget_template = 'kwisslewidget.html'
+    ad_widget_template = 'minriverteawidget.html'
+
 
     return _render(template, locals(), request)
 
@@ -2112,19 +2116,19 @@ def quiz_answer(request):
 
 
 def get_sparklines_json(request):
-    
+
     data = {}
-    
+
     today = datetime.datetime.today()
     first_date = datetime.datetime(today.year, today.month, 1)
     data['href'] = '/statistics/graph/?daterange='+\
                             quote(first_date.strftime('%Y/%m/%d')) +\
                             quote(' - ') +\
                             quote(today.strftime('%Y/%m/%d'))
-    
+
     data['src'] = get_sparklines_cached(150, 100)
     data['alt'] = _("Searches this month")
-    
+
     return _render_json(data)
 
 

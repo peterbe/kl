@@ -46,7 +46,7 @@ $(function() {
   });
   if (!$('#id_slots').val())
     $('#id_slots')[0].focus();
-    
+
   if ($('#match_text').text())
     __update_document_title($('#match_text').text());
     //console.log($('#match_text').text());
@@ -66,14 +66,14 @@ $(function() {
 
 {{ form.language }}
 
-  <input type="submit" 
+  <input type="submit"
    {% if result %}
    value="{% trans "Search again" %}"
    {% else %}
    value="{% trans "Search" %}"
    {% endif %}
   />
-  
+
 {% if not result and form.errors %}
 <br/>
 <a href="." id="clear-search">{% trans "clear search" %}</a>
@@ -93,7 +93,7 @@ $(function() {
    {{ each.word|highlight_suggestion:result.search|safe }}<br/>
   {% endfor %}
   </p>
-  
+
 {% else %}
 
 {% if show_example_search %}
@@ -101,7 +101,7 @@ $(function() {
 
 <div id="for-example">
 <p>{% blocktrans %}
-Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. 
+Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>.
 Enter the length of the word and fill in the known letters.
 {% endblocktrans %}</p>
 
@@ -118,6 +118,5 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 {% endif %}
 
 
-
-{% include "kwisslewidget.html" %}
+{% include ad_widget_template %}
 {% endblock %}
