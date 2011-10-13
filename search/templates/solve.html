@@ -19,7 +19,7 @@ div.sugg span {
   border:1px solid #ccc;
 }
 div.sugg abbr {
-  padding-left:10px; 
+  padding-left:10px;
   font-size:80%;
 }
 
@@ -67,7 +67,7 @@ p.recently-found { font-size:80%; }
 <p>
   <label for="id_length">{% trans "Number of letters" %}:</label>
   <input id="id_length" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"><br>
-  
+
   <label>{% trans "Slots" %}:</label>
   <span id="allslots">
   {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1">{% endfor %}
@@ -86,7 +86,7 @@ p.recently-found { font-size:80%; }
     <input name="notletters" value="" size="12">
       <small>(useful when playing hangman)</small>
     </span><br>
-  {% endif %}  
+  {% endif %}
 
 
 {% comment %}
@@ -107,7 +107,7 @@ ch_query = ch_queries[ch_selected];
 </script>
 <script  src="http://scripts.chitika.net/eminimalls/amm.js" type="text/javascript"></script>
 {% endcomment %}
-  
+
   <input type="submit" value="{% trans "Search" %}">
   <img id="loading" style="display:none" src="{% staticfile "/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15">
   <a href="./" id="clear-search" style="display:none">{% trans "clear search" %}</a>
@@ -129,7 +129,7 @@ ch_query = ch_queries[ch_selected];
 {% if show_example_search %}
 <div id="for-example">
 <p>{% blocktrans %}
-Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>. 
+Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>.
 Enter the length of the word and fill in the known letters.
 {% endblocktrans %}</p>
 
@@ -170,5 +170,6 @@ a 9 letter word that starts with C, third letter O and ends with RD?</a>
 Solve your email needs with an <a href="http://www.jangosmtp.com/">smtp relay</a> that works with gmail
 </p>
 
-{% include "kwisslewidget.html" %}
+{% include ad_widget_template %}
+
 {% endblock %}

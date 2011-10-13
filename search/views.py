@@ -268,8 +268,11 @@ def solve(request, json=False, record_search=True):
     accept_clues = wordnet is not None and \
       request.LANGUAGE_CODE.lower() in ('en', 'en-gb', 'en-us')
 
-    data = locals()
+    ad_widget_template = 'kwisslewidget.html'
+    if language in ('en-gb', 'fr'):
+        ad_widget_template = 'minriverteawidget.html'
 
+    data = locals()
     return _render('solve.html', data, request)
 
 def _get_recent_search_word(request):
@@ -1624,7 +1627,6 @@ def solve_simple(request, record_search=True,
 
     #ad_widget_template = 'kwisslewidget.html'
     ad_widget_template = 'minriverteawidget.html'
-
 
     return _render(template, locals(), request)
 
