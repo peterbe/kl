@@ -136,6 +136,8 @@ def solve(request, json=False, record_search=True):
     if request.GET.get('r'):
         record_search = niceboolean(request.GET.get('r'))
 
+    language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
+
     if request.GET.get('l'):
         try:
             length = int(request.GET.get('l'))
@@ -161,8 +163,6 @@ def solve(request, json=False, record_search=True):
             clues = clues.replace(' ',', ')
         clues = [x.strip() for x in clues.split(',')
                  if x.strip() and x.strip().lower() not in STOPWORDS and not x.count(' ')]
-
-        language = request.GET.get('lang', request.LANGUAGE_CODE).lower()
 
         search_results = [] # the final simple list that is sent back
 
@@ -269,7 +269,7 @@ def solve(request, json=False, record_search=True):
       request.LANGUAGE_CODE.lower() in ('en', 'en-gb', 'en-us')
 
     ad_widget_template = 'kwisslewidget.html'
-    if language in ('en-gb', 'fr'):
+    if language.lower() in ('en-gb', 'fr', 'sv'):
         ad_widget_template = 'minriverteawidget.html'
 
     data = locals()
