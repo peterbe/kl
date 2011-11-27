@@ -8,31 +8,31 @@ from django.core.cache import cache
 
 class Word(models.Model):
     """
-    A Word has two important parts: the word, its length 
+    A Word has two important parts: the word, its length
     and there's also the optional part_of_speech. The length always
     has to be that of the word:
-    
+
         >>> w = Word.objects.create(word=u'Peter',
         ...                         part_of_speech=u'egenamn',
         ...                         language='sv')
         >>> w.length == len(u'Peter')
         True
-        
+
     """
     class Meta:
         db_table = u'words'
-        unique_together = ('word', 'language')
-    
+#        unique_together = ('word', 'language') temporary commented out for mysql import
+
     word = models.CharField(max_length=40)
     language = models.CharField(max_length=5)
     length = models.IntegerField()
     part_of_speech = models.CharField(max_length=20, null=True)
     definition = models.CharField(max_length=250, null=True)
     name = models.BooleanField()
-    
+
     def __unicode__(self):
         return self.word
-    
+
     def __init__(self, *args, **kwargs):
         if 'word' in kwargs:
             if 'length' in kwargs:
@@ -52,13 +52,13 @@ post_save.connect(reset_word_count, sender=Word,
                   dispatch_uid="reset_word_count")
 
 class Search(models.Model):
-    """ A search is a record of someone doing a search. 
+    """ A search is a record of someone doing a search.
     """
-    
+
     class Meta:
         db_table = u'searches'
         verbose_name_plural = u'Searches'
-        
+
     search_word = models.CharField(max_length=40)
     add_date = models.DateTimeField('date added', default=datetime.datetime.now,
                                     db_index=True)
@@ -66,13 +66,13 @@ class Search(models.Model):
     ip_address =  models.CharField(max_length=15, default=u'')
     language = models.CharField(max_length=5, default=u'')
     search_type = models.CharField(max_length=50, default=u'')
-    
+
     found_word = models.ForeignKey(Word, null=True, blank=True)
-    
+
     def __unicode__(self):
         return self.search_word
-    
-    
+
+
 def reset_search_stats(sender, instance, created, **__):
     if created:
         cache_key = 'no_searches_today_%s' % instance.language
@@ -84,17 +84,17 @@ def reset_search_stats(sender, instance, created, **__):
         #print "cache_key", cache_key
         #print "was cached?", cache.get(cache_key) is not None
         cache.delete(cache_key)
-        
+
 post_save.connect(reset_search_stats, sender=Search,
-                  dispatch_uid="reset_search_stats")    
-    
-    
+                  dispatch_uid="reset_search_stats")
+
+
 class IPLookup(models.Model):
-    
+
     class Meta:
         db_table = u'ip_lookups'
         verbose_name_plural = u"IP Lookups"
-        
+
     ip = models.CharField(max_length=15, unique=True, db_index=True)
     longitude = models.DecimalField(decimal_places=10, max_digits=14,
                                     null=True, blank=True)
@@ -105,7 +105,7 @@ class IPLookup(models.Model):
     country_code = models.CharField(max_length=3)
     add_date = models.DateTimeField('date added', default=datetime.datetime.now,
                                     db_index=True)
-    
+
     def __unicode__(self):
         if self.place_name and self.longitude and self.latitude:
             return u"%s (%s:%s)" % (self.place_name, self.longitude, self.latitude)
@@ -113,8 +113,3 @@ class IPLookup(models.Model):
             return "%s (no coordinates)" % self.place_name
         else:
             return "%s (no coordinates)" % self.country_code
-        
-    
-
-
-    

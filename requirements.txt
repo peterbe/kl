@@ -1,0 +1,6 @@
+pygooglechart
+lxml
+slimmer
+django-static
+django-rosetta
+python-memcached

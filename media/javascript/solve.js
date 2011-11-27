@@ -9,12 +9,13 @@ function __prep_slots(n) {
       already.slice(n).remove();
    } else {
       var left = n - already.size();
-      for (var i=0, left=n - already.size(); i < left; i++) 
+      for (var i=0, left=n - already.size(); i < left; i++)
         $('#allslots').append(
                               $('<input name="s" size="1" maxlength="1"/>')
                               .attr('autocomplete','off')
                               .bind('keyup', on_slot_key)
-                              .bind('change', on_slot_change));
+                              .bind('change', on_slot_change)
+                             );
    }
 }
 
@@ -31,10 +32,10 @@ function on_length_key(event) {
       } else {
          this.value = '1';
          __wrap__prep_slots(1);
-      }   
+      }
    } else if (event.which==37 || event.which==40) { // left & down
       if (this.value) {
-         if ((parseInt(this.value)-1) < 1) 
+         if ((parseInt(this.value)-1) < 1)
            __wrap__prep_slots(1);
          else {
             this.value = parseInt(this.value)-1;
@@ -43,13 +44,13 @@ function on_length_key(event) {
       } else {
          this.value = '1';
          __wrap__prep_slots(1);
-      }  
+      }
    } else {
       if (__done_search) {
 	 __prep_slots(0);
       }
       __wrap__prep_slots(parseInt(this.value));
-      
+
       __done_search = false;
    }
 }
@@ -78,6 +79,8 @@ function on_slot_key(event) {
      __goto_prev_slot(this);
    else
      this.value = this.value.toUpperCase();
+  if (this.value.search(/[A-Z]/) > -1)
+    __goto_next_slot(this);
 }
 
 function on_slot_change(event) {
@@ -93,7 +96,7 @@ function __goto_next_slot(current) {
          this.select();
          is_next = false;
       } else if(this==current) is_next = true;
-      
+
    });
 }
 
@@ -101,11 +104,11 @@ function __goto_prev_slot(current) {
    var prev = null;
    $('input', $('#allslots')).each(function() {
       if(this==current && prev) {
-         prev.focus(); 
+         prev.focus();
          prev.select();
       }
       prev = this;
-      
+
    });
 }
 
@@ -135,11 +138,11 @@ function __before_ajaxSubmit(form_data, form_obj) {
    }
    // make sure the for-example is hidden
    $('#for-example:visible').hide();
-   
+
    $('#loading:hidden').show();
-   
-   
-   
+
+
+
    return true;
 }
 
@@ -156,7 +159,7 @@ function __update_document_title(result) {
 
 
 function __process_submission(res) {
-    
+
    // make sure any error messages are hidden
    $('div.error:visible').hide();
 
@@ -170,10 +173,10 @@ function __process_submission(res) {
       $('input', '#clues').val('');
       $('#clues').hide();
    }
-   
+
    //if (res.alternatives_truncated)
    //  $('#matches').text($('#matches').text() + " (men begransar till 100)");
-   
+
    $('#alternatives div.sugg').remove();
    var all, w;
    if (res.word_count) {
@@ -196,7 +199,7 @@ function __process_submission(res) {
       $('#matches').text(res.match_text);
    }
    $('#loading:visible').hide();
-   
+
    $('#clear-search').show();
    __done_search = true;
 }
@@ -217,7 +220,7 @@ function run_example(l, w) {
    setTimeout(function() {
       $('form#solutions').ajaxSubmit(submit_options);
    }, 500);
-   
+
 }
 
 function __check_notletters(s) {
@@ -230,9 +233,9 @@ function __check_notletters(s) {
    }
    s = s.toUpperCase();
    s = s.replace(/[\d\W]+/g, '');
-   
+
    var x = uniqify(s.match(/\w/g));
-   
+
    $('#allslots input').each(function() {
       var v = $(this).val();
       if (v && $.inArray(v, x) > -1)
@@ -240,7 +243,7 @@ function __check_notletters(s) {
            return a != v;
         });
    });
-   
+
    if (x.length)
      return x.join(', ') + ', ';
    return '';
@@ -262,23 +265,23 @@ $(function() {
       else
         __wrap__prep_slots(parseInt($('#id_length').val()));
    }
-   
+
    $('#id_length').bind('keyup', on_length_key).bind('change', on_length_change);
    if (!$('#id_length').val())
      $('#id_length')[0].focus();
-   
+
    $('form#solutions').ajaxForm(submit_options);
-   
+
    $('input[name="clues"]', '#solutions').bind('keyup', function() {
       if ($(this).attr('size') <= 12 && $(this).val().indexOf(',') > -1) {
          $(this).attr('size', parseInt($(this).attr('size')) * 2);
          $(this).unbind('keyup');
       }
    });
-   
+
    $('input[name="notletters"]', '#notletters').bind('keyup', function(event) {
       //console.log(event.keyCode);
       if (event.keyCode > 15)
         $(this).val(__check_notletters($(this).val()));
-   });   
+   });
 });

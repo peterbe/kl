@@ -1,7 +1,6 @@
 # Django settings for kl project.
 import os
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = DEBUG = False
 
 HOME = os.path.normpath(os.path.dirname(__file__))
 
@@ -13,6 +12,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
 
 DATABASE_ENGINE = 'postgresql_psycopg2'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'kl'             # Or path to database file if using sqlite3.
@@ -69,13 +69,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'djangodblog.DBLogMiddleware',
+#    'djangodblog.DBLogMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     #'django.middleware.locale.LocaleMiddleware',
     'middleware.locale.LocaleMiddleware',
     'minidetector.Middleware',
     'middleware.MobileSecondMiddleware',
-                      
+
 )
 
 ROOT_URLCONF = 'urls'
@@ -94,12 +94,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'search',
-    'djangodblog',
+ #   'djangodblog',
     'django.contrib.flatpages',
     'django.contrib.sitemaps',
     'rosetta',
     'django_static',
-                  
+
 )
 
 
@@ -156,7 +156,7 @@ LOGGING_LEVEL = DEBUG and logging.DEBUG or logging.ERROR
 import subprocess
 _proc = subprocess.Popen('git log --no-color -n 1 --date=iso',
                          shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-_proc_out = _proc.communicate()[0]                         
+_proc_out = _proc.communicate()[0]
 try:
     GIT_REVISION_DATE = [x.split('Date:')[1].split('+')[0].strip() for x in
                          _proc_out.splitlines() if x.startswith('Date:')][0]
@@ -184,5 +184,3 @@ HOME, SECRET_KEY, LANGUAGE_DOMAINS
 logging.basicConfig(filename=LOGGING_LOG_FILENAME,
                     level=LOGGING_LEVEL,
                    )
-
-
