@@ -1,9 +1,9 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url
 
 from views import *
 
 urlpatterns = patterns('',
-                       
+
     url(r'^upload-dsso/$', upload_dsso),
     url(r'^upload-wordlist/$', upload_wordlist),
     url(r'^change-language/to/(?P<language>[\w\-]+)/$', change_language),
@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^statistics/uniqueness/$', statistics_uniqueness),
     url(r'^variationstester/$', variationstester),
     url(r'^searches/(?P<year>\d{4})/(?P<month>\w+)/$', searches_summary),
-    url(r'^searches/(?P<year>\d{4})/(?P<month>\w+)/lookup-definitions/$', 
+    url(r'^searches/(?P<year>\d{4})/(?P<month>\w+)/lookup-definitions/$',
         searches_summary_lookup_definitions),
     url(r'^word-definition-lookup/$', word_definition_lookup),
     url(r'^word-whomp/$', word_whomp),
@@ -31,7 +31,6 @@ urlpatterns = patterns('',
     url(r'^word/(?P<word_string>\w+)/(?P<language>\w+[-\w]+)/$', word),
     url(r'^quiz_answer.json$', quiz_answer),
     url(r'^get_sparklines.json$', get_sparklines_json),
-    
+
     url(r'^dumb_test_page$', dumb_test_page),
-    
 )

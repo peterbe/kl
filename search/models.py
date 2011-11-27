@@ -45,8 +45,8 @@ class Word(models.Model):
 def reset_word_count(sender, instance, created, **__):
     if created:
         cache_key = 'no_total_words_%s' % instance.language
-        print "cache_key", cache_key
-        print "was cached?", cache.get(cache_key) is not None
+        #print "cache_key", cache_key
+        #print "was cached?", cache.get(cache_key) is not None
         cache.delete(cache_key)
 post_save.connect(reset_word_count, sender=Word,
                   dispatch_uid="reset_word_count")
