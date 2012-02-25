@@ -6,10 +6,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="revision" content="{{ GIT_REVISION_DATE }}">
   <title>{% block title %}{% trans "Crosstips" %}{% endblock %}</title>
-  
+
   <link rel="stylesheet" href="/css/boilerplate.css" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="/css/core.css" type="text/css" media="screen" charset="utf-8">
-  
+
 {% block extracss %}
 {% endblock %}
 
@@ -17,26 +17,26 @@
 
 <body id="profile_6" class=" user_book_list" {% block extrabody %}{% endblock %}>
   <div id="page">
-  
+
     <div id="body">
-      
-        
+
+
           {% block reader_sidebar_outer %}
           <div class="sidebar reader_sidebar">
 	  {% block reader_sidebar %}
-          
+
           <p>&nbsp;</p>
 
-          {% endblock %} {# reader_sidebar #}	  
+          {% endblock %} {# reader_sidebar #}
           </div>
 	  {% endblock %} {# reader_sidebar_outer #}
-        
+
 
         <div class="content_wrapper">
           <div class="content">
-            
 
-            
+
+
             <div class="content_title">
 	        <h3 style="float:right">{% block pagetitletagline %}{% endblock %}</h3>
                 <h2>{% block pagetitle %}Crosstips{% endblock %}</h2>
@@ -50,17 +50,16 @@
 
           </div>
         </div>
-      
+
     </div>
 
-    
+
     <div id="footer">
 
       <p class="copyright">
         <small>
           <a href="/">Crosstips &copy; 2009</a>
           <a href="http://www.peterbe.com/">Peterbe.com</a>
-          <a href="http://www.fry-it.com/">Fry-IT</a>
           <a href="/about/crosstips/">About Crosstips</a>
 	  <a href="/partners/">Partners</a>
           <a href="/statistics/calendar/">{% trans "Calendar" %}</a>
@@ -69,8 +68,8 @@
         </small>
       </p>
     </div>
-    
-  
+
+
   </div>
 
 

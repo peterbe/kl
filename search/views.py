@@ -1479,11 +1479,11 @@ def statistics_graph(request):
         search_languages_pie = get_languages_pie(qs, languages,
                                                  PIE_WIDTH, PIE_HEIGHT)
 
+    lengths = set(x['L'] for x
+                 in (qs.extra(select={'L':'length(search_word)'})
+                     .values('L')))
+    lengths = list(lengths)[1:-1]
 
-    #lengths = [x for x in
-    lengths = [x['L'] for x in
-               qs.extra(select={'L':'length(search_word)'})\
-                 .distinct('L').values('L')][1:-1]
     if len(lengths) > 1:
         search_lengths_bar = get_lengths_bar(qs, lengths,
                                              BAR_WIDTH,
