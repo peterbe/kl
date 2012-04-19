@@ -29,6 +29,11 @@ class Word(models.Model):
     part_of_speech = models.CharField(max_length=20, null=True)
     definition = models.CharField(max_length=250, null=True)
     name = models.BooleanField()
+    # used for optimization
+    first1 = models.CharField(max_length=1)
+    first2 = models.CharField(max_length=2)
+    last1 = models.CharField(max_length=1)
+    last2 = models.CharField(max_length=2)
 
     def __unicode__(self):
         return self.word
@@ -39,6 +44,25 @@ class Word(models.Model):
                 assert kwargs['length'] == len(kwargs['word'])
             else:
                 kwargs['length'] = len(kwargs['word'])
+
+            if 'first1' in kwargs:
+                assert kwargs['first1'] == kwargs['word'][0].lower()
+            else:
+                kwargs['first1'] = kwargs['word'][0].lower()
+            if 'first2' in kwargs:
+                assert kwargs['first2'] == kwargs['word'][:2].lower()
+            else:
+                kwargs['first2'] = kwargs['word'][:2].lower()
+
+            if 'last1' in kwargs:
+                assert kwargs['last1'] == kwargs['word'][0].lower()
+            else:
+                kwargs['last1'] = kwargs['word'][0].lower()
+            if 'last2' in kwargs:
+                assert kwargs['last2'] == kwargs['word'][:2].lower()
+            else:
+                kwargs['last2'] = kwargs['word'][:2].lower()
+
         super(Word, self).__init__(*args, **kwargs)
 
 

@@ -940,16 +940,26 @@ def _find_alternatives(slots, language, notletters=[]):
     end = ''
     try:
         start = re.findall('^\w+', search)[0]
-        filter_['word__istartswith'] = start
+        if len(start) > 1:
+            filter_['first2'] = start[:2].lower()
+            if len(start) > 2:
+                filter_['word__istartswith'] = start
+        else:
+            filter_['first1'] = start.lower()
     except IndexError:
         pass
 
     try:
         end = re.findall('\w+$', search)[0]
-        filter_['word__iendswith'] = end
+        if len(end) > 1:
+            filter_['last2'] = end[-2:].lower()
+            if len(end) > 2:
+                filter_['word__iendswith'] = end
+        else:
+            filter_['last1'] = end.lower()
+
     except IndexError:
         pass
-
 
     def filter_match(match):
         if end:
@@ -1012,7 +1022,9 @@ def _find_alternatives(slots, language, notletters=[]):
     search_qs = search_base.filter(**filter_)
     for notletter in notletters:
         search_qs = search_qs.exclude(word__icontains=notletter)
-    all_matches = [x for x in search_qs.order_by('word')[:limit]
+
+    all_matches = [x for x
+                   in search_qs.order_by('word')[:limit]
                    if filter_match(x)]
     return uniqify(all_matches,
                    lambda x: x.word.lower())

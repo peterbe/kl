@@ -1,0 +1,31 @@
+BEGIN;
+ALTER TABLE words ADD first1 VARCHAR(1) NULL;
+UPDATE words SET first1 = SUBSTRING(LOWER(word) FROM 0 FOR 2) WHERE first1 IS NULL;
+ALTER TABLE words ALTER COLUMN first1 SET NOT NULL;
+CREATE INDEX words_first1_idx ON words (first1 );
+COMMIT;
+REINDEX INDEX words_first1_idx ;
+
+BEGIN;
+ALTER TABLE words ADD first2 VARCHAR(2) NULL;
+UPDATE words SET first2 = SUBSTRING(LOWER(word) FROM 0 FOR 3) WHERE first2 IS NULL;
+ALTER TABLE words ALTER COLUMN first2 SET NOT NULL;
+CREATE INDEX words_first2_idx ON words (first2 );
+COMMIT;
+REINDEX INDEX words_first2_idx ;
+
+BEGIN;
+ALTER TABLE words ADD last1 VARCHAR(1) NULL;
+UPDATE words SET last1 = LOWER(RIGHT(word, 1)) WHERE last1 IS NULL;
+ALTER TABLE words ALTER COLUMN last1 SET NOT NULL;
+CREATE INDEX words_last1_idx ON words (last1 );
+COMMIT;
+REINDEX INDEX words_last1_idx ;
+
+BEGIN;
+ALTER TABLE words ADD last2 VARCHAR(2) NULL;
+UPDATE words SET last2 = LOWER(RIGHT(word, 2)) WHERE last2 IS NULL;
+ALTER TABLE words ALTER COLUMN last2 SET NOT NULL;
+CREATE INDEX words_last2_idx ON words (last2 );
+COMMIT;
+REINDEX INDEX words_last2_idx ;
