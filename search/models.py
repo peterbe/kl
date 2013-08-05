@@ -55,13 +55,13 @@ class Word(models.Model):
                 kwargs['first2'] = kwargs['word'][:2].lower()
 
             if 'last1' in kwargs:
-                assert kwargs['last1'] == kwargs['word'][0].lower()
+                assert kwargs['last1'] == kwargs['word'][-1].lower()
             else:
-                kwargs['last1'] = kwargs['word'][0].lower()
+                kwargs['last1'] = kwargs['word'][-1].lower()
             if 'last2' in kwargs:
-                assert kwargs['last2'] == kwargs['word'][:2].lower()
+                assert kwargs['last2'] == kwargs['word'][-2:].lower()
             else:
-                kwargs['last2'] = kwargs['word'][:2].lower()
+                kwargs['last2'] = kwargs['word'][-2:].lower()
 
         super(Word, self).__init__(*args, **kwargs)
 
